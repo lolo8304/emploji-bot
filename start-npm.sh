@@ -1,0 +1,1 @@
+nodemon -e js,json --watch . --watch ./locale  --exec npm start

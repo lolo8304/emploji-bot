@@ -1,0 +1,32 @@
+{
+  "name": "emploji-bot",
+  "version": "0.1.0",
+  "description": "emploji bot as Employee self service assistant / focus days 2017 - internal hackathon AXA Winterthur",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lolo8304/emploji-bot.git"
+  },
+  "keywords": [
+    "emploji",
+    "bot",
+    "focusdays"
+  ],
+  "author": "Lorenz Hänggi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lolo8304/emploji-bot/issues"
+  },
+  "homepage": "https://github.com/lolo8304/emploji-bot#readme",
+  "dependencies": {
+    "botbuilder": "^3.8.1",
+    "dotenv": "^4.0.0",
+    "fs": "0.0.1-security",
+    "restify": "^4.3.0",
+    "sprintf": "^0.1.5"
+  }
+}

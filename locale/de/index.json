@@ -1,0 +1,9 @@
+{
+  "$.Intro.Error": "Sorry - aber ich habe Dich nicht verstanden",
+  "$.Intro.Cancel": "OK verstanden - tippe einfach 'start' wenn Du was von mir willst",
+  "$.Intro.Welcome": "Willkommen - mein Name ist Emploji. Ich helfe Dir in der Administration",
+  "$.Absenzen.Auswahl" : "OK. Absenzen. Was willst Du genau?",
+  "$.Absenzen.Auswahl.Choices" : "Erstellen|Saldo|Monatsabschluss",
+
+  "_filler" : "filler to support , at end of lines :-)"
+}
