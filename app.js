@@ -91,6 +91,12 @@ server.get('/images/:name', function(req, res, next) {
     res.end(contents);
 });
 
+server.get('/', function (req, res, next) {
+  var contents = fs.readFileSync('./index.html', 'utf8');
+  res.setHeader('content-type', 'text/html');
+  res.end(new Buffer(contents));
+});
+
 //=========================================================
 // LUIS initialization
 //=========================================================
