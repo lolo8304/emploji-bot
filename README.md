@@ -78,5 +78,42 @@ use entry in keypass "MICROSOFT_LUIS_MODEL"
 - MICROSOFT_LUIS_MODEL= use "MICROSOFT_LUIS_MODEL" entry
 
 
-
 ## Run
+
+### using npm
+```bash
+cd emploji-bot
+npm start
+```
+
+### using npm-monitor
+
+every change of a file will restart
+```bash
+cd emploji-bot
+./start-npm.sh
+```
+
+or windows
+```bash
+cd emploji-bot
+start-npm.bat
+```
+
+
+
+## Test with emulator
+
+- start emulator
+- enter URL: http://localhost:3800/api/messages
+- fill in the credentials from keypass
+- type 'start' or 'hello'
+- if all is fine you should see this
+  ![ScreenShot](docu/emulator-start.png)
+
+
+
+### start new conversation
+
+- use "new conversation" or "refresh" in emulator 
+  ![ScreenShot](docu/emulator-newconverstation.png)
