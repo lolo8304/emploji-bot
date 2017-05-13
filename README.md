@@ -117,3 +117,10 @@ start-npm.bat
 
 - use "new conversation" or "refresh" in emulator 
   ![ScreenShot](docu/emulator-newconverstation.png)
+
+
+# Design and test Bot
+
+## Design with botsociety.io
+we are using https://botsociety.io to design bot conversations.
+

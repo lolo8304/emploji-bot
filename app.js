@@ -97,6 +97,34 @@ server.get('/', function (req, res, next) {
   res.end(new Buffer(contents));
 });
 
+
+var rp = require("request-promise");
+
+//http://localhost:3978/model/skis/set/kind/blau
+function getQnAResponsePromise(question) {
+    var options = {
+        method: 'POST',
+        uri: process.env.MICROSOFT_QNA_MAKER_URL,
+        headers: {
+            'Ocp-Apim-Subscription-Key': process.env.MICROSOFT_QNA_MAKER_KEY,
+            'Content-Type': 'application/json'
+        },
+        body: {
+            question: question
+        },
+        json: true // Automatically stringifies the body to JSON 
+    };
+    return rp(options);
+}
+
+function getQnAResponse(question, cb) {
+    getQnAResponsePromise(question).then(value => {
+        cb(question, value);
+    });
+};
+
+
+
 //=========================================================
 // LUIS initialization
 //=========================================================
@@ -122,10 +150,25 @@ const ENTITIES = {
 // BOT handler
 //=========================================================
 
+function replRegExp(session, text) {
+    var reg=/(\$\.[a-zA-Z\.]+)/ig;
+    var variableReplacementArray = text.match(reg);
+    if (variableReplacementArray) {
+        for (var i=0; i < variableReplacementArray.length;i++) {
+            var fromVar = variableReplacementArray[i];
+            var toText = session.localizer.gettext(session.preferredLocale(), fromVar);
+            text = text.replace(fromVar, toText);
+        }
+    }
+    return text;
+}
+
 // pass a text in locale file and will be replaced according to the language
 function choices(session, text, choices, ...args) {
     var intro = sprintf.sprintf(session.localizer.gettext(session.preferredLocale(), text), args);
+    intro = replRegExp(session, intro);
     var options = session.localizer.gettext(session.preferredLocale(), choices);
+    options = replRegExp(session, options);
     //builder.Prompts.choice(session, intro, options, {listStyle: builder.ListStyle["inline"]});
     builder.Prompts.choice(session, intro, options, {listStyle: builder.ListStyle["button"]});
     //builder.Prompts.choice(session, intro, options);
@@ -151,7 +194,9 @@ bot.dialog('/Intro', [
             ])
             .buttons([
                 // session, Action, Data-pushed, Title
-                builder.CardAction.dialogAction(session, "Absenzen", "meine Absenzen", "Absenzen")
+                builder.CardAction.dialogAction(session, "Absenzen", "meine Absenzen", "Absenzen"),
+                builder.CardAction.dialogAction(session, "Hilfe", "hilfe", "Hilfe"),
+                builder.CardAction.dialogAction(session, "Testen", "test", "Testen")
             ]);
         var msg = new builder.Message(session).addAttachment(card);
         session.send(msg);
@@ -159,8 +204,9 @@ bot.dialog('/Intro', [
   }
 ])
 .cancelAction('/', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(stop|bye|goodbye|abbruch|tschüss)/i })
-.beginDialogAction('Help', "/Help", { matches: /(help|hilfe)/i })
-.beginDialogAction('Absenzen', '/Absenzen', { matches: /Absenzen=meine.*/i });
+.beginDialogAction('Absenzen', '/Absenzen', { matches: /Absenzen=meine.*/i })
+.beginDialogAction('Testen', '/Testen', { matches: /Testen=.*/i })
+.beginDialogAction('Help', '/Help', { matches: /hilfe.*/i });
 
 
 bot.dialog('/Absenzen', [
@@ -185,16 +231,45 @@ bot.dialog('/Help', [
     recognizer.recognize({ message: { text: results.response }, locale: session.defaultLocale }, (err, args) => {
       if (!err) {
         const entity = (builder.EntityRecognizer.findEntity(args.entities || [], ENTITIES.TEST) || {});
-        session.send("bla bla bla");
+        session.send("intent and entities found");
         session.replaceDialog('/Help/Test')
       }
     });
-  }])
+  }
+])
 
 
 bot.dialog('/Help/Test', [
   function (session, args, next) {
         session.preferredLocale("de");
-        builder.Prompts.text(session, "Das ist ein Test Hilfe text");
+        builder.Prompts.text(session, "Frage?");
+  },
+  function (session, results) {
+    getQnAResponse(results.response, function(Q,A) {
+        var realAnswers = [];
+        if (A.answers) {
+            for (var i=0; i < A.answers.length;i++) {
+                var answer = A.answers[i];
+                if (answer.score > 0) {
+                    realAnswers.push(answer);
+                }
+            }
+        }
+        if (realAnswers.length > 0) {
+            var text = "Unsere Antworten:";
+            for (var i=0; i < realAnswers.length;i++) {
+                var answer = realAnswers[i];
+                text = text + "\n\n - "+answer.answer+" ("+answer.score+"%)";
+            }
+            session.send(text);
+            choices(session, "$.Hilfe.Feedback.Title", "$.Hilfe.Feedback.Choices");
+            session.sendBatch();
+        } else {
+            session.endDialog("$.Hilfe.KeineAntwort");
+        }
+    })
+  },
+  function (session, results) {
   }
 ])
+

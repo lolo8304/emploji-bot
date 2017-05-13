@@ -1,9 +1,19 @@
 {
   "$.Intro.Error": "Sorry - aber ich habe Dich nicht verstanden",
   "$.Intro.Cancel": "OK verstanden - tippe einfach 'start' wenn Du was von mir willst",
-  "$.Intro.Welcome": "Willkommen - mein Name ist Emploji. Ich helfe Dir in der Administration",
+  "$.Intro.Welcome": "Willkommen - mein Name ist Emploji. Ich helfe Dir in der Administration. Du kannst jederzeit 'hilfe' oder 'testen' eingeben",
   "$.Absenzen.Auswahl" : "OK. Absenzen. Was willst Du genau?",
-  "$.Absenzen.Auswahl.Choices" : "Erstellen|Saldo|Monatsabschluss",
+  "$.Absenzen.Auswahl.Choices" : "$.Action.Erstellen|$.Action.Saldo|$.Action.Monatsabschluss",
+  "$.Action.Erstellen" : "Erstellen",
+  "$.Action.Saldo" : "Saldo",
+  "$.Action.Monatsabschluss" : "Monatsabschluss",
+
+  "$.Hilfe.Feedback.Title" : "Zufrieden mit der Antwort?",
+  "$.Hilfe.Feedback.Choices" : "$.Ja|$.Nein",
+  "$.Ja" : "Ja",
+  "$.Nein" : "Nein",
+  "$.Hilfe.KeineAntwort":"Sorry. Leider keine Antwort gefunden",
+
 
   "_filler" : "filler to support , at end of lines :-)"
 }

@@ -3,6 +3,10 @@
 MICROSOFT_APP_ID=
 MICROSOFT_APP_PASSWORD=
 MICROSOFT_LUIS_MODEL=
+
+MICROSOFT_QNA_MAKER_URL=
+MICROSOFT_QNA_MAKER_KEY=
+
 PORT=3800
 
 ## uncomment for localhost
@@ -10,3 +14,4 @@ BOT_DOMAIN_URL=http://localhost:3978
 
 ## uncomment for production
 ## BOT_DOMAIN_URL=https://emploji-bot.herokuapp.com
+
