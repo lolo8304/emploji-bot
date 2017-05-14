@@ -1,6 +1,8 @@
 # emploji-bot
 emploji bot as Employee self service assitant / focus days 2017 - internal hackathon AXA Winterthur
 
+Additional readme: checkout our [hackzurich AXA 2016 GitHub](https://github.com/axa-azure-deployment/hackzurich2016-axa) for other ressources how to setup nodejs, Visual Studio Code, Mongodb if needed, Debugging, Nodemon
+
 # Preconditions
 
 - download and install nodejs environment

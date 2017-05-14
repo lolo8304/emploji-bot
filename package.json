@@ -28,7 +28,10 @@
     "fs": "0.0.1-security",
     "request-promise": "^4.2.1",
     "restify": "^4.3.0",
-    "sprintf": "^0.1.5"
+    "sprintf": "^0.1.5",
+
+    "mongodb": "^2.2.26",
+    "monk":"^4.0.0"
   },
   "devDependencies": {
   }
