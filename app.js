@@ -113,8 +113,10 @@ var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog('/', 
   intents
     .matches('Help', '/Help')
+    .matches('Testen', '/Testen')
     .matches('Intro', '/Intro')
 );
+
 
 // Entity Constants
 const ENTITIES = {
@@ -147,21 +149,16 @@ bot.dialog('/Intro', [
             ])
             .buttons([
                 // session, Action, Data-pushed, Title
-                builder.CardAction.dialogAction(session, "Absenzen", "meine Absenzen", "Absenzen"),
-                builder.CardAction.dialogAction(session, "Hilfe", "hilfe", "Hilfe"),
-                builder.CardAction.dialogAction(session, "Testen", "test", "Testen")
+                builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen!"),
+                builder.CardAction.dialogAction(session, "Hilfe", "Hilfe", "Hilfe!"),
+                builder.CardAction.dialogAction(session, "Testen", "Testen","Testen!")
             ]);
         var msg = new builder.Message(session).addAttachment(card);
         session.send(msg);
         session.sendBatch(); 
   }
 ])
-.cancelAction('/', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(stop|bye|goodbye|abbruch|tschüss)/i })
-.beginDialogAction('Help', "/Help", { matches: /(help|hilfe)/i })
-.beginDialogAction('Absenzen', '/Absenzen', { matches: /Absenzen=meine.*/i })
-.beginDialogAction('Testen', '/Testen', { matches: /Testen=.*/i })
-.beginDialogAction('Help', '/Help', { matches: /hilfe.*/i });
-
+.cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(stop|bye|goodbye|abbruch|tschüss)/i });
 
 bot.dialog('/Absenzen', [
   function (session, args, next) {
@@ -173,6 +170,8 @@ bot.dialog('/Absenzen', [
       session.send(results.response.entity + " gedrückt");
   }
 ])
+.triggerAction({ matches: /(Absenzen=.*|absenzen)/i })
+
 
 
 bot.dialog('/Testen', [
@@ -184,13 +183,37 @@ bot.dialog('/Testen', [
   function (session, results) {
     recognizer.recognize({ message: { text: results.response }, locale: session.defaultLocale }, (err, args) => {
       if (!err) {
-        const entity = (builder.EntityRecognizer.findEntity(args.entities || [], ENTITIES.TEST) || {});
-        session.send("intent and entities found");
-        session.endDialog();
+        // how to find specific entity
+        // const entity = (builder.EntityRecognizer.findEntity(args.entities || [], ENTITIES.TEST) || {});
+        var text = "Best intent: "+args.intent+ " / "+Math.floor(args.score * 100)+"%";
+        if (args.intents.length > 1) {
+            text += "\n\nOther intents: ";
+            for(var i=1;i<args.intents.length; i++) {
+                var otherIntent = args.intents[i];
+                text += "\n\n - "+otherIntent.intent+ " / "+Math.floor(otherIntent.score * 100)+"%";
+            }
+        }
+        session.send(text);
+        var metadata = "no entities";
+        if (args.entities.length > 0) {
+            metadata = "Entities:";
+            for(var i=0;i<args.entities.length; i++) {
+                var entity = args.entities[i];
+                metadata += "\n\n - "+entity.type+ " = "+(entity.resolution ? entity.resolution.values[0] : entity.entity);
+            }
+        }
+        session.send(metadata);
+        session.sendBatch();
+        session.replaceDialog("/Testen");
+      } else {
+        session.endDialog("Es ist ein Fehler aufgetreten. "+err);
       }
     });
   }
 ])
+.triggerAction({ matches: /(Testen=.*|testen)/i })
+.cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
+;
 
 
 bot.dialog('/Help', [
@@ -228,8 +251,10 @@ bot.dialog('/Help', [
         session.replaceDialog("/Help");
       }
       if (results.response.entity === bot_helper.locale(session, "$.Ja")) {
-        session.replaceDialog("/");
+        session.endDialog();
       }
   }
 ])
-
+.triggerAction({ matches: /(help|hilfe|fragen|Hilfe=.*)/i })
+.cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
+;
