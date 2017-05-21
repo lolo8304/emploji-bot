@@ -18,6 +18,7 @@ Additional readme: checkout our [hackzurich AXA 2016 GitHub](https://github.com/
 - https://nodejs.org/
 - Download V6.10.* version and install
 - Alternative Linux+Mac using https://github.com/creationix/nvm to support multiple version
+- nvm please use version 6.10.3 as "node" version not 7.x
 
 ## install node monitor 
 
@@ -93,6 +94,12 @@ verify the DB_URL pointing to remote DB if needed (user and password needed)
 
 
 ## Run
+
+### using npm install at 1st start or while adding new modules ins packages.json
+```bash
+cd emploji-bot
+npm install
+```
 
 ### using npm
 ```bash
