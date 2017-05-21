@@ -154,3 +154,26 @@ start-npm.bat
 ## Design with botsociety.io
 we are using https://botsociety.io to design bot conversations.
 
+## Edit and test bot
+- use Chrome Browser
+- use https://botsociety.io 
+- Login with our account emploji@gmail.com 
+- edit / create new bot
+- ...
+
+
+## Update Bot to simulate
+- open new Browser Tab
+- https://emploji-simulator.herokuapp.com/
+- click on "Chrome snippet" to get javascript to execute
+- Ctrl+a / Cmd+a to select all
+- Ctrl+c / Cmd+c to copy
+- Menu - "more tools" - "Developer tools"
+- Tab "Source"
+- ![ScreenShot](images/help-snippet.png)
+- "Run" the snippet
+- The script creates a JSON file and is uploading it to the central server (based on the script)
+- output
+
+bot posting to your.domain.com ...
+Capture BotSociety:100 ... successfully done
