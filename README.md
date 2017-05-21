@@ -133,6 +133,15 @@ start-npm.bat
   ![ScreenShot](docu/emulator-start.png)
 
 
+## Test with browser
+- start npm
+- open URL: http://localhost:3800
+- stype "start"
+- and you should see the "emploji"
+- type "testen" and try "5 Tage Ferien am 23.4.2016"
+- type "hilfe" and try "was ist focus days"
+- buttons does not work !!!!! will fix it 
+
 
 ### start new conversation
 
