@@ -10,7 +10,7 @@ MICROSOFT_QNA_MAKER_KEY=
 PORT=3800
 
 ## uncomment for localhost
-BOT_DOMAIN_URL=http://localhost:3978
+BOT_DOMAIN_URL=http://localhost:3800
 
 ## uncomment for production
 ## BOT_DOMAIN_URL=https://emploji-bot.herokuapp.com

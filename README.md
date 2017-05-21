@@ -79,6 +79,18 @@ use entry in keypass "MICROSOFT_APP_ID emploji bot"
 use entry in keypass "MICROSOFT_LUIS_MODEL"
 - MICROSOFT_LUIS_MODEL= use "MICROSOFT_LUIS_MODEL" entry
 
+verify the BOT_DOMAIN pointing to localhost or server
+- BOT_DOMAIN_URL=http://localhost:3800
+- BOT_DOMAIN_URL=https://emploji-bot.herokuapp.com
+
+verify the DB_URL pointing to localhost (no user and password needed)
+- DB_APP_URL=localhost:27018/emploji-bot
+
+verify the DB_URL pointing to remote DB if needed (user and password needed)
+- DB_APP_URL=domain:port/name
+- DB_APP_USER=user
+- DB_APP_PWD=pwd
+
 
 ## Run
 
