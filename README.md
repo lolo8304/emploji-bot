@@ -44,7 +44,7 @@ See our [hackzurich documentation](https://github.com/axa-azure-deployment/hackz
 # Microsoft botframework 
 
 - https://dev.botframework.com
-- Login with microsoft Live ID (employji@gmail.com)
+- Login with microsoft Live ID (emploji@gmail.com)
 
 - Principles of bot design https://docs.microsoft.com/en-us/bot-framework/bot-design-principles
 - Quickstart Guide documentation NodeJS https://docs.microsoft.com/en-us/bot-framework/nodejs/bot-builder-nodejs-quickstart
