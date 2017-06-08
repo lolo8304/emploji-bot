@@ -244,13 +244,15 @@ bot.dialog('/Intro', [
 
         } else {
             session.preferredLocale("de");
+            var welcomeText = session.localizer.gettext(session.preferredLocale(), "$.Intro.Hi") +
+                session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
             var buttons = [];
             buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
             buttons[1] = builder.CardAction.dialogAction(session, "Absenzen","Absenzen", "Absenzen");
             buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen","Spesen");
             var card = new builder.HeroCard(session)
                 .title("Emploji")
-                .text("$.Intro.Welcome")
+                .text(welcomeText)
                 .images([
                     builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
                 ]).buttons(buttons);
@@ -321,7 +323,7 @@ function handleTextMessageQnA(message, session) {
         if (realAnswers.length > 0) {
             sendQnAAnswers(realAnswers, session);
         } else {
-            session.send("Sorry, habe deine Meldung nicht verstanden: " + session.message.text);
+            session.send("$.Intro.NichtVerstanden", session.message.text);
             session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
             session.replaceDialog("/Intro");
 

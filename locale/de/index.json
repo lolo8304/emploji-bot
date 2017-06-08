@@ -1,7 +1,8 @@
 {
   "$.Intro.Error": "Sorry - aber ich habe Dich nicht verstanden",
   "$.Intro.Cancel": "OK verstanden - tippe einfach 'start' wenn Du was von mir willst",
-  "$.Intro.Welcome": "Willkommen - mein Name ist Emploji. Ich helfe Dir in der Administration. Wähle eine Funktion unten oder erfasse eine beliebige Frage.",
+  "$.Intro.Hi": ["Willkommen", "Hoi", "Ciao", "Sali", "Salüe", "Grüezi", "Grüessech", "Guten Tag", "Bonjour"],
+  "$.Intro.Welcome": " - mein Name ist Emploji. Ich helfe Dir in der Administration. Wähle eine Funktion unten oder erfasse eine beliebige Frage.",
   "$.Absenzen.Auswahl" : "OK. Absenzen. Was willst Du genau?",
   "$.Absenzen.Auswahl.Choices" : "$.Action.Erstellen|$.Action.Saldo|$.Action.Monatsabschluss",
   "$.Action.Erstellen" : "Erstellen",
@@ -20,5 +21,9 @@
   "$.Spesen.Summary":"Ich fasse zusammen:\n\nCHF 51.80\n31.05.2017\n\nIKEA Dietlikon\n\nKST: 12002 HREmployee Administration",
   "$.Spesen.End":"Perfekt. Der Betrag wird dir spätestens im Folgemonat ausgezahlt - je nach dem wie schnell ich bin ;-)",
 
-  "_filler" : "filler to support , at end of lines :-)"
+  "_filler" : "filler to support , at end of lines :-)", 
+
+  "$.Intro.NichtVerstanden": ["Sorry, habe deine Frage %s nicht verstanden", 
+    "Äxgüsi, was meinst du mit %s?", "Bitte drück dich klarer aus - verstehe %s nicht"]
+
 }
