@@ -28,17 +28,34 @@ function SpesenDialog(bot, builder, recognizer) {
                 session.send(result.response[0].name);
             }
             builder.Prompts.choice(session, "$.Spesen.Summary", "Richtig|Falsch", { listStyle: builder.ListStyle.button });
+//            builder.Prompts.text(session, "$.Spesen.Summary");
         },
         function (session, result) {
-            builder.Prompts.text(session, "$.Spesen.End");
+            if(result.response.index == 1) {
+                session.beginDialog("/spesenbearbeiten");
+            } else {
+                next();
+            }
+        },
+        function (session, result) {
+            session.endDialog("$.Spesen.End");
         }
     ])
-        .triggerAction({ matches: /Spesen/i })
         .cancelAction('/Intro', "OK Spesenerfassung abgebrochen", 
         { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
     onSelectAction: (session, args) => {
         session.endDialog();
-        session.beginDialog("/Intro");
-    },
-    confirmPrompt: `Are you sure you wish to cancel?`});
+    }});
+
+    this.bot.dialog('/spesenbearbeiten', [
+        function (session) {
+            builder.Prompts.text(session, 'Hi! What is your name?');
+        },
+        function (session, results) {
+            session.userData.name = results.response;
+            session.endDialog();
+        }
+    ]);
+
 }
+
