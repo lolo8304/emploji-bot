@@ -31,7 +31,7 @@ var bot = new builder.UniversalBot(connector, {
 bot.datastore={
     user: "C936871",
     users: require('./import/datastore/users.json'),
-    absences: require('./import/datastore/2016-absences.json'),
+    absences: require('./import/datastore/absences.json'),
     getUser: function() {
         for(var i in this.users) {
             if (this.users[i].user===this.user) return this.users[i];
