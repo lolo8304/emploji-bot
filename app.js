@@ -28,6 +28,24 @@ var bot = new builder.UniversalBot(connector, {
         defaultLocale: "de"
     }
 });
+bot.datastore={
+    user: "C936871",
+    users: require('./import/datastore/users.json'),
+    absences: require('./import/datastore/absences.json'),
+    getUser: function() {
+        for(var i in this.users) {
+            if (this.users[i].user===this.user) return this.users[i];
+        }
+        return undefined;
+    },
+    getAbsences: function() {
+        var result=[]; 
+        for(var i in this.absences) {
+            if (this.absences[i].user===this.user) result.push(this.absences[i]);
+        }
+        return result;
+    }
+};
 
 //=========================================================
 // App helper methods
@@ -128,6 +146,7 @@ const ENTITIES = {
 //=========================================================
 // BOT handler
 //=========================================================
+
 
 bot_helper = require("./modules/bot-helper.js")(bot, builder, recognizer);
 
