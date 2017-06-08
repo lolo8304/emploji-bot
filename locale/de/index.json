@@ -1,7 +1,7 @@
 {
   "$.Intro.Error": "Sorry - aber ich habe Dich nicht verstanden",
   "$.Intro.Cancel": "OK verstanden - tippe einfach 'start' wenn Du was von mir willst",
-  "$.Intro.Welcome": "Willkommen - mein Name ist Emploji. Ich helfe Dir in der Administration. Du kannst jederzeit 'hilfe' oder 'testen' eingeben",
+  "$.Intro.Welcome": "Willkommen - mein Name ist Emploji. Ich helfe Dir in der Administration. Wähle eine Funktion unten oder erfasse eine beliebige Frage.",
   "$.Absenzen.Auswahl" : "OK. Absenzen. Was willst Du genau?",
   "$.Absenzen.Auswahl.Choices" : "$.Action.Erstellen|$.Action.Saldo|$.Action.Monatsabschluss",
   "$.Action.Erstellen" : "Erstellen",
