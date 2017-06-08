@@ -237,7 +237,7 @@ bot.dialog('/Intro', [
                 session.beginDialog("Monatsabschluss");
             } 
             else {
-                session.send(session.message.text);
+                //session.send(session.message.text);
                 handleTextMessage(session.message.text, session);
             }
 
