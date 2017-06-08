@@ -166,7 +166,7 @@ bot.dialog('/',
         .matches('Monatsabschluss', '/Monatsabschluss')
         .matches('Spesen', '/Spesen')
         .matches('Absenzen', '/Absenzen'), [
-            function (session, args, next) {
+        function (session, args, next) {
             console.log("in /");
         }
     ]);
@@ -195,7 +195,9 @@ spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
-        if (session.message.type === "message" && session.message.text) {
+        if (session.message.type === "message" 
+        && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i)) 
+        && session.message.text ) {
             session.send(session.message.text);
         } else {
             session.preferredLocale("de");
