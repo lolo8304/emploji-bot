@@ -16,4 +16,6 @@ function AbsenzenDialog(bot, builder, recognizer) {
         },
     ])
         .triggerAction({ matches: /Absenzen/i })
+        .cancelAction('/dddd', "OK Absenzerfassung abgebrochen", 
+        { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i })
 }

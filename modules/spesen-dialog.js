@@ -15,4 +15,6 @@ function SpesenDialog(bot, builder, recognizer) {
         },
     ])
         .triggerAction({ matches: /Spesen/i })
+        .cancelAction('/Intro', "OK Spesenerfassung abgebrochen", 
+        { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i })
 }

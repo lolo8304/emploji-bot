@@ -165,19 +165,19 @@ bot.dialog('/',
         .matches('FAQ', '/FAQ')
         .matches('Monatsabschluss', '/Monatsabschluss')
         .matches('Spesen', '/Spesen')
-        .matches('Absenzen', '/Absenzen')
-);
+        .matches('Absenzen', '/Absenzen'), [
+            function (session, args, next) {
+            console.log("in /");
+        }
+    ]);
 
-/*bot.on('conversationUpdate', function (message) {
-       // bot.beginDialog('/Intro');
-       bot.send("hallo");
-});*/
 
 bot.on('conversationUpdate', (message) => {
     if (message.membersAdded) {
         if (!(message.membersAdded[0].name === 'Bot')) {
-        bot.beginDialog(message.address, '*:/Intro');
-    }}
+            bot.beginDialog(message.address, '*:/Intro');
+        }
+    }
 });
 
 
@@ -195,44 +195,29 @@ spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
-        session.preferredLocale("de");
-        var buttons=[];
-        buttons[0] = builder.CardAction.imBack(session, "Monatsabschluss", "Monatsabschluss");
-        buttons[1] = builder.CardAction.imBack(session, "Absenzen", "Absenzen");
-        buttons[2] = builder.CardAction.imBack(session, "Spesen", "Spesen");
-        var card = new builder.HeroCard(session)
-            .title("Emploji")
-            .text("$.Intro.Welcome")
-            .images([
-                builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
-            ]).buttons(buttons);
-       /*     .buttons([
-                // session, Action, Data-pushed, Title
-                builder.CardAction.dialogAction(session, "/Abschluss", "Abschluss", "Monatsabschluss!"),
-                builder.CardAction.dialogAction(session, "/Absenzen", "Absenzen", "Absenzen!"),
-                builder.CardAction.dialogAction(session, "/Spesen", "Spesen", "Spesen!")
-            ])*/
-            
-        var msg = new builder.Message(session).addAttachment(card);
-        session.send(msg);
-        session.sendBatch();
+        if (session.message.type === "message" && session.message.text) {
+            session.send(session.message.text);
+        } else {
+            session.preferredLocale("de");
+            var buttons = [];
+            buttons[0] = builder.CardAction.imBack(session, "Monatsabschluss", "Monatsabschluss");
+            buttons[1] = builder.CardAction.imBack(session, "Absenzen", "Absenzen");
+            buttons[2] = builder.CardAction.imBack(session, "Spesen", "Spesen");
+            var card = new builder.HeroCard(session)
+                .title("Emploji")
+                .text("$.Intro.Welcome")
+                .images([
+                    builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
+                ]).buttons(buttons);
+
+            var msg = new builder.Message(session).addAttachment(card);
+            session.send(msg);
+            session.sendBatch();
+        }
     }
 ])
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(stop|bye|goodbye|abbruch|tschüss)/i });
-/*
-bot.dialog('/Absenzen', [
-    function (session, args, next) {
-        session.preferredLocale("de");
-        bot_helper.choices(session, "$.Absenzen.Auswahl", "$.Absenzen.Auswahl.Choices");
-        session.sendBatch();
-    },
-    function (session, results, next) {
-        session.send(results.response.entity + " gedrückt");
-    }
-])
-    .triggerAction({ matches: /(Absenzen=.*|absenzen)/i })
 
-*/
 
 bot.dialog('/Testen', [
     function (session, args, next) {

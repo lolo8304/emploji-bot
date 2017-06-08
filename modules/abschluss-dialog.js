@@ -16,4 +16,6 @@ function AbschlussDialog(bot, builder, recognizer) {
         },
     ])
         .triggerAction({ matches: /Monatsabschluss/i })
+        .cancelAction('/Intro', "OK Monatsabschluss abgebrochen", 
+        { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 }
