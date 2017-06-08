@@ -11,8 +11,27 @@ function SpesenDialog(bot, builder, recognizer) {
 
     this.bot.dialog('/Spesen', [
         function (session, args, next) {
-            session.send("Spesen Dialog");
+//            builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", IPromptChoiceOptions.listStyle.list);
+            builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", { listStyle: builder.ListStyle.button });
         },
+        function (session, result) {
+            if(result.response.index == 0) {
+                builder.Prompts.text(session, "$.Spesen.Text");
+            } else {
+                builder.Prompts.attachment(session, "$.Spesen.Foto");
+            }
+        },
+        function (session, result) {
+            if (typeof result.response === 'String') {
+                session.send(result.response.text);
+            } else {
+                session.send(result.response[0].name);
+            }
+            builder.Prompts.choice(session, "$.Spesen.Summary", "Richtig|Falsch", { listStyle: builder.ListStyle.button });
+        },
+        function (session, result) {
+            builder.Prompts.text(session, "$.Spesen.End");
+        }
     ])
         .triggerAction({ matches: /Spesen/i })
         .cancelAction('/Intro', "OK Spesenerfassung abgebrochen", 
