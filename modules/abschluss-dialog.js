@@ -14,10 +14,10 @@ function AbschlussDialog(bot, builder, recognizer) {
         function (session, args, next) {
             var space=" ";
             var text="Hallo "+bot.datastore.getUser().firstname+"<br>name="+session.message.address.user.name+"<br>id="+session.message.address.user.id;
-            text+="<br>Deine Absenzen:<table><tr><td>Absenz</td><td>von</td><td>bis</td><td>Tage</td></tr>";
+            text+="<br>Deine Absenzen:<table><tr><td>Absenz</td><td>von</td><td>bis</td><td>Tage</td><td>Bestätigt</td></tr>";
             var absences=bot.datastore.getAbsences();
             for(var i in absences) {
-                text+="<tr><td>"+absences[i].typ+space+"</td><td>"+absences[i].fromDate+space+"</td><td>"+absences[i].toDate+space+"</td><td>"+absences[i].days+space+"</td></tr>";
+                text+="<tr><td>"+absences[i].typ+space+"</td><td>"+absences[i].fromDate+space+"</td><td>"+absences[i].toDate+space+"</td><td>"+absences[i].days+space+"</td><td>"+absences[i].commit+space+"</td></tr>";
             }
             text+="</table>";
        //    session.send(text);
