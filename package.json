@@ -11,6 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/lolo8304/emploji-bot.git"
   },
+  "engines": {
+    "node":"v6.10.3"
+  },
   "keywords": [
     "emploji",
     "bot",
