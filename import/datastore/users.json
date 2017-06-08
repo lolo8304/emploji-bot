@@ -1,0 +1,26 @@
+[
+  {
+    "user": "C936871",
+    "name": "Hänggi",
+    "firstname": "Lorenz",
+    "dateOfBirth": "1969-04-13",
+    "minExpenses": 50,
+    "position": "Innovation"
+  },
+  {
+    "user": "C950394",
+    "name": "Breitenmoser",
+    "firstname": "Bernhard",
+    "dateOfBirth": "1970-04-01",
+    "minExpenses": 0,
+    "position": "SAP Specialist"
+  },
+  {
+    "user": "C123456",
+    "name": "Muster",
+    "firstname": "Peter",
+    "dateOfBirth": "1950-01-01",
+    "minExpenses": 200,
+    "position": "CEO"
+  }
+]
