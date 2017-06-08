@@ -11,7 +11,6 @@ function SpesenDialog(bot, builder, recognizer) {
 
     this.bot.dialog('Spesen', [
         function (session, args, next) {
-//            builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", IPromptChoiceOptions.listStyle.list);
             builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", { listStyle: builder.ListStyle.button });
         },
         function (session, result) {
@@ -28,7 +27,6 @@ function SpesenDialog(bot, builder, recognizer) {
                 session.send(result.response[0].name);
             }
             builder.Prompts.choice(session, "$.Spesen.Summary", "Richtig|Falsch", { listStyle: builder.ListStyle.button });
-//            builder.Prompts.text(session, "$.Spesen.Summary");
         },
         function (session, result, next) {
             if(result.response.index == 1) {
@@ -49,11 +47,21 @@ function SpesenDialog(bot, builder, recognizer) {
 
     this.bot.dialog('Spesen_bearbeiten', [
         function (session) {
-            builder.Prompts.text(session, 'Hi! What is your name?');
+            builder.Prompts.choice(
+                session, 
+                "Was willst du ändern:", 
+                "CHF 51.80|31.05.2017|IKEA Dietlikon|KST: 12002 HREmployee Administration|Nichts", 
+                { listStyle: builder.ListStyle.button });
+        },
+        function (session, result, next) {
+            if(result.response.index == 0) {
+                builder.Prompts.text(session, "Betrag ändern");
+            } else {
+                session.endDialog();
+            }
         },
         function (session, results) {
-            session.userData.name = results.response;
-            session.endDialog();
+            session.replaceDialog('Spesen_bearbeiten');
         }
     ]);
 
