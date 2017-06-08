@@ -216,8 +216,6 @@ bot.on('conversationUpdate', (message) => {
 });
 
 
-bot.use(Middleware.dialogVersion({version: 1.0, resetCommand: /^reset/i}));
-
 intents.onDefault(
     builder.DialogAction.send("$.Intro.Error")
 );
