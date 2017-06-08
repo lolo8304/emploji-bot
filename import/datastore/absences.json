@@ -1,0 +1,191 @@
+[
+  {
+    "user": "brm",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "brm",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "brm",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "cogji",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "cogji",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "cogji",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "david",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "david",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "david",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Vaterschaftsurlaub",
+    "text": "",
+    "fromDate": "2017-04-13",
+    "toDate": "2017-05-13",
+    "days": 19,
+    "commit": true
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "meyerchri",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "meyerchri",
+    "typ": "Umzug",
+    "text": "",
+    "fromDate": "2017-05-15",
+    "toDate": "2017-05-16",
+    "days": 2,
+    "commit": true
+  },
+  {
+    "user": "meyerchri",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "remostrupler",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "remostrupler",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "remostrupler",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "susanne_s",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "susanne_s",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "susanne_s",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  }
+]

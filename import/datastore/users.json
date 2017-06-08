@@ -1,26 +1,72 @@
 [
   {
-    "user": "C936871",
+    "user": "meyerchri",
+    "name": "Meyer",
+    "firstname": "Christina",
+    "dateOfBirth": "1969-04-13",
+    "minExpenses": 0,
+    "position": "Innovation",
+    "Anstellung": 60,
+    "sex": "f"
+  },
+  {
+    "user": "david",
+    "name": "Ulrich",
+    "firstname": "David",
+    "dateOfBirth": "1970-04-01",
+    "minExpenses": 50,
+    "position": "Architecture",
+    "Anstellung": 90,
+    "sex": "m"
+  },
+  {
+    "user": "remostrupler",
+    "name": "Struppler",
+    "firstname": "Remo",
+    "dateOfBirth": "1950-01-01",
+    "minExpenses": 0,
+    "position": "IT-Risk",
+    "Anstellung": 100,
+    "sex": "m"
+  },
+  {
+    "user": "susanne_s",
+    "name": "Sulzer",
+    "firstname": "Susanne",
+    "dateOfBirth": "1950-01-01",
+    "minExpenses": 0,
+    "position": "HR",
+    "Anstellung": 100,
+    "sex": "f"
+  },
+  {
+    "user": "lorenz-haenggi",
     "name": "Hänggi",
     "firstname": "Lorenz",
     "dateOfBirth": "1969-04-13",
     "minExpenses": 50,
-    "position": "Innovation"
+    "position": "Innovation",
+    "Anstellung": 100,
+    "sex": "m"
   },
   {
-    "user": "C950394",
+    "user": "cogji",
+    "name": "Giorgi",
+    "firstname": "Corinne",
+    "dateOfBirth": "1960-01-01",
+    "minExpenses": 0,
+    "position": "HR",
+    "Anstellung": 80,
+    "sex": "f"
+  },
+  {
+    "user": "brm",
     "name": "Breitenmoser",
     "firstname": "Bernhard",
-    "dateOfBirth": "1970-04-01",
+    "dateOfBirth": "1960-01-01",
     "minExpenses": 0,
-    "position": "SAP Specialist"
-  },
-  {
-    "user": "C123456",
-    "name": "Muster",
-    "firstname": "Peter",
-    "dateOfBirth": "1950-01-01",
-    "minExpenses": 200,
-    "position": "CEO"
+    "position": "SAP Specialist",
+    "Anstellung": 100,
+    "sex": "m"
   }
 ]
