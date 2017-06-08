@@ -14,6 +14,11 @@
   "$.Nein" : "Nein",
   "$.Hilfe.KeineAntwort":"Sorry. Leider keine Antwort gefunden",
 
+  "$.Spesen.Start":"Wie willst du deine Spesen erfassen?",
+  "$.Spesen.Text":"Gib uns die Daten durch.",
+  "$.Spesen.Foto":"Fotografiere deine Spesen.",
+  "$.Spesen.Summary":"Ich fasse zusammen:\n\nCHF 51.80\n31.05.2017\n\nIKEA Dietlikon\n\nKST: 12002 HREmployee Administration",
+  "$.Spesen.End":"Perfekt. Der Betrag wird dir spätestens im Folgemonat ausgezahlt - je nach dem wie schnell ich bin ;-)",
 
   "_filler" : "filler to support , at end of lines :-)"
 }
