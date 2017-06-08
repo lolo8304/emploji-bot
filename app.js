@@ -282,7 +282,7 @@ function beginDialogOnLuisIntent(intent, session) {
     console.log("Switch to Dialog based on luis intent " + intent.intent);
     if (intent.intent.startsWith("Absenzen")) {
         //hier müssen wir noch die Daten übergeben
-        session.beginDialog("/Absenzen", {});
+        session.beginDialog("Absenzen", {});
     }
 }
 
