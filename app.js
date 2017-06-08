@@ -237,7 +237,7 @@ bot.dialog('/Intro', [
                 session.beginDialog("Monatsabschluss");
             } 
             else {
-                session.send(session.message.text);
+                //session.send(session.message.text);
                 handleTextMessage(session.message.text, session);
             }
 
@@ -312,8 +312,8 @@ function handleTextMessageQnA(message, session) {
         if (A.answers) {
             for (var i = 0; i < A.answers.length; i++) {
                 var answer = A.answers[i];
+                console.log("QnA score: " + answer.score);
                 if (answer.score > process.env.INTENT_SCORE_QnA_THRESHOLD) {
-                    console.log("QnA score: " + answer.score);
                     realAnswers.push(answer);
                 }
             }
@@ -321,7 +321,7 @@ function handleTextMessageQnA(message, session) {
         if (realAnswers.length > 0) {
             sendQnAAnswers(realAnswers, session);
         } else {
-            //handle default Verhalten
+            //session.replaceDialog("/Intro");
         }
 
     })
