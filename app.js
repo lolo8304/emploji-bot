@@ -29,19 +29,27 @@ var bot = new builder.UniversalBot(connector, {
     }
 });
 bot.datastore={
-    user: "C936871",
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
-    getUser: function() {
+    getUserId: function(session) {
+        var id=session.message.address.user.name;
         for(var i in this.users) {
-            if (this.users[i].user===this.user) return this.users[i];
+            if (this.users[i].user===id) return id;
+        }
+        return "lorenz-haenggi";
+    },
+    getUser: function(session) {
+        var id=this.getUserId(session);
+        for(var i in this.users) {
+            if (this.users[i].user===id) return this.users[i];
         }
         return undefined;
     },
-    getAbsences: function() {
+    getAbsences: function(session) {
+        var id=this.getUserId(session);
         var result=[]; 
         for(var i in this.absences) {
-            if (this.absences[i].user===this.user) result.push(this.absences[i]);
+            if (this.absences[i].user===id) result.push(this.absences[i]);
         }
         return result;
     }
