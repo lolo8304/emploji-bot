@@ -13,7 +13,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
     this.bot.dialog('Absenzen', [
         function (session, args, next) {
             if (args && args.intent) {
-                session.send("Absenzen Dialog für intent: " + args.intent);
+                session.send("Absenzen Dialog für intent: " + args.intent.intent);
             } else {
                 session.send("Absenzen Dialog");
             }
