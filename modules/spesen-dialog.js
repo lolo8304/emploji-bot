@@ -9,7 +9,7 @@ function SpesenDialog(bot, builder, recognizer) {
     this.builder = builder;
     this.recognizer = recognizer;
 
-    this.bot.dialog('/Spesen', [
+    this.bot.dialog('Spesen', [
         function (session, args, next) {
 //            builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", IPromptChoiceOptions.listStyle.list);
             builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", { listStyle: builder.ListStyle.button });
@@ -30,9 +30,9 @@ function SpesenDialog(bot, builder, recognizer) {
             builder.Prompts.choice(session, "$.Spesen.Summary", "Richtig|Falsch", { listStyle: builder.ListStyle.button });
 //            builder.Prompts.text(session, "$.Spesen.Summary");
         },
-        function (session, result) {
+        function (session, result, next) {
             if(result.response.index == 1) {
-                session.beginDialog("/spesenbearbeiten");
+                session.beginDialog("Spesen_bearbeiten");
             } else {
                 next();
             }
@@ -47,7 +47,7 @@ function SpesenDialog(bot, builder, recognizer) {
         session.endDialog();
     }});
 
-    this.bot.dialog('/spesenbearbeiten', [
+    this.bot.dialog('Spesen_bearbeiten', [
         function (session) {
             builder.Prompts.text(session, 'Hi! What is your name?');
         },
