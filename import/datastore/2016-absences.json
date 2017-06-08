@@ -5,7 +5,8 @@
     "text": "Sommerferien Canada",
     "fromDate": "2017-04-13",
     "toDate": "2017-04-14",
-    "days": 2
+    "days": 2,
+    "commit": true
   },
   {
     "user": "C936871",
@@ -13,7 +14,17 @@
     "text": "XMAS Ferien",
     "fromDate": "2017-12-23",
     "toDate": "2017-12-26",
-    "days": 6
+    "days": 6,
+    "commit": false
+  },
+  {
+    "user": "C936871",
+    "typ": "Krank",
+    "text": "",
+    "fromDate": "2017-04-01",
+    "toDate": "2017-04-01",
+    "days": 0.5,
+    "commit": false
   },
   {
     "user": "C123456",

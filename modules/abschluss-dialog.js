@@ -12,9 +12,9 @@ function AbschlussDialog(bot, builder, recognizer) {
 
     this.bot.dialog('/Monatsabschluss', [
         function (session, args, next) {
-            var space="&nbsp;&nbsp;&nbsp;"
-            var text="Hallo "+bot.datastore.getUser().firstname+" name="+session.message.address.user.name+" id="+session.message.address.user.id;
-            text+=", deine Absenzen:<table><tr><td>Absenz</td><td>von</td><td>bis</td><td>Tage</td></tr>";
+            var space=" ";
+            var text="Hallo "+bot.datastore.getUser().firstname+"<br>name="+session.message.address.user.name+"<br>id="+session.message.address.user.id;
+            text+="<br>Deine Absenzen:<table><tr><td>Absenz</td><td>von</td><td>bis</td><td>Tage</td></tr>";
             var absences=bot.datastore.getAbsences();
             for(var i in absences) {
                 text+="<tr><td>"+absences[i].typ+space+"</td><td>"+absences[i].fromDate+space+"</td><td>"+absences[i].toDate+space+"</td><td>"+absences[i].days+space+"</td></tr>";
