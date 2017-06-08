@@ -143,7 +143,7 @@ var faqRecognizer = new builder.RegExpRecognizer("FAQ", {
     en_us: /^(faq|help)/i,
     de: /^(faq|hilfe)/i
 });
-var abschlussRecognizer = new builder.RegExpRecognizer("Abschluss", {
+var abschlussRecognizer = new builder.RegExpRecognizer("Monatsabschluss", {
     en_us: /^(closing|month)/i,
     de: /^(abschluss|monat)/i
 });
@@ -163,7 +163,7 @@ bot.dialog('/',
     intents
         .matches('Intro', '/Intro')
         .matches('FAQ', '/FAQ')
-        .matches('Abschluss', '/Abschluss')
+        .matches('Monatsabschluss', '/Monatsabschluss')
         .matches('Spesen', '/Spesen')
         .matches('Absenzen', '/Absenzen')
 );
@@ -186,6 +186,8 @@ intents.onDefault(
 );
 
 abschlussDialog = require('./modules/abschluss-dialog.js')(bot, builder, recognizer);
+absenzenDialog = require('./modules/absenz-dialog.js')(bot, builder, recognizer);
+spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 //=========================================================
 // dialog handler
@@ -194,25 +196,30 @@ abschlussDialog = require('./modules/abschluss-dialog.js')(bot, builder, recogni
 bot.dialog('/Intro', [
     function (session, args, next) {
         session.preferredLocale("de");
+        var buttons=[];
+        buttons[0] = builder.CardAction.imBack(session, "Monatsabschluss", "Monatsabschluss");
+        buttons[1] = builder.CardAction.imBack(session, "Absenzen", "Absenzen");
+        buttons[2] = builder.CardAction.imBack(session, "Spesen", "Spesen");
         var card = new builder.HeroCard(session)
             .title("Emploji")
             .text("$.Intro.Welcome")
             .images([
                 builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
-            ])
-            .buttons([
+            ]).buttons(buttons);
+       /*     .buttons([
                 // session, Action, Data-pushed, Title
-                builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen!"),
-                builder.CardAction.dialogAction(session, "Hilfe", "Hilfe", "Hilfe!"),
-                builder.CardAction.dialogAction(session, "Testen", "Testen", "Testen!")
-            ]);
+                builder.CardAction.dialogAction(session, "/Abschluss", "Abschluss", "Monatsabschluss!"),
+                builder.CardAction.dialogAction(session, "/Absenzen", "Absenzen", "Absenzen!"),
+                builder.CardAction.dialogAction(session, "/Spesen", "Spesen", "Spesen!")
+            ])*/
+            
         var msg = new builder.Message(session).addAttachment(card);
         session.send(msg);
         session.sendBatch();
     }
 ])
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(stop|bye|goodbye|abbruch|tschüss)/i });
-
+/*
 bot.dialog('/Absenzen', [
     function (session, args, next) {
         session.preferredLocale("de");
@@ -225,7 +232,7 @@ bot.dialog('/Absenzen', [
 ])
     .triggerAction({ matches: /(Absenzen=.*|absenzen)/i })
 
-
+*/
 
 bot.dialog('/Testen', [
     function (session, args, next) {
@@ -269,7 +276,7 @@ bot.dialog('/Testen', [
 ;
 
 
-bot.dialog('/Help', [
+bot.dialog('/Hilfe', [
     function (session, args, next) {
         session.preferredLocale("de");
         builder.Prompts.text(session, "Frage?");

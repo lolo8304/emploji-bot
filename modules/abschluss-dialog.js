@@ -10,10 +10,10 @@ function AbschlussDialog(bot, builder, recognizer) {
     this.builder = builder;
     this.recognizer = recognizer;
 
-    this.bot.dialog('/Abschluss', [
+    this.bot.dialog('/Monatsabschluss', [
         function (session, args, next) {
-            session.send("Abschluss Dialog");
+            session.send("Monatsabschluss Dialog");
         },
     ])
-        .triggerAction({ matches: /Abschluss/i })
+        .triggerAction({ matches: /Monatsabschluss/i })
 }
