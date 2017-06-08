@@ -1,22 +1,191 @@
-[{"brm":"brm","Weiterbildung":"Ferien","2017-02-15":"2017-07-15","2017-02-18":"2017-07-22","3":5,"true":false},
-{"brm":"brm","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"cogji","Weiterbildung":"Weiterbildung","2017-02-15":"2017-02-15","2017-02-18":"2017-02-18","3":3,"true":true},
-{"brm":"cogji","Weiterbildung":"Ferien","2017-02-15":"2017-07-15","2017-02-18":"2017-07-22","3":5,"true":false},
-{"brm":"cogji","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"david","Weiterbildung":"Weiterbildung","2017-02-15":"2017-02-15","2017-02-18":"2017-02-18","3":3,"true":true},
-{"brm":"david","Weiterbildung":"Ferien","2017-02-15":"2017-07-15","2017-02-18":"2017-07-22","3":5,"true":false},
-{"brm":"david","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"lorenz-haenggi","Weiterbildung":"Vaterschaftsurlaub","2017-02-15":"2017-04-13","2017-02-18":"2017-05-13","3":19,"true":true},
-{"brm":"lorenz-haenggi","Weiterbildung":"Ferien","2017-02-15":"2017-07-15","2017-02-18":"2017-07-22","3":5,"true":false},
-{"brm":"lorenz-haenggi","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"meyerchri","Weiterbildung":"Weiterbildung","2017-02-15":"2017-02-15","2017-02-18":"2017-02-18","3":3,"true":true},
-{"brm":"meyerchri","Weiterbildung":"Umzug","2017-02-15":"2017-05-15","2017-02-18":"2017-05-16","3":2,"true":true},
-{"brm":"meyerchri","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"remostrupler","Weiterbildung":"Weiterbildung","2017-02-15":"2017-02-15","2017-02-18":"2017-02-18","3":3,"true":true},
-{"brm":"remostrupler","Weiterbildung":"Ferien","2017-02-15":"2017-07-15","2017-02-18":"2017-07-22","3":5,"true":false},
-{"brm":"remostrupler","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"susanne_s","Weiterbildung":"Weiterbildung","2017-02-15":"2017-02-15","2017-02-18":"2017-02-18","3":3,"true":true},
-{"brm":"susanne_s","Weiterbildung":"Ferien","2017-02-15":"2017-07-15","2017-02-18":"2017-07-22","3":5,"true":false},
-{"brm":"susanne_s","Weiterbildung":"Ferien","2017-02-15":"2017-07-31","2017-02-18":"2017-08-06","3":5,"true":false},
-{"brm":"user","Weiterbildung":"typ","2017-02-15":"fromDate","2017-02-18":"toDate","3":days,"true":commit}
+[
+  {
+    "user": "brm",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "brm",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "brm",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "cogji",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "cogji",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "cogji",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "david",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "david",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "david",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Vaterschaftsurlaub",
+    "text": "",
+    "fromDate": "2017-04-13",
+    "toDate": "2017-05-13",
+    "days": 19,
+    "commit": true
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "meyerchri",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "meyerchri",
+    "typ": "Umzug",
+    "text": "",
+    "fromDate": "2017-05-15",
+    "toDate": "2017-05-16",
+    "days": 2,
+    "commit": true
+  },
+  {
+    "user": "meyerchri",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "remostrupler",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "remostrupler",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "remostrupler",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "susanne_s",
+    "typ": "Weiterbildung",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": true
+  },
+  {
+    "user": "susanne_s",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-15",
+    "toDate": "2017-07-22",
+    "days": 5,
+    "commit": false
+  },
+  {
+    "user": "susanne_s",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-07-31",
+    "toDate": "2017-08-06",
+    "days": 5,
+    "commit": false
+  }
 ]

@@ -6,7 +6,8 @@
     "dateOfBirth": "1969-04-13",
     "minExpenses": 0,
     "position": "Innovation",
-    "Anstellung": 60
+    "Anstellung": 60,
+    "sex": "f"
   },
   {
     "user": "david",
@@ -15,7 +16,8 @@
     "dateOfBirth": "1970-04-01",
     "minExpenses": 50,
     "position": "Architecture",
-    "Anstellung": 90
+    "Anstellung": 90,
+    "sex": "m"
   },
   {
     "user": "remostrupler",
@@ -24,7 +26,8 @@
     "dateOfBirth": "1950-01-01",
     "minExpenses": 0,
     "position": "IT-Risk",
-    "Anstellung": 100
+    "Anstellung": 100,
+    "sex": "m"
   },
   {
     "user": "susanne_s",
@@ -33,7 +36,8 @@
     "dateOfBirth": "1950-01-01",
     "minExpenses": 0,
     "position": "HR",
-    "Anstellung": 100
+    "Anstellung": 100,
+    "sex": "f"
   },
   {
     "user": "lorenz-haenggi",
@@ -42,7 +46,8 @@
     "dateOfBirth": "1969-04-13",
     "minExpenses": 50,
     "position": "Innovation",
-    "Anstellung": 100
+    "Anstellung": 100,
+    "sex": "m"
   },
   {
     "user": "cogji",
@@ -51,7 +56,8 @@
     "dateOfBirth": "1960-01-01",
     "minExpenses": 0,
     "position": "HR",
-    "Anstellung": 80
+    "Anstellung": 80,
+    "sex": "f"
   },
   {
     "user": "brm",
@@ -60,6 +66,7 @@
     "dateOfBirth": "1960-01-01",
     "minExpenses": 0,
     "position": "SAP Specialist",
-    "Anstellung": 100
+    "Anstellung": 100,
+    "sex": "m"
   }
 ]
