@@ -10,7 +10,7 @@ function AbschlussDialog(bot, builder, recognizer) {
     this.builder = builder;
     this.recognizer = recognizer;
 
-    this.bot.dialog('Monatsabschluss', [
+    this.bot.dialog('Monatsabschluss', [  
         function (session, args, next) {
             var user=bot.datastore.getUser(session);
             var absences=bot.datastore.getAbsences(session);
