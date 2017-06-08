@@ -16,6 +16,11 @@ function AbsenzenDialog(bot, builder, recognizer) {
         },
     ])
         .triggerAction({ matches: /Absenzen/i })
-        .cancelAction('/dddd', "OK Absenzerfassung abgebrochen", 
-        { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i })
+        .cancelAction('/Intro', "OK Absenzerfassung abgebrochen", 
+        { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
+    onSelectAction: (session, args) => {
+        session.endDialog();
+        session.beginDialog("/Intro");
+    },
+    confirmPrompt: `Are you sure you wish to cancel?`});
 }
