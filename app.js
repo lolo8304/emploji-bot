@@ -23,17 +23,13 @@ var connector = new builder.ChatConnector({
 // Listen for messages from users 
 server.post('/api/messages', connector.listen());
 
-<<<<<<< HEAD
+
 var bot = new builder.UniversalBot(connector, {
     localizerSettings: {
         defaultLocale: "de"
     }
 });
 bot.datastore = {
-=======
-var bot = new builder.UniversalBot(connector);
-bot.datastore={
->>>>>>> 9436d76a10c7a88bc37abd57c8460082850afc0b
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
     getUserId: function (session) {
