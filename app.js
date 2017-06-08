@@ -158,7 +158,8 @@ var introRecognizer = new builder.RegExpRecognizer("Intro", {
     en_us: /^(intro|start)/i,
     de: /^(intro|start)/i
 });
-var faqRecognizer = new builder.RegExpRecognizer("FAQ", {
+
+/*var faqRecognizer = new builder.RegExpRecognizer("FAQ", {
     en_us: /^(faq|help)/i,
     de: /^(faq|hilfe)/i
 });
@@ -173,18 +174,20 @@ var spesenRecognizer = new builder.RegExpRecognizer("Spesen", {
 var absenzenRecognizer = new builder.RegExpRecognizer("Absenzen", {
     en_us: /^(absence)/i,
     de: /^(absenz|krank|ferien)/i
-});
+});*/
 var intents = new builder.IntentDialog({
-    recognizers: [introRecognizer, faqRecognizer, abschlussRecognizer, spesenRecognizer, absenzenRecognizer]
+    //recognizers: [introRecognizer, faqRecognizer, abschlussRecognizer, spesenRecognizer, absenzenRecognizer]
+    recognizers: [introRecognizer]
 });
 
 bot.dialog('/',
     intents
         .matches('Intro', '/Intro')
-        .matches('FAQ', '/FAQ')
-        .matches('Monatsabschluss', '/Monatsabschluss')
-        .matches('Spesen', '/Spesen')
-        .matches('Absenzen', '/Absenzen'), [
+ //       .matches('FAQ', '/FAQ')
+ //       .matches('Monatsabschluss', 'Monatsabschluss')
+//        .matches('Spesen', 'Spesen')
+//        .matches('Absenzen', 'Absenzen')
+, [
         function (session, args, next) {
             console.log("in /");
         }
@@ -385,14 +388,14 @@ bot.dialog('/Hilfe', [
     },
     function (session, results) {
         if (results.response.entity === bot_helper.locale(session, "$.Nein")) {
-            session.replaceDialog("/Help");
+            session.replaceDialog("/Hilfe");
         }
         if (results.response.entity === bot_helper.locale(session, "$.Ja")) {
-            session.endDialog();
+            session.replaceDialog("/Intro");
         }
     }
 ])
-    .triggerAction({ matches: /(help|hilfe|fragen|Hilfe=.*)/i })
+    .triggerAction({ matches: /(help|hilfe|fragen|Hilfe|faq=.*)/i })
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 ;
 
