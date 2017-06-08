@@ -214,16 +214,29 @@ spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
-        if (session.message.type === "message" 
-        && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i)) 
-        && session.message.text ) {
-            session.send(session.message.text);
+        if (session.message.type === "message"
+            && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
+            && session.message.text) {
+            //hier geht es um die Universalweiche
+            if (session.message.text.startsWith("action?Spesen")) {
+                session.beginDialog("Spesen");
+            } else if (session.message.text.startsWith("action?Absenzen")) {
+                session.beginDialog("Absenzen");
+            } else if (session.message.text.startsWith("action?Monats")) {
+                session.beginDialog("Monatsabschluss");
+            } 
+            else {
+                session.send(session.message.text);
+                handleTextMessage(session.message.text, session);
+            }
+
+
         } else {
             session.preferredLocale("de");
             var buttons = [];
-            buttons[0] = builder.CardAction.imBack(session, "Monatsabschluss", "Monatsabschluss");
-            buttons[1] = builder.CardAction.imBack(session, "Absenzen", "Absenzen");
-            buttons[2] = builder.CardAction.imBack(session, "Spesen", "Spesen");
+            buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
+            buttons[1] = builder.CardAction.dialogAction(session, "Absenzen","Absenzen", "Absenzen");
+            buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen","Spesen");
             var card = new builder.HeroCard(session)
                 .title("Emploji")
                 .text("$.Intro.Welcome")
@@ -235,9 +248,65 @@ bot.dialog('/Intro', [
             session.send(msg);
             session.sendBatch();
         }
-    }
+    },
+    function(session, args, next) {
+        session.replaceDialog("/Intro");
+    } 
 ])
-    .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(stop|bye|goodbye|abbruch|tschüss)/i });
+    .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", 
+    { matches: /(stop|bye|goodbye|abbruch|tschüss)/i ,
+    onSelectAction: (session, args) => {
+        session.endDialog();
+        session.beginDialog("/Intro");
+    }});
+
+
+//first LUIS, dann QnA, dann ??'
+function handleTextMessage(message, session) {
+    builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
+        if (intents.length > 0) {
+            console.log('Luis Score: ' + intents[0].score);
+            if (intents[0].score >= process.env.INTENT_SCORE_LUIS_THRESHOLD) {
+              //Weiche auf LUIS
+              beginDialogOnLuisIntent(intents[0], session);
+              return;
+            }
+        } 
+      //Query QnA Score
+        handleTextMessageQnA(message, session);
+        
+    });
+}
+
+function beginDialogOnLuisIntent(intent, session) {
+    console.log("Switch to Dialog based on luis intent " + intent.intent);
+    if (intent.intent.startsWith("Absenzen")) {
+        //hier müssen wir noch die Daten übergeben
+        session.beginDialog("/Absenzen", {});
+    }
+}
+
+function handleTextMessageQnA(message, session) {
+    qnaMaker.getQnAResponse(message, function (Q, A) {
+        var realAnswers = [];
+        if (A.answers) {
+            for (var i = 0; i < A.answers.length; i++) {
+                var answer = A.answers[i];
+                if (answer.score > process.env.INTENT_SCORE_QnA_THRESHOLD) {
+                    console.log("QnA score: " + answer.score);
+                    realAnswers.push(answer);
+                }
+            }
+        }
+        if (realAnswers.length > 0) {
+            sendQnAAnswers(realAnswers, session);
+        } else {
+            //handle default Verhalten
+        }
+
+    })
+}
+
 
 
 bot.dialog('/Testen', [
@@ -299,14 +368,7 @@ bot.dialog('/Hilfe', [
                 }
             }
             if (realAnswers.length > 0) {
-                var text = "Unsere Antworten:";
-                for (var i = 0; i < realAnswers.length; i++) {
-                    var answer = realAnswers[i];
-                    text = text + "\n\n - " + answer.answer + " (" + answer.score + "%)";
-                }
-                session.send(text);
-                bot_helper.choices(session, "$.Hilfe.Feedback.Title", "$.Hilfe.Feedback.Choices");
-                session.sendBatch();
+                sendQnAAnswers(realAnswers, session);
             } else {
                 session.endDialog("$.Hilfe.KeineAntwort");
             }
@@ -324,3 +386,14 @@ bot.dialog('/Hilfe', [
     .triggerAction({ matches: /(help|hilfe|fragen|Hilfe=.*)/i })
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 ;
+
+function sendQnAAnswers(answers, session) {
+    var text = "Unsere Antworten:";
+    for (var i = 0; i < answers.length; i++) {
+        var answer = answers[i];
+        text = text + "\n\n - " + answer.answer + " (" + answer.score + "%)";
+    }
+    session.send(text);
+    bot_helper.choices(session, "$.Hilfe.Feedback.Title", "$.Hilfe.Feedback.Choices");
+    session.sendBatch();
+}

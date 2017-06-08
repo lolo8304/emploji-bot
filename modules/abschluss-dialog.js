@@ -10,7 +10,7 @@ function AbschlussDialog(bot, builder, recognizer) {
     this.builder = builder;
     this.recognizer = recognizer;
 
-    this.bot.dialog('/Monatsabschluss', [
+    this.bot.dialog('Monatsabschluss', [
         function (session, args, next) {
             var space=" ";
             var text="Hallo "+bot.datastore.getUser().firstname+"<br>name="+session.message.address.user.name+"<br>id="+session.message.address.user.id;
@@ -35,12 +35,9 @@ function AbschlussDialog(bot, builder, recognizer) {
         //    }
        // },
     ])
-        .triggerAction({ matches: /Monatsabschluss/i })
         .cancelAction('/Intro', "OK Monatsabschluss abgebrochen", 
         { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
     onSelectAction: (session, args) => {
         session.endDialog();
-        session.beginDialog("/Intro");
-    },
-    confirmPrompt: `Are you sure you wish to cancel?`});
+    }});
 }

@@ -1,0 +1,29 @@
+#add ID and password and LUIS URL here and copy it to .env
+
+MICROSOFT_APP_ID=
+MICROSOFT_APP_PASSWORD=
+#MICROSOFT_LUIS_MODEL=
+MICROSOFT_LUIS_MODEL=
+
+MICROSOFT_QNA_MAKER_URL=
+MICROSOFT_QNA_MAKER_KEY=
+
+PORT=3800
+
+## uncomment for localhost
+BOT_DOMAIN_URL=http://localhost:3800
+
+## uncomment for production
+## BOT_DOMAIN_URL=https://emploji-bot.herokuapp.com
+
+## localhost: only URL is needed, no user / pwd
+DB_APP_URL=localhost:27018/emploji-bot
+
+## remote mongodb
+#DB_APP_URL=domain:port/name
+#DB_APP_USER=user
+#DB_APP_PWD=pwd
+
+##Intent score Schwellwerte für Treffer
+INTENT_SCORE_LUIS_THRESHOLD=0.8
+INTENT_SCORE_QnA_THRESHOLD=0.5
