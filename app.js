@@ -397,22 +397,12 @@ bot.dialog('/Hilfe', [
             }
             if (realAnswers.length > 0) {
                 sendQnAAnswers(realAnswers, session);
-                bot_helper.choices(session, "$.Hilfe.Feedback.Title", "$.Hilfe.Feedback.Choices");
                 session.sendBatch();
+                session.endDialog();
             } else {
                 session.endDialog("$.Hilfe.KeineAntwort");
             }
         })
-    },
-    function (session, results) {
-        if (results.response.entity === bot_helper.locale(session, "$.Nein")) {
-            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
-            session.replaceDialog("/Hilfe");
-        }
-        if (results.response.entity === bot_helper.locale(session, "$.Ja")) {
-            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
-            session.replaceDialog("/Intro");
-        }
     }
 ])
     .triggerAction({ matches: /(help|hilfe|fragen|Hilfe|faq=.*)/i })
