@@ -321,7 +321,7 @@ function handleTextMessageQnA(message, session) {
         if (realAnswers.length > 0) {
             sendQnAAnswers(realAnswers, session);
         } else {
-            session.replaceDialog("/Intro");
+            //session.replaceDialog("/Intro");
         }
 
     })
