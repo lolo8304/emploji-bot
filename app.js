@@ -28,28 +28,28 @@ var bot = new builder.UniversalBot(connector, {
         defaultLocale: "de"
     }
 });
-bot.datastore={
+bot.datastore = {
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
-    getUserId: function(session) {
-        var id=session.message.address.user.name;
-        for(var i in this.users) {
-            if (this.users[i].user===id) return id;
+    getUserId: function (session) {
+        var id = session.message.address.user.name;
+        for (var i in this.users) {
+            if (this.users[i].user === id) return id;
         }
         return "lorenz-haenggi";
     },
-    getUser: function(session) {
-        var id=this.getUserId(session);
-        for(var i in this.users) {
-            if (this.users[i].user===id) return this.users[i];
+    getUser: function (session) {
+        var id = this.getUserId(session);
+        for (var i in this.users) {
+            if (this.users[i].user === id) return this.users[i];
         }
         return undefined;
     },
-    getAbsences: function(session) {
-        var id=this.getUserId(session);
-        var result=[]; 
-        for(var i in this.absences) {
-            if (this.absences[i].user===id) result.push(this.absences[i]);
+    getAbsences: function (session) {
+        var id = this.getUserId(session);
+        var result = [];
+        for (var i in this.absences) {
+            if (this.absences[i].user === id) result.push(this.absences[i]);
         }
         return result;
     }
@@ -191,11 +191,11 @@ var intents = new builder.IntentDialog({
 bot.dialog('/',
     intents
         .matches('Intro', '/Intro')
- //       .matches('FAQ', '/FAQ')
- //       .matches('Monatsabschluss', 'Monatsabschluss')
-//        .matches('Spesen', 'Spesen')
-//        .matches('Absenzen', 'Absenzen')
-, [
+    //       .matches('FAQ', '/FAQ')
+    //       .matches('Monatsabschluss', 'Monatsabschluss')
+    //        .matches('Spesen', 'Spesen')
+    //        .matches('Absenzen', 'Absenzen')
+    , [
         function (session, args, next) {
             console.log("in /");
         }
@@ -235,7 +235,7 @@ bot.dialog('/Intro', [
                 session.beginDialog("Absenzen");
             } else if (session.message.text.startsWith("action?Monats")) {
                 session.beginDialog("Monatsabschluss");
-            } 
+            }
             else {
                 //session.send(session.message.text);
                 handleTextMessage(session.message.text, session);
@@ -248,8 +248,8 @@ bot.dialog('/Intro', [
                 session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
             var buttons = [];
             buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
-            buttons[1] = builder.CardAction.dialogAction(session, "Absenzen","Absenzen", "Absenzen");
-            buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen","Spesen");
+            buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
+            buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
             var card = new builder.HeroCard(session)
                 .title("Emploji")
                 .text(welcomeText)
@@ -262,16 +262,18 @@ bot.dialog('/Intro', [
             session.sendBatch();
         }
     },
-    function(session, args, next) {
+    function (session, args, next) {
         session.replaceDialog("/Intro");
-    } 
+    }
 ])
-    .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", 
-    { matches: /(stop|bye|goodbye|abbruch|tschüss)/i ,
-    onSelectAction: (session, args) => {
-        session.endDialog();
-        session.beginDialog("/Intro");
-    }});
+    .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst",
+    {
+        matches: /(stop|bye|goodbye|abbruch|tschüss)/i,
+        onSelectAction: (session, args) => {
+            session.endDialog();
+            session.beginDialog("/Intro");
+        }
+    });
 
 
 //first LUIS, dann QnA, dann ??'
@@ -280,14 +282,14 @@ function handleTextMessage(message, session) {
         if (intents.length > 0) {
             console.log('Luis Score: ' + intents[0].score);
             if (intents[0].score >= (process.env.INTENT_SCORE_LUIS_THRESHOLD || 0.51)) {
-              //Weiche auf LUIS
-              beginDialogOnLuisIntent(intents[0], entities, session);
-              return;
+                //Weiche auf LUIS
+                beginDialogOnLuisIntent(intents[0], entities, session);
+                return;
             }
-        } 
-      //Query QnA Score
+        }
+        //Query QnA Score
         handleTextMessageQnA(message, session);
-        
+
     });
 }
 
@@ -295,13 +297,13 @@ function beginDialogOnLuisIntent(intent, entities, session) {
     console.log("Switch to Dialog based on luis intent " + intent.intent);
     if (intent.intent.startsWith("Absenzen")) {
         //hier müssen wir noch die Daten übergeben
-        session.beginDialog("Absenzen", {"intent": intent, "entities": entities});
+        session.beginDialog("Absenzen", { "intent": intent, "entities": entities });
     } else if (intent.intent.startsWith("Spesen")) {
         //hier müssen wir noch die Daten übergeben
-        session.beginDialog("Spesen", {"intent": intent, "entities": entities});
+        session.beginDialog("Spesen", { "intent": intent, "entities": entities });
     } if (intent.intent.startsWith("Monatsabschluss")) {
         //hier müssen wir noch die Daten übergeben
-        session.beginDialog("Monatsabschluss", {"intent": intent, "entities": entities});
+        session.beginDialog("Monatsabschluss", { "intent": intent, "entities": entities });
     } else {
         console.log("no dialog found for intend " + intent.intent);
     }
@@ -394,6 +396,8 @@ bot.dialog('/Hilfe', [
             }
             if (realAnswers.length > 0) {
                 sendQnAAnswers(realAnswers, session);
+                bot_helper.choices(session, "$.Hilfe.Feedback.Title", "$.Hilfe.Feedback.Choices");
+                session.sendBatch();
             } else {
                 session.endDialog("$.Hilfe.KeineAntwort");
             }
@@ -401,9 +405,11 @@ bot.dialog('/Hilfe', [
     },
     function (session, results) {
         if (results.response.entity === bot_helper.locale(session, "$.Nein")) {
+            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
             session.replaceDialog("/Hilfe");
         }
         if (results.response.entity === bot_helper.locale(session, "$.Ja")) {
+            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
             session.replaceDialog("/Intro");
         }
     }
@@ -419,6 +425,4 @@ function sendQnAAnswers(answers, session) {
         text = text + "\n\n - " + answer.answer + " (" + answer.score + "%)";
     }
     session.send(text);
-    bot_helper.choices(session, "$.Hilfe.Feedback.Title", "$.Hilfe.Feedback.Choices");
-    session.sendBatch();
 }
