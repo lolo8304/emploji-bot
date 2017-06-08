@@ -12,12 +12,18 @@ function AbsenzenDialog(bot, builder, recognizer) {
 
     this.bot.dialog('Absenzen', [
         function (session, args, next) {
-            session.send("Absenzen Dialog");
+            if (args.intent) {
+                session.send("Absenzen Dialog für intent: " + args.intent);
+            } else {
+                session.send("Absenzen Dialog");
+            }
         },
     ])
-        .cancelAction('/Intro', "OK Absenzerfassung abgebrochen", 
-        { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
-    onSelectAction: (session, args) => {
-        session.endDialog();
-    }});
+        .cancelAction('/Intro', "OK Absenzerfassung abgebrochen",
+        {
+            matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
+            onSelectAction: (session, args) => {
+                session.endDialog();
+            }
+        });
 }

@@ -268,7 +268,7 @@ function handleTextMessage(message, session) {
             console.log('Luis Score: ' + intents[0].score);
             if (intents[0].score >= process.env.INTENT_SCORE_LUIS_THRESHOLD) {
               //Weiche auf LUIS
-              beginDialogOnLuisIntent(intents[0], session);
+              beginDialogOnLuisIntent(intents[0], entities, session);
               return;
             }
         } 
@@ -278,11 +278,11 @@ function handleTextMessage(message, session) {
     });
 }
 
-function beginDialogOnLuisIntent(intent, session) {
+function beginDialogOnLuisIntent(intent, entities, session) {
     console.log("Switch to Dialog based on luis intent " + intent.intent);
     if (intent.intent.startsWith("Absenzen")) {
         //hier müssen wir noch die Daten übergeben
-        session.beginDialog("Absenzen", {});
+        session.beginDialog("Absenzen", {"intent": intent, "entities": entities});
     }
 }
 
