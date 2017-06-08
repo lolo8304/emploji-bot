@@ -175,8 +175,9 @@ bot.dialog('/',
 
 bot.on('conversationUpdate', (message) => {
     if (message.membersAdded) {
+        if (!(message.membersAdded[0].name === 'Bot')) {
         bot.beginDialog(message.address, '*:/Intro');
-    }
+    }}
 });
 
 
