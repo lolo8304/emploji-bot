@@ -313,7 +313,7 @@ function handleTextMessageQnA(message, session) {
             for (var i = 0; i < A.answers.length; i++) {
                 var answer = A.answers[i];
                 console.log("QnA score: " + answer.score);
-                if (answer.score > (process.env.INTENT_SCORE_QnA_THRESHOLD || 35.0) {
+                if (answer.score > (process.env.INTENT_SCORE_QnA_THRESHOLD || 35.0)) {
                     realAnswers.push(answer);
                 }
             }
