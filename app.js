@@ -225,7 +225,7 @@ spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
-        if (session.message.type === "message"
+        if (session.message && (session.message.type === "message")
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
             && session.message.text) {
             //hier geht es um die Universalweiche
@@ -277,7 +277,7 @@ function handleTextMessage(message, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
             console.log('Luis Score: ' + intents[0].score);
-            if (intents[0].score >= process.env.INTENT_SCORE_LUIS_THRESHOLD) {
+            if (intents[0].score >= (process.env.INTENT_SCORE_LUIS_THRESHOLD || 0.51)) {
               //Weiche auf LUIS
               beginDialogOnLuisIntent(intents[0], entities, session);
               return;
@@ -313,7 +313,7 @@ function handleTextMessageQnA(message, session) {
             for (var i = 0; i < A.answers.length; i++) {
                 var answer = A.answers[i];
                 console.log("QnA score: " + answer.score);
-                if (answer.score > process.env.INTENT_SCORE_QnA_THRESHOLD) {
+                if (answer.score > (process.env.INTENT_SCORE_QnA_THRESHOLD || 35.0) {
                     realAnswers.push(answer);
                 }
             }
@@ -321,7 +321,10 @@ function handleTextMessageQnA(message, session) {
         if (realAnswers.length > 0) {
             sendQnAAnswers(realAnswers, session);
         } else {
-            //session.replaceDialog("/Intro");
+            session.send("Sorry, habe deine Meldung nicht verstanden: " + session.message.text);
+            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
+            session.replaceDialog("/Intro");
+
         }
 
     })
