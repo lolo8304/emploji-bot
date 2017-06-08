@@ -12,28 +12,42 @@ function AbschlussDialog(bot, builder, recognizer) {
 
     this.bot.dialog('Monatsabschluss', [
         function (session, args, next) {
-            var space=" ";
-            var text="Hallo "+bot.datastore.getUser().firstname+"<br>name="+session.message.address.user.name+"<br>id="+session.message.address.user.id;
-            text+="<br>Deine Absenzen:<table><tr><td>Absenz</td><td>von</td><td>bis</td><td>Tage</td></tr>";
+            var user=bot.datastore.getUser();
             var absences=bot.datastore.getAbsences();
+            var cnt=0;
+            var cntOpen=0;
             for(var i in absences) {
-                text+="<tr><td>"+absences[i].typ+space+"</td><td>"+absences[i].fromDate+space+"</td><td>"+absences[i].toDate+space+"</td><td>"+absences[i].days+space+"</td></tr>";
+                cnt++;
+               if (absences[i].commit) cntOpen++;
             }
-            text+="</table>";
-       //    session.send(text);
-      // var msg=new builder.Message(session).text(text);
-        session.send(text);
- 
+            if (cnt==0) {
+               session.send("Du hast keine Absenzen!");
+            } else {
+                if (cntOpen==0) {
+                    builder.Prompts.choice(session, "Deine "+cnt+" Absenzen sind schon bestätigt! Wenn du willst, kannst du", "Alle Absenzen anzeigen", { listStyle: builder.ListStyle.button });
+                 } else {
+                    var text="Du hast "+cntOpen+" unbestätigte Absenzen<br>";
+                    for(var i in absences) {
+                        if (absences[i].commit==false) {
+                            if (absences[i].days==1) {
+                              text+=absences[i].typ+" am "+absences[i].fromDate+"<br>";
+                            } else {
+                               text+=absences[i].days+ " Tage "+absences[i].typ+" ab "+absences[i].fromDate+"<br>";
+                            }
+                        }
+                    }
+                    builder.Prompts.choice(session, text,  "Absenzen bestätigen", { listStyle: builder.ListStyle.button });
+                }
+            }
         }
-           // builder.Prompts.text(session, text);
         
-        //function (session, results, next) {
-           // if (results.response) {
-           //     session.send("Monatsabschluss Dialog2 für "+results.response);
-         //   } else {
-       //         session.send("Du hast nichts angegeben!");
-        //    }
-       // },
+        /* ,
+
+        function (session, results, next) {
+                session.send("Monatsabschluss Dialog2 für und "+result.response.index);
+        }
+*/
+           
     ])
         .cancelAction('/Intro', "OK Monatsabschluss abgebrochen", 
         { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,

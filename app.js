@@ -29,19 +29,27 @@ var bot = new builder.UniversalBot(connector, {
     }
 });
 bot.datastore={
-    user: "C936871",
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
-    getUser: function() {
+    getUserId: function(session) {
+        var id=session.message.address.user.name;
         for(var i in this.users) {
-            if (this.users[i].user===this.user) return this.users[i];
+            if (this.users[i].user===id) return id;
+        }
+        return "lorenz-haenggi";
+    },
+    getUser: function(session) {
+        var id=this.getUserId(session);
+        for(var i in this.users) {
+            if (this.users[i].user===id) return this.users[i];
         }
         return undefined;
     },
-    getAbsences: function() {
+    getAbsences: function(session) {
+        var id=this.getUserId(session);
         var result=[]; 
         for(var i in this.absences) {
-            if (this.absences[i].user===this.user) result.push(this.absences[i]);
+            if (this.absences[i].user===id) result.push(this.absences[i]);
         }
         return result;
     }
@@ -158,7 +166,8 @@ var introRecognizer = new builder.RegExpRecognizer("Intro", {
     en_us: /^(intro|start)/i,
     de: /^(intro|start)/i
 });
-var faqRecognizer = new builder.RegExpRecognizer("FAQ", {
+
+/*var faqRecognizer = new builder.RegExpRecognizer("FAQ", {
     en_us: /^(faq|help)/i,
     de: /^(faq|hilfe)/i
 });
@@ -173,18 +182,20 @@ var spesenRecognizer = new builder.RegExpRecognizer("Spesen", {
 var absenzenRecognizer = new builder.RegExpRecognizer("Absenzen", {
     en_us: /^(absence)/i,
     de: /^(absenz|krank|ferien)/i
-});
+});*/
 var intents = new builder.IntentDialog({
-    recognizers: [introRecognizer, faqRecognizer, abschlussRecognizer, spesenRecognizer, absenzenRecognizer]
+    //recognizers: [introRecognizer, faqRecognizer, abschlussRecognizer, spesenRecognizer, absenzenRecognizer]
+    recognizers: [introRecognizer]
 });
 
 bot.dialog('/',
     intents
         .matches('Intro', '/Intro')
-        .matches('FAQ', '/FAQ')
-        .matches('Monatsabschluss', '/Monatsabschluss')
-        .matches('Spesen', '/Spesen')
-        .matches('Absenzen', '/Absenzen'), [
+ //       .matches('FAQ', '/FAQ')
+ //       .matches('Monatsabschluss', 'Monatsabschluss')
+//        .matches('Spesen', 'Spesen')
+//        .matches('Absenzen', 'Absenzen')
+, [
         function (session, args, next) {
             console.log("in /");
         }
@@ -385,14 +396,14 @@ bot.dialog('/Hilfe', [
     },
     function (session, results) {
         if (results.response.entity === bot_helper.locale(session, "$.Nein")) {
-            session.replaceDialog("/Help");
+            session.replaceDialog("/Hilfe");
         }
         if (results.response.entity === bot_helper.locale(session, "$.Ja")) {
-            session.endDialog();
+            session.replaceDialog("/Intro");
         }
     }
 ])
-    .triggerAction({ matches: /(help|hilfe|fragen|Hilfe=.*)/i })
+    .triggerAction({ matches: /(help|hilfe|fragen|Hilfe|faq=.*)/i })
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 ;
 
