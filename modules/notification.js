@@ -20,7 +20,10 @@ function Nofifier(bot, builder, recognizer) {
                 bot: savedAddress.bot,
                 serviceUrl: savedAddress.serviceUrl
             };
-            notify(address, "Test Notification")
+            notify(address, "Test Notification, id: " 
+            + address.id + " bot id: " + address.bot.id  + " bot name: " + address.bot.name 
+            + " serviceURL: " + address.serviceUrl 
+            + " user name: " + address.user.name + " user id: " + address.user.id);
         },
     ])
         .cancelAction('/Intro', "OK Notifier abgebrochen",

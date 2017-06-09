@@ -191,6 +191,7 @@ notifier = require('./modules/notification.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
+        
         if (session.message && (session.message.type === "message")
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
             && session.message.text) {
