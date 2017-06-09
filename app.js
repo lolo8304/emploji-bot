@@ -208,7 +208,28 @@ bot.dialog('/Intro', [
                 handleTextMessage(session.message.text, session);
             }
         } else {
+<<<<<<< HEAD
             showMenu(session);
+=======
+            session.preferredLocale("de");
+            var welcomeText = session.localizer.gettext(session.preferredLocale(), "$.Intro.Hi") +
+                session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
+            var buttons = [];
+            buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
+            buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
+            buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
+            buttons[3] = builder.CardAction.dialogAction(session, "Hilfe", "Hilfe", "Hilfe");
+            var card = new builder.HeroCard(session)
+                .title("Emploji")
+                .text(welcomeText)
+                .images([
+                    builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
+                ]).buttons(buttons);
+
+            var msg = new builder.Message(session).addAttachment(card);
+            session.send(msg);
+            session.sendBatch();
+>>>>>>> a1cf1e79d408a241896165170ea31a7f4022f4dd
         }
     },
     function (session, args, next) {

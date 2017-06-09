@@ -33,13 +33,13 @@ function AbschlussDialog(bot, builder, recognizer) {
                 }
                 list = "weiter|Alle Absenzen anzeigen";
             } else {
-                text += "Du hast " + cntOpen + " unbestätigte Absenzen<br>";
+                text += "Du hast " + cntOpen + " unbestätigte Absenzen\n\n";
                 for (var i in absences) {
                     if (absences[i].commit === false) {
                         if (absences[i].days === 1) {
-                            text += "1 Tag " + absences[i].typ + " am " + absences[i].fromDate + "<br>";
+                            text += "1 Tag " + absences[i].typ + " am " + absences[i].fromDate + "\n\n";
                         } else {
-                            text += absences[i].days + " Tage " + absences[i].typ + " vom " + absences[i].fromDate + " bis " + absences[i].toDate + "<br>";
+                            text += absences[i].days + " Tage " + absences[i].typ + " vom " + absences[i].fromDate + " bis " + absences[i].toDate + "\n\n";
                         }
                     }
                 }
@@ -55,21 +55,21 @@ function AbschlussDialog(bot, builder, recognizer) {
             var absences = bot.datastore.getAbsences(session);
             if (result.response) {
                 if (result.response.entity === "Alle Absenzen anzeigen") {
-                    var text = "Deine Absenzen:<br>";
+                    var text = "Deine Absenzen:\n\n";
                     for (var i in absences) {
                         if (absences[i].days === 1) {
                             text += "1 Tag " + absences[i].typ + " am " + absences[i].fromDate;
                         } else {
                             text += absences[i].days + " Tage " + absences[i].typ + " vom " + absences[i].fromDate + " bis " + absences[i].toDate;
                         }
-                        text += " " + (absences[i].commit ? "(bestätigt)" : "(unbestätigt)") + "<br>";
+                        text += " " + (absences[i].commit ? "(bestätigt)" : "(unbestätigt)") + "\n\n";
                     }
                     session.send(text);
                 } else if (result.response.entity === "Monatabschluss bestätigen") {
                     for (var i in absences) {
                         absences[i].commit = true;
                     }
-                    session.send("Dein Monatsabschluss ist bestätigt");
+                    session.endDialog("Dein Monatsabschluss ist bestätigt");
                 }
             }
         }
