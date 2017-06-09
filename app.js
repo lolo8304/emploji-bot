@@ -242,11 +242,48 @@ function showMenu(session) {
 
     var msg = new builder.Message(session).addAttachment(card);
     session.send(msg);
-    session.sendBatch(); 
+    session.sendBatch();
 }
 
-//first LUIS, dann QnA, dann ??'
+//=========================================================
+// Universalweiche 
+//   1. Zeige QnA mit hohem Treffer
+//   2. Check Luis, wenn Intent gefunden > Schwellwert --> Starte passenden Dialog, Stop
+//   3. Wenn nicht Luis, dann zeige noch die QNA zwischen high and low level mark
+//   4. wenn keine Treffer --> verstehe nicht Antwort 
+//=========================================================
+
 function handleTextMessage(message, session) {
+    handleTextMessagePhase1(message, session);
+}
+
+//Phase 1: Retrieve QNA Answers, zeige hohe Treffer
+function handleTextMessagePhase1(message, session) {
+    qnaMaker.getQnAResponse(message, function (Q, A) {
+        var topAnswers = [];
+        var alternativeAnswers = [];
+        if (A.answers) {
+            for (var i = 0; i < A.answers.length; i++) {
+                var answer = A.answers[i];
+                console.log("QnA score: " + answer.score);
+                if (answer.score >= (process.env.INTENT_SCORE_QnA_HIGH_THRESHOLD || 75.0)) {
+                    topAnswers.push(answer);
+                } else if (answer.score >= (process.env.INTENT_SCORE_QnA_LOW_THRESHOLD || 35.0)) {
+                    alternativeAnswers.push(answer);
+                }
+            }
+        }
+        if (topAnswers.length > 0) {
+            sendQnAAnswers(topAnswers, session);
+        }
+
+        //starte Phase 2 -> LUIS, gebe top und alternative answers mit
+        handleTextMessagePhase2(message, topAnswers, alternativeAnswers, session);
+    })
+}
+
+//Phase 2: check LUIS for matching intents
+function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
             console.log('Luis Score: ' + intents[0].score);
@@ -256,12 +293,12 @@ function handleTextMessage(message, session) {
                 return;
             }
         }
-        //Query QnA Score
-        handleTextMessageQnA(message, session);
-
+        //Starte Phasen 3/4
+        handleTextMessagePhase3(message, topAnswers, altAnswers, session);
     });
 }
 
+//Handle LUIS Intent - Starte die passenden Dialoge
 function beginDialogOnLuisIntent(intent, entities, session) {
     console.log("Switch to Dialog based on luis intent " + intent.intent);
     if (intent.intent.startsWith("Absenzen")) {
@@ -276,31 +313,20 @@ function beginDialogOnLuisIntent(intent, entities, session) {
     } else {
         console.log("no dialog found for intend " + intent.intent);
     }
-
 }
 
-function handleTextMessageQnA(message, session) {
-    qnaMaker.getQnAResponse(message, function (Q, A) {
-        var realAnswers = [];
-        if (A.answers) {
-            for (var i = 0; i < A.answers.length; i++) {
-                var answer = A.answers[i];
-                console.log("QnA score: " + answer.score);
-                if (answer.score > (process.env.INTENT_SCORE_QnA_THRESHOLD || 35.0)) {
-                    realAnswers.push(answer);
-                }
-            }
-        }
-        if (realAnswers.length > 0) {
-            sendQnAAnswers(realAnswers, session);
-        } else {
+//Phasen 3/4 - zeige alternative Answers oder wenn keine vorhanden, habe nicht verstanden
+function handleTextMessagePhase3(message, topAnswers, altAnswers, session) {
+    if (altAnswers.length > 0) {
+        sendQnAAnswers(altAnswers, session);
+    } else {
+        if (topAnswers.length === 0) {
+            //zeige nicht verstanden nur, wenn keine topAnswer gezeigt wird
             session.send("$.Intro.NichtVerstanden", session.message.text);
             session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
             session.replaceDialog("/Intro");
-
         }
-
-    })
+    }
 }
 
 
