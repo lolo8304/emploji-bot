@@ -28,3 +28,7 @@ DB_APP_URL=localhost:27018/emploji-bot
 INTENT_SCORE_LUIS_THRESHOLD=0.5
 INTENT_SCORE_QnA_LOW_THRESHOLD=30.0
 INTENT_SCORE_QnA_HIGH_THRESHOLD=80.0
+
+##Notification Settings - SLACK ONLY
+BOT_ID=
+BOT_SERVICE_URL=https://slack.botframework.com

@@ -1,9 +1,10 @@
 [
-{"user":"meyerchri","datum":"42685","betrag":"3.99","beschreibung":"IKEA","begruendung":"Neue Deko fürs Büro","kategorie":"Übriges","kostenstelle":"","dateiname":""},
-{"user":"david","datum":"29.7.2017 - 30.7.2017","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":"","dateiname":"emploji-512x512.png"},
-{"user":"remostrupler","datum":"","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":"","dateiname":"emploji-simulator.png"},
-{"user":"susanne_s","datum":"29.7.2017 - 30.7.2017","betrag":"","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":"","dateiname":"emploji-simulator-512x512.png"},
-{"user":"lorenz-haenggi","datum":"29.7.2017 - 30.7.2017","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"","kategorie":"","kostenstelle":"","dateiname":"emploji.png"},
-{"user":"cogji","datum":"","betrag":"","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":"","dateiname":""},
-{"user":"brm","datum":"","betrag":"","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":"","dateiname":""}
+{"index":"1","dateiname":"","datum":"01.04.2017","betrag":"33.33","beschreibung":"Büromaterial vom IKEA","begruendung":"CWS Einrichtung","kategorie":"Übriges"},
+{"index":"2","dateiname":"Blumen.pdf","datum":"07.06.2017","betrag":"10.3","beschreibung":"Blumen","begruendung":"Geburtstag Mitarbeiter","kategorie":"Übriges"},
+{"index":"3","dateiname":"SBB.pdf","datum":"07.06.2017","betrag":"13","beschreibung":"Zug ZH <-> Winti","begruendung":"Business Trip","kategorie":"Transport"},
+{"index":"4","dateiname":"Kundenevent.pdf","datum":"12.06.2017","betrag":"643.2","beschreibung":"Kundenlunch","begruendung":"Kundenevent","kategorie":"Verpflegung"},
+{"index":"5","dateiname":"Kundensnack.pdf","datum":"12.06.2017","betrag":"81","beschreibung":"Kundenevent","begruendung":"Snacks","kategorie":"Verpflegung"},
+{"index":"6","dateiname":"Taxi.jpg","datum":"","betrag":"11.9","beschreibung":"Taxifahrt","begruendung":"Kundenbesuch","kategorie":"Transport"},
+{"index":"7","dateiname":"IKEA.jpg","datum":"31.05.2017","betrag":"51.8","beschreibung":"Büromaterial","begruendung":"CWS Einrichtung","kategorie":"Übriges"},
+{"index":"8","dateiname":"Hotel.png","datum":"","betrag":"456.5","beschreibung":"Hotel Nümberg","begruendung":"Kundenbesuch","kategorie":"Übriges"}
 ]

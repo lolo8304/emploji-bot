@@ -14,16 +14,19 @@ function Nofifier(bot, builder, recognizer) {
         function (session, args, next) {
             session.send("Notification Dialog");
             var savedAddress = session.message.address;
-            var address= {
-                id: savedAddress.id,
-                user: savedAddress.user,
-                bot: savedAddress.bot,
+            var address = {
+                //          id: savedAddress.id,
+                user: { id: savedAddress.user.id },
+                bot: { id: savedAddress.bot.id },
                 serviceUrl: savedAddress.serviceUrl
             };
-            notify(address, "Test Notification, id: " 
-            + address.id + " bot id: " + address.bot.id  + " bot name: " + address.bot.name 
-            + " serviceURL: " + address.serviceUrl 
-            + " user name: " + address.user.name + " user id: " + address.user.id);
+            //notify David im Slack
+            notifyUser("U5EPZJE92:T5C4WRWET", "test notification");
+
+            /*          notify(address, "Test Notification, id: " 
+                      + address.id + " bot id: " + address.bot.id  + " bot name: " + address.bot.name 
+                      + " serviceURL: " + address.serviceUrl 
+                      + " user name: " + address.user.name + " user id: " + address.user.id);*/
         },
     ])
         .cancelAction('/Intro', "OK Notifier abgebrochen",
@@ -41,5 +44,17 @@ function Nofifier(bot, builder, recognizer) {
         bot.send(msg);
     }
 
-    this.notify 
+    function notifyUser(user_id, message) {
+        var address = {
+            user: { id: user_id },
+            bot: { id: process.env.BOT_ID },
+            serviceUrl: process.env.BOT_SERVICE_URL
+        };
+        var msg = new builder.Message().address(address);
+        msg.text(message);
+        msg.textLocale('de');
+        bot.send(msg);
+    }
+
+    this.notify
 }
