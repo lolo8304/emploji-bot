@@ -1,0 +1,34 @@
+
+module.exports = NotifierHelper;
+
+function NotifierHelper(bot, builder, luisRecognizer) {
+    return new Nofifier(bot, builder, luisRecognizer);
+};
+
+function Nofifier(bot, builder, recognizer) {
+    this.bot = bot;
+    this.builder = builder;
+    this.recognizer = recognizer;
+
+    this.bot.dialog('Notifier', [
+        function (session, args, next) {
+            session.send("Notification Dialog");
+            var savedAddress = session.message.address;
+            notify(savedAddress, "Test Notification")
+        },
+    ])
+        .cancelAction('/Intro', "OK Notifier abgebrochen",
+        {
+            matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
+            onSelectAction: (session, args) => {
+                session.endDialog();
+            }
+        });
+
+    function notify(address, message) {
+        var msg = new builder.Message().address(address);
+        msg.text(message);
+        msg.textLocale('de');
+        bot.send(msg);
+    }
+}

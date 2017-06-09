@@ -182,6 +182,7 @@ bot_helper = require("./modules/bot-helper.js")(bot, builder, recognizer);
 abschlussDialog = require('./modules/abschluss-dialog.js')(bot, builder, recognizer);
 absenzenDialog = require('./modules/absenz-dialog.js')(bot, builder, recognizer);
 spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
+notifier = require('./modules/notification.js')(bot, builder, recognizer);
 
 //=========================================================
 // Intro dialog handler
@@ -200,6 +201,8 @@ bot.dialog('/Intro', [
                 session.beginDialog("Absenzen");
             } else if (session.message.text.startsWith("action?Monats")) {
                 session.beginDialog("Monatsabschluss");
+            } else if (session.message.text.startsWith("action?Notifier")) {
+                session.beginDialog("Notifier");
             }
             else {
                 //starte die Universalweiche: 1. LUIS, 2. QNA, 3. sorry...
@@ -231,6 +234,9 @@ function showMenu(session) {
     buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
     buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
+
+    //notification testing
+    buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
         .title("Emploji")
         .text(welcomeText)
