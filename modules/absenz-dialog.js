@@ -8,7 +8,7 @@ function AbsenzenDialogHelper(bot, builder, luisRecognizer) {
 function addAbsence(bot, session, category, text, fromDate, toDate, days) {
     var user = bot.datastore.getUser(session);
     var newAbsence = {
-        user: user,
+        user: user.user,
         typ: category,
         text: text,
         fromDate: fromDate,
@@ -31,24 +31,44 @@ function getAbsenzTyp(builder, entities) {
 function getAbsenzDateFrom(builder, entities) {
   const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || undefined);
   if (entity) {
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        if (e.startIndex >= entity.startIndex && e.endIndex <= entity.endIndex) {
+            e.type = e.type + "-removed";
+        }
+    }
       return entity.entity.replace(" ","");
   }
   return "";
 }
 function getAbsenzDauer(builder, entities) {
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.number") || undefined);
+  if (entity) {
+      return Number.parseInt(entity.entity);
+  }
+  return "";
+}
+function getAbsenzDauerMultiplier(builder, entities) {
   const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzDauer") || undefined);
   if (entity) {
-      return Number.parseInt(entity.resolution.values[0]);
+      var dauer = entity.resolution.values[0];
+      if (dauer === "Woche") {
+        return 5;
+      } else {
+          return 1;
+      }
   }
-  return 0;
+  return 1;
 }
 
 function getAbsenceAttributes(builder, entities) {
+    var multiplyer = getAbsenzDauerMultiplier(builder, entities);
+
     var absence = {
         typ: getAbsenzTyp(builder, entities),
         fromDate: getAbsenzDateFrom(builder, entities),
         toDate: "",
-        days: getAbsenzDauer(builder, entities)
+        days: multiplyer * getAbsenzDauer(builder, entities)
     };
     if (absence.typ === "Wohnungswechsel") {
         absence.responseToUserText = sprintf.sprintf(
@@ -109,7 +129,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
             } else if (args && args.errorText) {                
                 builder.Prompts.text(session, args.errorText);
             } else {
-                builder.Prompts.text(session, "Nenne mir den Abwesenheitsgrund und Datum von bis, dann erfasse ich die Absenz.");
+                builder.Prompts.text(session, "Nenne mir den Abwesenheitsgrund (krank, Ferien, Umzug, ...), Datum und Anzahl Tage - dann erfasse ich die Absenz.");
             }
         },
         function (session, result, next) {
