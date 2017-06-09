@@ -31,7 +31,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
     };
 
 
-    this.bot.dialog('Absenzen_Erfassen', [
+    this.bot.dialog('Absenzen_Erstellen', [
         function (session, args, next) {
             if (args && args.intent) {
                 var newAbsence = addAbsenceFromEntities(bot, session, args.entities);
@@ -54,7 +54,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
     this.bot.dialog('Absenzen', [
         function (session, args, next) {
             if (args && args.intent) {
-                session.replaceDialog("Absenzen_Erfassen", args);
+                session.replaceDialog("Absenzen_Erstellen", args);
             } else if (args && args.errorText) {                
                 builder.Prompts.text(session, args.errorText);
             } else {
@@ -67,7 +67,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
                 if (err || (intents[0] && intents[0].intent === "None")) {
                     session.replaceDialog("Absenzen", { errorText: "Ich habe nicht alles verstanden. Bitte wiederholen" });
                 } else if (intents[0]) {
-                    session.replaceDialog(intents[0], {intent: intents[0], entities: entities});
+                    session.replaceDialog(intents[0].intent, {intent: intents[0].intent, entities: entities});
                 }
             });
         }
