@@ -311,7 +311,7 @@ function showMenu(session) {
     //notification testing
     // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
-        .title("Emploji")
+        .title("")
         .text(welcomeText)
         .images([
             builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emoji_nolego.png")
@@ -331,7 +331,7 @@ function showMenu(session) {
 //=========================================================
 
 function handleTextMessage(message, session) {
-   if (session.message.text === "hallo") { 
+   if (session.message.text === "hallo" || session.message.text === "Hallo") { 
         var arr=[];
         for (var i in bot.datastore.users) {
             arr.push(" - "+bot.datastore.users[i].firstname);
