@@ -407,10 +407,13 @@ bot.dialog('/Hilfe', [
 
 //hilfsfunktion
 function sendQnAAnswers(answers, session) {
-    var text = "Unsere Antworten:";
+ //   var text = "Unsere Antworten:";
     for (var i = 0; i < answers.length; i++) {
         var answer = answers[i];
-        text = text + "\n\n - " + answer.answer + " (" + answer.score + "%)";
+        text = answer.answer; //+ " (" + answer.score + "%)";
+        if (i < (answers.length -1)){
+            text = text + "\n\n";
+        }
     }
     session.send(text);
 }
