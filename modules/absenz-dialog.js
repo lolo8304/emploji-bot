@@ -1,3 +1,4 @@
+var sprintf = require('sprintf-js');
 module.exports = AbsenzenDialogHelper;
 
 function AbsenzenDialogHelper(bot, builder, luisRecognizer) {
@@ -12,7 +13,7 @@ function addAbsence(bot, session, category, text, fromDate, toDate, days) {
         text: text,
         fromDate: fromDate,
         toDate: toDate,
-        days: 3,
+        days: days,
         commit: false
     }
     bot.datastore.absences.push(newAbsence);
@@ -21,37 +22,48 @@ function addAbsence(bot, session, category, text, fromDate, toDate, days) {
 
 
 function getAbsenzTyp(builder, entities) {
-  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzTyp") || {});
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzTyp") || undefined);
   if (entity) {
       return entity.resolution.values[0];
   }
   return "";
 }
 function getAbsenzDateFrom(builder, entities) {
-  const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || {});
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || undefined);
   if (entity) {
-      return entity.entity;
+      return entity.entity.replace(" ","");
   }
   return "";
 }
 function getAbsenzDauer(builder, entities) {
-  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzDauer") || {});
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzDauer") || undefined);
   if (entity) {
-      return entity.resolution.values[0];
+      return Number.parseInt(entity.resolution.values[0]);
   }
-  return "";
+  return 0;
 }
 
 function getAbsenceAttributes(builder, entities) {
-    return {
+    var absence = {
         typ: getAbsenzTyp(builder, entities),
         fromDate: getAbsenzDateFrom(builder, entities),
+        toDate: "",
         days: getAbsenzDauer(builder, entities)
     };
+    if (absence.typ === "Wohnungswechsel") {
+        absence.responseToUserText = sprintf.sprintf(
+            "Ich habe deine Absenz vom %s für deinen %s registriert",
+        absence.fromDate, absence.typ);
+    } else {
+        absence.responseToUserText = sprintf.sprintf(
+            "Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", 
+            absence.typ, absence.fromDate, absence.toDate, absence.days);
+    }
+    return absence;
 }
 
-function addAbsenceFromEntities(bot, session, entities) {
-    return addAbsence(bot, session, "Ferien", "endlich mal Ferien", "2017-04-01", "2017-04-15", 3);
+function addAbsenceFromAttributes(bot, session, attributes) {
+    return addAbsence(bot, session, attributes.typ, "", attributes.fromDate, "", attributes.days);
 }
 
 function AbsenzenDialog(bot, builder, recognizer) {
@@ -67,12 +79,13 @@ function AbsenzenDialog(bot, builder, recognizer) {
         function (session, args, next) {
             if (args && args.intent) {
                 var absenceAttributes = getAbsenceAttributes(builder, args.entities);
-                var newAbsence = addAbsenceFromEntities(bot, session, args.entities);
+                var newAbsence = addAbsenceFromAttributes(bot, session, absenceAttributes);
                 if (newAbsence) {
                     var user = bot.datastore.getUser(session);
                     bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Absenz von "+user.firstname+" "+user.name+" bestätigen.");
-                    session.send("Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", newAbsence.typ, newAbsence.fromDate, newAbsence.toDate, newAbsence.days);
+                    session.send(absenceAttributes.responseToUserText);
                     session.send("Dein Manager wurde zur Bestätigung aufgefordert");
+                    session.sendBatch();
                 } else {
                     session.send("Es ist ein Fehler aufgetreten bei der Erstellung Deiner Absenz. Bitte melde Dich bei meine Administration.")
                 }

@@ -34,6 +34,7 @@
 
     "mongodb": "^2.2.26",
     "monk":"^4.0.0"
+
   },
   "devDependencies": {
   }
