@@ -69,7 +69,7 @@ bot.datastore = {
     getUserManager: function (session) {
         return this.getUser(session).manager;
     },
-    
+
     getAbsences: function (session) {
         var id = this.getUserId(session);
         var result = [];
@@ -156,9 +156,9 @@ server.get('/', function (req, res, next) {
 var querystring = require('querystring');
 var url = require('url');
 
-server.use(function(req,res,next){
+server.use(function (req, res, next) {
     req.queryJson = querystring.parse(url.parse(req.url).query);
-    req.param = function(name){
+    req.param = function (name) {
         var p = this.params[name];
         if (p) {
             return p
@@ -169,7 +169,7 @@ server.use(function(req,res,next){
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-   next();
+    next();
 });
 
 //notifiy all users
@@ -309,7 +309,7 @@ function showMenu(session) {
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
 
     //notification testing
-   // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
+    // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
         .title("Emploji")
         .text(welcomeText)
@@ -366,6 +366,7 @@ function handleTextMessagePhase1(message, session) {
 function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
+            console.log("message: "+message);
             console.log('Luis Score: ' + intents[0].score + " for " + intents[0].intent);
             var threshold = Number.parseFloat(process.env.INTENT_SCORE_LUIS_THRESHOLD || "0.51");
             if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= threshold)) {
@@ -402,10 +403,14 @@ function handleTextMessagePhase3(message, topAnswers, altAnswers, session) {
         sendQnAAnswers(altAnswers, session);
     } else {
         if (topAnswers.length === 0) {
-            //zeige nicht verstanden nur, wenn keine topAnswer gezeigt wird
-            session.send("$.Intro.NichtVerstanden", session.message.text);
-            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
-            session.replaceDialog("/Intro");
+            if (session.message.text.startsWith("action?")) {
+                //war eine action, mache nichts!
+            } else {
+                //zeige nicht verstanden nur, wenn keine topAnswer gezeigt wird
+                session.send("$.Intro.NichtVerstanden", session.message.text);
+                session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
+                session.replaceDialog("/Intro");
+            }
         }
     }
 }

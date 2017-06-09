@@ -88,9 +88,9 @@ function AbschlussDialog(bot, builder, recognizer) {
 
 
     function createThumbnailCard(bot, builder, session, title, icon) {
-        var images=[];
+        var images = [];
         if (icon)
-        images.push(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/'+icon));
+            images.push(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/' + icon));
         var card =
             new builder.ThumbnailCard(session)
                 .title(title)
@@ -108,16 +108,18 @@ function AbschlussDialog(bot, builder, recognizer) {
             if (all || absences[i].commit === false) {
                 if (absences[i].days === 1) {
                     items.push(
-                        builder.ReceiptItem.create(session, " am " + ddmm(absences[i].fromDate), absences[i].typ)
-                            .subtitle("1 Tag" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
+                        builder.ReceiptItem.create(session,
+                            " am " + ddmm(absences[i].fromDate),
+                            absences[i].typ + ": 1 Tag" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
                             .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/Icon_' + absences[i].typ + '.png'))
-                    )
+                    );
                 } else {
                     items.push(
-                        builder.ReceiptItem.create(session, ddmm(absences[i].fromDate) + " bis " + ddmm(absences[i].toDate), absences[i].typ)
-                            .subtitle(absences[i].days + " Tage" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
+                        builder.ReceiptItem.create(session,
+                            ddmm(absences[i].fromDate) + " bis " + ddmm(absences[i].toDate),
+                            absences[i].typ + ": " + absences[i].days + " Tage" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
                             .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/Icon_' + absences[i].typ + '.png'))
-                    )
+                    );
                 }
             }
         }
