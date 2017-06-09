@@ -20,11 +20,11 @@ function SpesenDialog(bot, builder, recognizer) {
                 builder.Prompts.attachment(session, "$.Spesen.Foto");
             }
         },
-        function (session, result) {
-            if (typeof result.response === 'String') {
+        function (session, result, next) {
+            if (typeof result.response === "string") {
                 session.userData.spesen = { 
                     datum: "29.5.2017 - 30.5.2017",
-                    betrag: "CHF 12.34",
+                    betrag: "CHF 12.22",
                     beschreibung: "Flug nach Köln",
                     begruendung: "Docker Kurs",
                     kategorie: "Transport",
@@ -32,38 +32,23 @@ function SpesenDialog(bot, builder, recognizer) {
                 }
             } else {
                 session.userData.spesen = { 
-                    datum: "30.5.2017",
+                    datum: "",
                     betrag: "CHF 73.05",
-                    beschreibung: "Einkauf bei " + result.response[0].name.split(".")[0],
+                    beschreibung: "Einkauf bei " + result.response[0].name,
                     begruendung: "Büroaccessoires",
                     kategorie: "Übrige",
                     filename: result.response[0].name
                 }
             }
-            session.userData.spesen = { 
-                datum: "29.5.2017 - 30.5.2017",
-                betrag: "CHF 12.34",
-                beschreibung: "Flug nach Köln",
-                begruendung: "Docker Kurs",
-                kategorie: "Transport"
-            }
-            builder.Prompts.choice(
-                session, 
+            session.send(
                 "Ich fasse zusammen:\n\n" +
                     "Datum: " + session.userData.spesen.datum + "\n\n" + 
                     "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
-                    "Bescheeibung: " + session.userData.spesen.beschreibung + "\n\n" + 
+                    "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
                     "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
-                    "Kategorie: " +session.userData.spesen.kategorie,
-                "Richtig|Falsch", 
-                { listStyle: builder.ListStyle.button });
-        },
-        function (session, result, next) {
-            if(result.response.index == 1) {
-                session.beginDialog("Spesen_bearbeiten");
-            } else {
-                next();
-            }
+                    "Kategorie: " +session.userData.spesen.kategorie
+            );
+            session.beginDialog("Spesen_validieren");
         },
         function (session, result) {
             session.endDialog("$.Spesen.End");
@@ -75,6 +60,80 @@ function SpesenDialog(bot, builder, recognizer) {
         session.endDialog();
     }});
 
+
+    this.bot.dialog('Spesen_validieren', [
+        function (session, result, next) {
+            session.dialogData.spesen = session.userData.spesen;
+
+            if (session.userData.spesen.datum === "") {
+                session.beginDialog("Spesen_bearbeiten_datum");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
+            if (session.userData.spesen.betrag === "") {
+                session.beginDialog("Spesen_bearbeiten_betrag");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
+            if (session.userData.spesen.beschreibung === "") {
+                session.beginDialog("Spesen_bearbeiten_beschreibung");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
+            if (session.userData.spesen.begruendung === "") {
+                session.beginDialog("Spesen_bearbeiten_begruendung");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
+            if (session.userData.spesen.beschreibung === "") {
+
+                /**
+                 * 
+                 * 
+                 */
+
+                session.beginDialog("Spesen_bearbeiten_kategorie");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
+            if (! session.dialogData.spesen === session.userData.spesen ) {
+                session.send(
+                    "Ich fasse zusammen:\n\n" +
+                        "Datum: " + session.userData.spesen.datum + "\n\n" + 
+                        "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
+                        "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
+                        "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
+                        "Kategorie: " +session.userData.spesen.kategorie
+                );
+            }
+            builder.Prompts.choice(
+                session, 
+                "Alles richtig?" ,
+                "Ja, Spesen so einreichen|Nein", 
+                { listStyle: builder.ListStyle.button });
+        },
+        function (session, result, next) {
+            if(result.response.index == 1) {
+                session.beginDialog("Spesen_bearbeiten");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
+            session.endDialog();
+        }
+    ]);
+
     this.bot.dialog('Spesen_bearbeiten', [
         function (session) {
             builder.Prompts.choice(
@@ -84,7 +143,7 @@ function SpesenDialog(bot, builder, recognizer) {
                     "Betrag: " + session.userData.spesen.betrag + "|" + 
                     "Beschreibung: " + session.userData.spesen.beschreibung + "|" + 
                     "Begründung: " + session.userData.spesen.begruendung + "|" + 
-                    session.userData.spesen.kategorie + "|Nichts. Alles ist korrekt.", 
+                    "Kategorie: " + session.userData.spesen.kategorie + "|Nichts. Alles ist korrekt.", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
