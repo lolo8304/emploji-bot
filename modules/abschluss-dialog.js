@@ -63,7 +63,9 @@ function AbschlussDialog(bot, builder, recognizer) {
         function (session, result, next) {
             var card = createAbsenceCard(bot, builder, session, true);
             var msg = new builder.Message(session).addAttachment(card);
-            session.send(msg);
+            //  session.send(msg);
+            session.message.text = "bye";
+            session.endDialog(msg);
         }
     ]);
 
@@ -74,6 +76,7 @@ function AbschlussDialog(bot, builder, recognizer) {
             for (var i in absences) {
                 absences[i].commit = true;
             }
+            session.message.text = "bye";
             session.endDialog("Dein Monatsabschluss ist bestätigt");
         }
     ]);
