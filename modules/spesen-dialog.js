@@ -10,31 +10,34 @@ function SpesenDialog(bot, builder, recognizer) {
     this.recognizer = recognizer;
 
     this.bot.dialog('Spesen', [
+        // function (session, args, next) {
+        //     builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", { listStyle: builder.ListStyle.button });
+        // },
+        // function (session, result) {
+        //     if(result.response.index == 0) {
+        //         builder.Prompts.text(session, "$.Spesen.Text");
+        //     } else {
+        //         builder.Prompts.attachment(session, "$.Spesen.Foto");
+        //     }
+        // },
         function (session, args, next) {
-            builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", { listStyle: builder.ListStyle.button });
-        },
-        function (session, result) {
-            if(result.response.index == 0) {
-                builder.Prompts.text(session, "$.Spesen.Text");
-            } else {
-                builder.Prompts.attachment(session, "$.Spesen.Foto");
-            }
+            builder.Prompts.attachment(session, "$.Spesen.FotoStart");
         },
         function (session, result, next) {
-            if (typeof result.response === "string") {
-                if (result.response.length < 2 && parseInt(result.response)!=NaN) {
-                    session.userData.spesen = bot.datastore.spesenzettel[parseInt(result.response)];                    
-                } else {
-                    session.userData.spesen = { 
-                        datum: "",
-                        betrag: "",
-                        beschreibung: "",
-                        begruendung: "",
-                        kategorie: "",
-                        text: result.response.text
-                    }
-                }
-            } else {
+            // if (typeof result.response === "string") {
+            //     if (result.response.length < 2 && parseInt(result.response)!=NaN) {
+            //         session.userData.spesen = bot.datastore.spesenzettel[parseInt(result.response)];                    
+            //     } else {
+            //         session.userData.spesen = { 
+            //             datum: "",
+            //             betrag: "",
+            //             beschreibung: "",
+            //             begruendung: "",
+            //             kategorie: "",
+            //             text: result.response.text
+            //         }
+            //     }
+            // } else {
                 session.userData.spesen = bot.datastore.spesenzettel[0];
                 var fn = result.response[0].name;
                 for (var i = 0; i < bot.datastore.spesenzettel.length; i++) {
@@ -42,7 +45,7 @@ function SpesenDialog(bot, builder, recognizer) {
                         session.userData.spesen = bot.datastore.spesenzettel[i];
                     }
                 }
-            }
+            // }
             session.send(
                 "Ich fasse zusammen:\n\n" +
                     "Datum: " + session.userData.spesen.datum + "\n\n" + 
@@ -54,12 +57,14 @@ function SpesenDialog(bot, builder, recognizer) {
             session.beginDialog("Spesen_validieren");
         },
         function (session, result) {
+            session.message.text = "bye";
             session.endDialog("$.Spesen.End");
         }
     ])
         .cancelAction('/Intro', "OK Spesenerfassung abgebrochen", 
         { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
     onSelectAction: (session, args) => {
+        session.message.text = "bye";
         session.endDialog();
     }});
 
@@ -113,14 +118,21 @@ function SpesenDialog(bot, builder, recognizer) {
             builder.Prompts.choice(
                 session, 
                 "Alles richtig?" ,
-                "Ja, Spesen so einreichen|Nein", 
+                "Ja, Spesen so einreichen|Nein, ich möchte korrigieren|Vorgang abbrechen", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
-            if(result.response.index == 1) {
-                session.beginDialog("Spesen_bearbeiten");
-            } else {
-                next();
+            switch (result.response.index) {
+                case 1:
+                    session.beginDialog("Spesen_bearbeiten");
+                    break;
+                case 2:
+                    session.message.text = "bye";
+                    session.replaceDialog("/Intro");
+                    break;
+                default:
+                    next();
+                    break;
             }
         },
         function (session, result, next) {
@@ -137,7 +149,7 @@ function SpesenDialog(bot, builder, recognizer) {
                     "Betrag: " + session.userData.spesen.betrag + "|" + 
                     "Beschreibung: " + session.userData.spesen.beschreibung + "|" + 
                     "Begründung: " + session.userData.spesen.begruendung + "|" + 
-                    "Kategorie: " + session.userData.spesen.kategorie + "|Nichts. Alles ist korrekt.", 
+                    "Kategorie: " + session.userData.spesen.kategorie + "|Nichts. Alles ist korrekt.|Vorgang abbrechen", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
@@ -157,8 +169,13 @@ function SpesenDialog(bot, builder, recognizer) {
                 case 4:
                     session.beginDialog('Spesen_bearbeiten_kategorie');
                     break;
-                default:
+                case 5:
                     session.endDialog();
+                    break;
+                default:
+                    session.message.text = "bye";
+                    session.replaceDialog("/Intro");
+                    break;
             }
         },
         function (session, result) {
