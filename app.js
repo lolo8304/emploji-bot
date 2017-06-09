@@ -366,6 +366,7 @@ function handleTextMessagePhase1(message, session) {
 function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
+            console.log("message: "+message);
             console.log('Luis Score: ' + intents[0].score + " for " + intents[0].intent);
             var threshold = Number.parseFloat(process.env.INTENT_SCORE_LUIS_THRESHOLD || "0.51");
             if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= threshold)) {
