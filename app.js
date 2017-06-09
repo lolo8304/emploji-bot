@@ -32,6 +32,7 @@ var bot = new builder.UniversalBot(connector, {
 bot.datastore = {
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
+    spesenzettel: require('./import/datastore/spesenzettel.json'),
     getUserId: function (session) {
         var id = session.message.address.user.name;
         for (var i in this.users) {
@@ -138,8 +139,6 @@ server.get('/', function (req, res, next) {
 var model = process.env.MICROSOFT_LUIS_MODEL;
 var recognizer = new builder.LuisRecognizer(model);
 
-
-
 //=========================================================
 // default handler
 //=========================================================
@@ -184,6 +183,7 @@ bot_helper = require("./modules/bot-helper.js")(bot, builder, recognizer);
 abschlussDialog = require('./modules/abschluss-dialog.js')(bot, builder, recognizer);
 absenzenDialog = require('./modules/absenz-dialog.js')(bot, builder, recognizer);
 spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
+notifier = require('./modules/notification.js')(bot, builder, recognizer);
 
 //=========================================================
 // Intro dialog handler
@@ -191,6 +191,7 @@ spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
+        
         if (session.message && (session.message.type === "message")
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
             && session.message.text) {
@@ -202,6 +203,8 @@ bot.dialog('/Intro', [
                 session.beginDialog("Absenzen");
             } else if (session.message.text.startsWith("action?Monats")) {
                 session.beginDialog("Monatsabschluss");
+            } else if (session.message.text.startsWith("action?Notifier")) {
+                session.beginDialog("Notifier");
             }
             else {
                 //starte die Universalweiche: 1. LUIS, 2. QNA, 3. sorry...
@@ -233,6 +236,9 @@ function showMenu(session) {
     buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
     buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
+
+    //notification testing
+    buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
         .title("Emploji")
         .text(welcomeText)
@@ -409,10 +415,13 @@ bot.dialog('/Hilfe', [
 
 //hilfsfunktion
 function sendQnAAnswers(answers, session) {
-    var text = "Unsere Antworten:";
+ //   var text = "Unsere Antworten:";
     for (var i = 0; i < answers.length; i++) {
         var answer = answers[i];
-        text = text + "\n\n - " + answer.answer + " (" + answer.score + "%)";
+        text = answer.answer; //+ " (" + answer.score + "%)";
+        if (i < (answers.length -1)){
+            text = text + "\n\n";
+        }
     }
     session.send(text);
 }
