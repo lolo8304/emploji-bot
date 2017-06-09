@@ -138,8 +138,6 @@ server.get('/', function (req, res, next) {
 var model = process.env.MICROSOFT_LUIS_MODEL;
 var recognizer = new builder.LuisRecognizer(model);
 
-
-
 //=========================================================
 // default handler
 //=========================================================
