@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/lolo8304/emploji-bot#readme",
   "dependencies": {
-    "botbuilder": "^3.8.4",
     "dotenv": "^4.0.0",
     "fs": "0.0.1-security",
     "request-promise": "^4.2.1",
