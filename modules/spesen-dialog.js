@@ -94,12 +94,6 @@ function SpesenDialog(bot, builder, recognizer) {
         function (session, result, next) {
             if (session.userData.spesen.kategorie === "") {
                 session.userData.spesenbearbeitet = true;
-
-                /**
-                 * 
-                 * 
-                 */
-
                 session.beginDialog("Spesen_bearbeiten_kategorie");
             } else {
                 next();
@@ -205,7 +199,16 @@ function SpesenDialog(bot, builder, recognizer) {
         },
         function (session, result) {
             session.userData.spesen.beschreibung = result.response;
-            session.endDialog();
+            var luisearch = "der text der kategorie heisst: " + result.response;
+            builder.LuisRecognizer.recognize(luisearch, process.env.MICROSOFT_LUIS_MODEL, function (err, intents, entities) {
+                if (err || intents[0] || entities[0] ) {
+                } else {
+                    if (intents[0].intent === "Kategoriensuche" && entities[0].type==="Spesenkategorie") {
+                        session.userData.spesen.kategorie = entities[0].resolution.values[0];
+                    }
+                }
+                session.endDialog();
+            });
         }
     ]);
     this.bot.dialog('Spesen_bearbeiten_kategorie', [
@@ -224,4 +227,3 @@ function SpesenDialog(bot, builder, recognizer) {
         }
     ]);
 }
-
