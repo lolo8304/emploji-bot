@@ -314,7 +314,7 @@ function showMenu(session) {
         .title("Emploji")
         .text(welcomeText)
         .images([
-            builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
+            builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emoji_nolego.png")
         ]).buttons(buttons);
 
     var msg = new builder.Message(session).addAttachment(card);
