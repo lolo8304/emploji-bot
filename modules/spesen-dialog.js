@@ -23,10 +23,31 @@ function SpesenDialog(bot, builder, recognizer) {
         function (session, result) {
             if (typeof result.response === 'String') {
                 session.send(result.response.text);
+
+/**
+
+  Kategorie = Übernachtung, Verpflegung, Transport, Übrige, Psssst
+
+
+**/
             } else {
                 session.send(result.response[0].name);
             }
-            builder.Prompts.choice(session, "$.Spesen.Summary", "Richtig|Falsch", { listStyle: builder.ListStyle.button });
+            session.userData.spesen_datum = "29.5.2017 - 30.5.2017";
+            session.userData.spesen_betrag = "CHF 12.34";
+            session.userData.spesen_beschreibung = "Flug nach Köln";
+            session.userData.spesen_begruendung = "Docker Kurs";
+            session.userData.spesen_kategorie = "Transport";
+            builder.Prompts.choice(
+                session, 
+                "Ich fasse zusammen:\n\n" +
+                    session.userData.spesen_datum + "\n\n" + 
+                    session.userData.spesen_betrag + "\n\n" + 
+                    session.userData.spesen_beschreibung + "\n\n" + 
+                    session.userData.spesen_begruendung + "\n\n" + 
+                    session.userData.spesen_kategorie,
+                "Richtig|Falsch", 
+                { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
             if(result.response.index == 1) {
@@ -50,20 +71,83 @@ function SpesenDialog(bot, builder, recognizer) {
             builder.Prompts.choice(
                 session, 
                 "Was willst du ändern:", 
-                "CHF 51.80|31.05.2017|IKEA Dietlikon|KST: 12002 HREmployee Administration|Nichts", 
+                session.userData.spesen_datum + "|" + 
+                    session.userData.spesen_betrag + "|" + 
+                    session.userData.spesen_beschreibung + "|" + 
+                    session.userData.spesen_begruendung + "|" + 
+                    session.userData.spesen_kategorie + "|Nichts", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
-            if(result.response.index == 0) {
-                builder.Prompts.text(session, "Betrag ändern");
-            } else {
-                session.endDialog();
+            switch(result.response.index) {
+                case 0:
+                    session.beginDialog('Spesen_bearbeiten_datum');
+                    break;
+                case 1:
+                    session.beginDialog('Spesen_bearbeiten_betrag');
+                    break;
+                case 2:
+                    session.beginDialog('Spesen_bearbeiten_beschreibung');
+                    break;
+                case 3:
+                    session.beginDialog('Spesen_bearbeiten_begruendung');
+                    break;
+                case 4:
+                    session.beginDialog('Spesen_bearbeiten_kategorie');
+                    break;
+                default:
+                    session.endDialog();
             }
         },
-        function (session, results) {
+        function (session, result) {
             session.replaceDialog('Spesen_bearbeiten');
         }
     ]);
 
+    this.bot.dialog('Spesen_bearbeiten_betrag', [
+        function (session, result, next) {
+            builder.Prompts.text(session, "Betrag ändern");
+        },
+        function (session, result) {
+            session.userData.spesen_betrag = result.response;
+            session.endDialog();
+        }
+    ]);
+    this.bot.dialog('Spesen_bearbeiten_datum', [
+        function (session, result, next) {
+            builder.Prompts.text(session, "Datum ändern");
+        },
+        function (session, result) {
+            session.userData.spesen_datum = result.response;
+            session.endDialog();
+        }
+    ]);
+    this.bot.dialog('Spesen_bearbeiten_begruendung', [
+        function (session, result, next) {
+            builder.Prompts.text(session, "Begründung ändern");
+        },
+        function (session, result) {
+            session.userData.spesen_begruendung = result.response;
+            session.endDialog();
+        }
+    ]);
+    this.bot.dialog('Spesen_bearbeiten_beschreibung', [
+        function (session, result, next) {
+            builder.Prompts.text(session, "Beschreibung ändern");
+        },
+        function (session, result) {
+            session.userData.spesen_beschreibung = result.response;
+            session.endDialog();
+        }
+    ]);
+    this.bot.dialog('Spesen_bearbeiten_kategorie', [
+        function (session, result, next) {
+            builder.Prompts.text(session, "Kategorie ändern");
+        },
+        function (session, result) {
+            session.userData.spesen_kategorie = result.response;
+            session.endDialog();
+        }
+    ]);
 }
 
