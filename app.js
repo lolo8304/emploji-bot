@@ -139,8 +139,6 @@ server.get('/', function (req, res, next) {
 var model = process.env.MICROSOFT_LUIS_MODEL;
 var recognizer = new builder.LuisRecognizer(model);
 
-
-
 //=========================================================
 // default handler
 //=========================================================
@@ -287,8 +285,8 @@ function handleTextMessagePhase1(message, session) {
 function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
-            console.log('Luis Score: ' + intents[0].score);
-            if (intents[0].score >= (process.env.INTENT_SCORE_LUIS_THRESHOLD || 0.51)) {
+            console.log('Luis Score: ' + intents[0].score + " for " + intents[0].intent);
+            if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= (process.env.INTENT_SCORE_LUIS_THRESHOLD || 0.51))) {
                 //Weiche auf LUIS
                 beginDialogOnLuisIntent(intents[0], entities, session);
                 return;
@@ -410,10 +408,13 @@ bot.dialog('/Hilfe', [
 
 //hilfsfunktion
 function sendQnAAnswers(answers, session) {
-    var text = "Unsere Antworten:";
+ //   var text = "Unsere Antworten:";
     for (var i = 0; i < answers.length; i++) {
         var answer = answers[i];
-        text = text + "\n\n - " + answer.answer + " (" + answer.score + "%)";
+        text = answer.answer; //+ " (" + answer.score + "%)";
+        if (i < (answers.length -1)){
+            text = text + "\n\n";
+        }
     }
     session.send(text);
 }
