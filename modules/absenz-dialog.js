@@ -8,7 +8,7 @@ function AbsenzenDialogHelper(bot, builder, luisRecognizer) {
 function addAbsence(bot, session, category, text, fromDate, toDate, days) {
     var user = bot.datastore.getUser(session);
     var newAbsence = {
-        user: user,
+        user: user.user,
         typ: category,
         text: text,
         fromDate: fromDate,
