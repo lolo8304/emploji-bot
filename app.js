@@ -331,7 +331,17 @@ function showMenu(session) {
 //=========================================================
 
 function handleTextMessage(message, session) {
-    handleTextMessagePhase1(message, session);
+   if (session.message.text === "hallo") { 
+        var arr=[];
+        for (var i in bot.datastore.users) {
+            arr.push(" - "+bot.datastore.users[i].firstname);
+            if (Math.random()>0.5) arr=arr.reverse(); // etwa sumsortieren gefällig?
+        }
+        session.message.text = "bye"; 
+        session.endDialog("Ein Hallo zurück von\n\n"+arr.join("\n\n"));
+    } else {
+        handleTextMessagePhase1(message, session);
+    }
 }
 
 //Phase 1: Retrieve QNA Answers, zeige hohe Treffer
