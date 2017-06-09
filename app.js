@@ -66,6 +66,10 @@ bot.datastore = {
         }
         return undefined;
     },
+    getUserManager: function (session) {
+        return this.getUser(session).manager;
+    },
+    
     getAbsences: function (session) {
         var id = this.getUserId(session);
         var result = [];

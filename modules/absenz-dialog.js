@@ -69,8 +69,10 @@ function AbsenzenDialog(bot, builder, recognizer) {
                 var absenceAttributes = getAbsenceAttributes(builder, args.entities);
                 var newAbsence = addAbsenceFromEntities(bot, session, args.entities);
                 if (newAbsence) {
+                    var user = bot.datastore.getUser(session);
+                    bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Absenz von "+user.firstname+" "+user.name+" bestätigen.");
                     session.send("Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", newAbsence.typ, newAbsence.fromDate, newAbsence.toDate, newAbsence.days);
-                    
+                    session.send("Dein Manager wurde zur Bestätigung aufgefordert");
                 } else {
                     session.send("Es ist ein Fehler aufgetreten bei der Erstellung Deiner Absenz. Bitte melde Dich bei meine Administration.")
                 }
