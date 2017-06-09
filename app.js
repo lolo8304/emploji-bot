@@ -32,6 +32,7 @@ var bot = new builder.UniversalBot(connector, {
 bot.datastore = {
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
+    spesenzettel: require('./import/datastore/spesenzettel.json'),
     getUserId: function (session) {
         var id = session.message.address.user.name;
         for (var i in this.users) {
