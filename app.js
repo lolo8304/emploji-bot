@@ -331,7 +331,7 @@ function showMenu(session) {
 //=========================================================
 
 function handleTextMessage(message, session) {
-   if (session.message.text === "hallo") { 
+   if (session.message.text === "hallo" || session.message.text === "Hallo") { 
         var arr=[];
         for (var i in bot.datastore.users) {
             arr.push(" - "+bot.datastore.users[i].firstname);
