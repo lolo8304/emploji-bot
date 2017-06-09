@@ -311,7 +311,7 @@ function showMenu(session) {
     //notification testing
     // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
-    //    .title("")
+        .title("")
         .text(welcomeText)
         .images([
             builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emoji_nolego.png")
