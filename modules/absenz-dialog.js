@@ -31,6 +31,12 @@ function getAbsenzTyp(builder, entities) {
 function getAbsenzDateFrom(builder, entities) {
   const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || undefined);
   if (entity) {
+    for (var i = 0; i < entities.length; i++) {
+        var e = entities[i];
+        if (e.startIndex >= entity.startIndex && e.endIndex <= entity.endIndex) {
+            e.type = e.type + "-removed";
+        }
+    }
       return entity.entity.replace(" ","");
   }
   return "";
