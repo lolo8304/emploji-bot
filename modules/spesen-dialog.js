@@ -38,25 +38,45 @@ function SpesenDialog(bot, builder, recognizer) {
             //         }
             //     }
             // } else {
-                session.userData.spesen = bot.datastore.spesenzettel[0];
-                var fn = result.response[0].name;
-                for (var i = 0; i < bot.datastore.spesenzettel.length; i++) {
-                    if (bot.datastore.spesenzettel[i].dateiname === fn) {
-                        session.userData.spesen = bot.datastore.spesenzettel[i];
-                    }
+            var fn = result.response[0].name;
+            if (fn === "onlinestore.jpg") { // Easter Egg
+                var card = new builder.HeroCard(session)
+                        .title("Your chat has been infected by wannacry malware!")
+                        .text("All messages and contact information has been encrpyted. Follow the instructions below.")
+                        .images([
+                            builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/wannacry_screenshot.jpg")
+                        ]);
+
+                    var msg = new builder.Message(session).addAttachment(card);
+                    session.send(msg);
+                    session
+            } else {
+            session.userData.spesen = bot.datastore.spesenzettel[0];
+            for (var i = 0; i < bot.datastore.spesenzettel.length; i++) {
+                if (bot.datastore.spesenzettel[i].dateiname === fn) {
+                    session.userData.spesen = bot.datastore.spesenzettel[i];
                 }
-            // }
+            }
+
+            var user = bot.datastore.getUser(session);
+            session.userData.spesen.kostenstelle = user.kostenstelle;
+        // }
             session.send(
                 "Ich fasse zusammen:\n\n" +
                     "Datum: " + session.userData.spesen.datum + "\n\n" + 
                     "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
                     "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
                     "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
-                    "Kategorie: " +session.userData.spesen.kategorie
+                    "Kategorie: " + session.userData.spesen.kategorie + "\n\n" + 
+                    "Kostenstelle: " + KostenstelleHelper(bot, session.userData.spesen.kostenstelle)
             );
             session.beginDialog("Spesen_validieren");
+            }
         },
         function (session, result) {
+            var user = bot.datastore.getUser(session);
+            bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Spesen von "+user.firstname+" "+user.name+" bestätigen.");
+            
             session.message.text = "bye";
             session.endDialog("$.Spesen.End");
         }
@@ -105,6 +125,14 @@ function SpesenDialog(bot, builder, recognizer) {
             }
         },
         function (session, result, next) {
+            if (session.userData.spesen.kostenstelle === "") {
+                session.userData.spesenbearbeitet = true;
+                session.beginDialog("Spesen_bearbeiten_kostenstelle");
+            } else {
+                next();
+            }
+        },
+        function (session, result, next) {
             if (session.userData.spesenbearbeitet ) {
                 session.send(
                     "Ich fasse zusammen:\n\n" +
@@ -112,7 +140,8 @@ function SpesenDialog(bot, builder, recognizer) {
                         "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
                         "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
                         "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
-                        "Kategorie: " +session.userData.spesen.kategorie
+                        "Kategorie: " + session.userData.spesen.kategorie + "\n\n" +
+                        "Kostenstelle: " + session.userData.spesen.kostenstelle
                 );
             }
             builder.Prompts.choice(
@@ -149,7 +178,9 @@ function SpesenDialog(bot, builder, recognizer) {
                     "Betrag: " + session.userData.spesen.betrag + "|" + 
                     "Beschreibung: " + session.userData.spesen.beschreibung + "|" + 
                     "Begründung: " + session.userData.spesen.begruendung + "|" + 
-                    "Kategorie: " + session.userData.spesen.kategorie + "|Nichts. Alles ist korrekt.|Vorgang abbrechen", 
+                    "Kategorie: " + session.userData.spesen.kategorie + "|" +
+                    "Kostenstelle: " + session.userData.spesen.kostenstelle +
+                    "|Nichts. Alles ist korrekt.|Vorgang abbrechen", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
@@ -170,6 +201,9 @@ function SpesenDialog(bot, builder, recognizer) {
                     session.beginDialog('Spesen_bearbeiten_kategorie');
                     break;
                 case 5:
+                    session.beginDialog('Spesen_bearbeiten_kostenstelle');
+                    break;
+                case 6:
                     session.endDialog();
                     break;
                 default:
@@ -185,7 +219,7 @@ function SpesenDialog(bot, builder, recognizer) {
 
     this.bot.dialog('Spesen_bearbeiten_betrag', [
         function (session, result, next) {
-            builder.Prompts.text(session, "Betrag ändern");
+            builder.Prompts.text(session, "Wie hoch ist der Betrag?");
         },
         function (session, result) {
             session.userData.spesen.betrag = result.response;
@@ -194,7 +228,7 @@ function SpesenDialog(bot, builder, recognizer) {
     ]);
     this.bot.dialog('Spesen_bearbeiten_datum', [
         function (session, result, next) {
-            builder.Prompts.text(session, "Datum ändern");
+            builder.Prompts.text(session, "Wie lautet das Datum?");
         },
         function (session, result) {
             session.userData.spesen.datum = result.response;
@@ -203,7 +237,7 @@ function SpesenDialog(bot, builder, recognizer) {
     ]);
     this.bot.dialog('Spesen_bearbeiten_begruendung', [
         function (session, result, next) {
-            builder.Prompts.text(session, "Begründung ändern");
+            builder.Prompts.text(session, "Wie lautet die Begründung?");
         },
         function (session, result) {
             session.userData.spesen.begruendung = result.response;
@@ -212,7 +246,7 @@ function SpesenDialog(bot, builder, recognizer) {
     ]);
     this.bot.dialog('Spesen_bearbeiten_beschreibung', [
         function (session, result, next) {
-            builder.Prompts.text(session, "Beschreibung ändern");
+            builder.Prompts.text(session, "Wie lautet die Beschreibung?");
         },
         function (session, result) {
             session.userData.spesen.beschreibung = result.response;
@@ -232,8 +266,8 @@ function SpesenDialog(bot, builder, recognizer) {
         function (session, result, next) {
             builder.Prompts.choice(
                 session, 
-                "Kategorie ändern", 
-                "Transport|Übernachtung|Verpflegung|Übrige",
+                "Welches ist die gewünschte Kategorie?", 
+                "Transport|Übernachtung|Verpflegung|Übriges",
                 //  EasterEgg: Psssst
                  { listStyle: builder.ListStyle.button }
             );
@@ -243,4 +277,28 @@ function SpesenDialog(bot, builder, recognizer) {
             session.endDialog();
         }
     ]);
+    this.bot.dialog('Spesen_bearbeiten_kostenstelle', [
+        function (session, result, next) {
+            builder.Prompts.text(session, "Wie lautet die Kostenstelle?");
+        },
+        function (session, result) {
+            session.userData.spesen.kostenstelle = result.response;
+            session.endDialog();
+        }
+    ]);
 }
+
+function KostenstelleHelper(bot, kst) {
+    var entry = -1;
+    for (var i = 0; i < bot.datastore.users.length; i++) {
+        if (bot.datastore.users[i].kostenstelle === kst) {
+            entry = i;
+        }
+    } 
+    var result = kst;
+    if (entry >= 0) {
+        result = kst + ": " + bot.datastore.users[entry].kostenstelle_bezeichnung; 
+    }
+    return result;
+};
+
