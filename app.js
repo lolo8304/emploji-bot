@@ -251,6 +251,7 @@ bot.dialog('/Intro', [
             buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
             buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
             buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
+            buttons[3] = builder.CardAction.dialogAction(session, "Hilfe", "Hilfe", "Hilfe");
             var card = new builder.HeroCard(session)
                 .title("Emploji")
                 .text(welcomeText)
