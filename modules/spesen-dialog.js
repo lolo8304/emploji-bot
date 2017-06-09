@@ -22,13 +22,17 @@ function SpesenDialog(bot, builder, recognizer) {
         },
         function (session, result, next) {
             if (typeof result.response === "string") {
-                session.userData.spesen = { 
-                    datum: "29.5.2017 - 30.5.2017",
-                    betrag: "CHF 12.22",
-                    beschreibung: "Flug nach Köln",
-                    begruendung: "Docker Kurs",
-                    kategorie: "Transport",
-                    text: result.response.text
+                if (result.response.length < 2 && parseInt(result.response)!=NaN) {
+                    session.userData.spesen = bot.datastore.spesenzettel[parseInt(result.response)];                    
+                } else {
+                    session.userData.spesen = { 
+                        datum: "",
+                        betrag: "",
+                        beschreibung: "",
+                        begruendung: "",
+                        kategorie: "",
+                        text: result.response.text
+                    }
                 }
             } else {
                 session.userData.spesen = { 
@@ -63,9 +67,10 @@ function SpesenDialog(bot, builder, recognizer) {
 
     this.bot.dialog('Spesen_validieren', [
         function (session, result, next) {
-            session.dialogData.spesen = session.userData.spesen;
+            session.userData.spesenbearbeitet = false;
 
             if (session.userData.spesen.datum === "") {
+                session.userData.spesenbearbeitet = true;
                 session.beginDialog("Spesen_bearbeiten_datum");
             } else {
                 next();
@@ -73,6 +78,7 @@ function SpesenDialog(bot, builder, recognizer) {
         },
         function (session, result, next) {
             if (session.userData.spesen.betrag === "") {
+                session.userData.spesenbearbeitet = true;
                 session.beginDialog("Spesen_bearbeiten_betrag");
             } else {
                 next();
@@ -80,20 +86,15 @@ function SpesenDialog(bot, builder, recognizer) {
         },
         function (session, result, next) {
             if (session.userData.spesen.beschreibung === "") {
+                session.userData.spesenbearbeitet = true;
                 session.beginDialog("Spesen_bearbeiten_beschreibung");
             } else {
                 next();
             }
         },
         function (session, result, next) {
-            if (session.userData.spesen.begruendung === "") {
-                session.beginDialog("Spesen_bearbeiten_begruendung");
-            } else {
-                next();
-            }
-        },
-        function (session, result, next) {
-            if (session.userData.spesen.beschreibung === "") {
+            if (session.userData.spesen.kategorie === "") {
+                session.userData.spesenbearbeitet = true;
 
                 /**
                  * 
@@ -106,7 +107,7 @@ function SpesenDialog(bot, builder, recognizer) {
             }
         },
         function (session, result, next) {
-            if (! session.dialogData.spesen === session.userData.spesen ) {
+            if (session.userData.spesenbearbeitet ) {
                 session.send(
                     "Ich fasse zusammen:\n\n" +
                         "Datum: " + session.userData.spesen.datum + "\n\n" + 
