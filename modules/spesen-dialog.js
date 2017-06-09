@@ -24,12 +24,6 @@ function SpesenDialog(bot, builder, recognizer) {
             if (typeof result.response === 'String') {
                 session.send(result.response.text);
 
-/**
-
-  Kategorie = Übernachtung, Verpflegung, Transport, Übrige, Psssst
-
-
-**/
             } else {
                 session.send(result.response[0].name);
             }
@@ -142,10 +136,16 @@ function SpesenDialog(bot, builder, recognizer) {
     ]);
     this.bot.dialog('Spesen_bearbeiten_kategorie', [
         function (session, result, next) {
-            builder.Prompts.text(session, "Kategorie ändern");
+            builder.Prompts.choice(
+                session, 
+                "Kategorie ändern", 
+                "Transport|Übernachtung|Verpflegung|Übrige",
+                //  EasterEgg: Psssst
+                 { listStyle: builder.ListStyle.button }
+            );
         },
         function (session, result) {
-            session.userData.spesen_kategorie = result.response;
+            session.userData.spesen_kategorie = result.response.entity;
             session.endDialog();
         }
     ]);
