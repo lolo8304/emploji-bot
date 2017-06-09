@@ -15,7 +15,7 @@ function Nofifier(bot, builder, recognizer) {
             session.send("Notification Dialog");
             var savedAddress = session.message.address;
             var address= {
-                id: savedAddress.id,
+      //          id: savedAddress.id,
                 user: {id: savedAddress.user.id},
                 bot: {id: savedAddress.bot.id},
                 serviceUrl: savedAddress.serviceUrl
