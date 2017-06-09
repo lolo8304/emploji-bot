@@ -46,8 +46,14 @@ function Nofifier(bot, builder, recognizer) {
     }
 
     this.notifyUserWithName = function notifyUserWithName(user_name, message) {
-
+        notifyUser(bot.datastore.getUserSlackIdByName(user_name), message);
     }
+
+    this.notifyUserWithId = function notifyUserWithId(user_id, message) {
+        notifyUser(user_id, message);
+    }
+
+    
 
     function notifyUser(user_id, message) {
         var address = {

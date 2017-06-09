@@ -148,6 +148,52 @@ server.get('/', function (req, res, next) {
     res.end(new Buffer(contents));
 });
 
+//parse http params
+var querystring = require('querystring');
+var url = require('url');
+
+server.use(function(req,res,next){
+    req.queryJson = querystring.parse(url.parse(req.url).query);
+    req.param = function(name){
+        var p = this.params[name];
+        if (p) {
+            return p
+        }
+        return this.queryJson[name];
+    };
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+   next();
+});
+
+//notifiy all users
+server.get('/notifyallusers', function (req, response, next) {
+    response.setHeader('content-type', 'text/html');
+
+    var message = req.param("message") || "undefined message";
+
+    response.write('<html>');
+    response.write('<body>');
+    response.write('<h1>User Notification</h1>');
+    response.write('notification: </br>');
+    response.write(message);
+    response.write('</br>');
+    response.write('<ul>');
+    var users = bot.datastore.users;
+    for (var i in users) {
+        if (users[i].user) {
+            notifier.notifyUserWithId(users[i].slack_id, message);
+            response.write('<li>' + users[i].user + '</li>');
+        }
+    }
+    response.write('</ul>')
+    response.write('</body>');
+    response.write('</html>');
+    response.end();
+});
+
 
 //=========================================================
 // LUIS initialization
@@ -223,7 +269,8 @@ bot.dialog('/Intro', [
             } else if (session.message.text.startsWith("action?Monats")) {
                 session.beginDialog("Monatsabschluss");
             } else if (session.message.text.startsWith("action?Notifier")) {
-                session.beginDialog("Notifier");
+                // session.beginDialog("Notifier");
+                notifier.notifyUserWithName("lorenz-haenggi", "hallo David Notification");
             }
             else {
                 //starte die Universalweiche: 1. LUIS, 2. QNA, 3. sorry...
@@ -257,7 +304,7 @@ function showMenu(session) {
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
 
     //notification testing
-    buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
+   // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
         .title("Emploji")
         .text(welcomeText)
@@ -434,11 +481,11 @@ bot.dialog('/Hilfe', [
 
 //hilfsfunktion
 function sendQnAAnswers(answers, session) {
- //   var text = "Unsere Antworten:";
+    //   var text = "Unsere Antworten:";
     for (var i = 0; i < answers.length; i++) {
         var answer = answers[i];
         text = answer.answer; //+ " (" + answer.score + "%)";
-        if (i < (answers.length -1)){
+        if (i < (answers.length - 1)) {
             text = text + "\n\n";
         }
     }
