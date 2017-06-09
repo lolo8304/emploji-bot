@@ -343,9 +343,12 @@ function handleTextMessagePhase1(message, session) {
             for (var i = 0; i < A.answers.length; i++) {
                 var answer = A.answers[i];
                 console.log("QnA score: " + answer.score);
-                if (answer.score >= (process.env.INTENT_SCORE_QnA_HIGH_THRESHOLD || 75.0)) {
+                var thresholdLow = Number.parseFloat(process.env.INTENT_SCORE_QnA_LOW_THRESHOLD || "35.0");
+                var thresholdHigh = Number.parseFloat(process.env.INTENT_SCORE_QnA_HIGH_THRESHOLD || "75.0");
+
+                if (answer.score >= thresholdHigh) {
                     topAnswers.push(answer);
-                } else if (answer.score >= (process.env.INTENT_SCORE_QnA_LOW_THRESHOLD || 35.0)) {
+                } else if (answer.score >= thresholdLow) {
                     alternativeAnswers.push(answer);
                 }
             }
@@ -363,8 +366,10 @@ function handleTextMessagePhase1(message, session) {
 function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
+            console.log("message: "+message);
             console.log('Luis Score: ' + intents[0].score + " for " + intents[0].intent);
-            if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= (process.env.INTENT_SCORE_LUIS_THRESHOLD || 0.51))) {
+            var threshold = Number.parseFloat(process.env.INTENT_SCORE_LUIS_THRESHOLD || "0.51");
+            if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= threshold)) {
                 //Weiche auf LUIS
                 beginDialogOnLuisIntent(intents[0], entities, session);
                 return;

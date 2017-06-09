@@ -96,5 +96,19 @@
     "kostenstelle": "SCHB1001",
     "kostenstelle_bezeichnung": "SAP Common Services",
     "manager": "david"
+  },
+  {
+    "user": "User",
+    "slack_id": "default-user",
+    "name": "Emulator",
+    "firstname": "Botly",
+    "dateOfBirth": "42894",
+    "minExpenses": "0",
+    "position": "Bot",
+    "Anstellung": "100",
+    "sex": "m",
+    "kostenstelle": "18222",
+    "kostenstelle_bezeichnung": "Bot",
+    "manager": "remostrupler"
   }
 ]
