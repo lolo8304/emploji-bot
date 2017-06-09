@@ -16,8 +16,8 @@ function Nofifier(bot, builder, recognizer) {
             var savedAddress = session.message.address;
             var address= {
                 id: savedAddress.id,
-                user: savedAddress.user,
-                bot: savedAddress.bot,
+                user: {id: savedAddress.user.id},
+                bot: {id: savedAddress.bot.id},
                 serviceUrl: savedAddress.serviceUrl
             };
             notify(address, "Test Notification, id: " 
