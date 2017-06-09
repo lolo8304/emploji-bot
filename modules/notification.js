@@ -14,7 +14,13 @@ function Nofifier(bot, builder, recognizer) {
         function (session, args, next) {
             session.send("Notification Dialog");
             var savedAddress = session.message.address;
-            notify(savedAddress, "Test Notification")
+            var address= {
+                id: savedAddress.id,
+                user: savedAddress.user,
+                bot: savedAddress.bot,
+                serviceUrl: savedAddress.serviceUrl
+            };
+            notify(address, "Test Notification")
         },
     ])
         .cancelAction('/Intro', "OK Notifier abgebrochen",
@@ -31,4 +37,6 @@ function Nofifier(bot, builder, recognizer) {
         msg.textLocale('de');
         bot.send(msg);
     }
+
+    this.notify 
 }
