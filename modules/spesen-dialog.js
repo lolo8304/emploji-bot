@@ -10,34 +10,10 @@ function SpesenDialog(bot, builder, recognizer) {
     this.recognizer = recognizer;
 
     this.bot.dialog('Spesen', [
-        // function (session, args, next) {
-        //     builder.Prompts.choice(session, "$.Spesen.Start", "Freitext|Foto", { listStyle: builder.ListStyle.button });
-        // },
-        // function (session, result) {
-        //     if(result.response.index == 0) {
-        //         builder.Prompts.text(session, "$.Spesen.Text");
-        //     } else {
-        //         builder.Prompts.attachment(session, "$.Spesen.Foto");
-        //     }
-        // },
         function (session, args, next) {
             builder.Prompts.attachment(session, "$.Spesen.FotoStart");
         },
         function (session, result, next) {
-            // if (typeof result.response === "string") {
-            //     if (result.response.length < 2 && parseInt(result.response)!=NaN) {
-            //         session.userData.spesen = bot.datastore.spesenzettel[parseInt(result.response)];                    
-            //     } else {
-            //         session.userData.spesen = { 
-            //             datum: "",
-            //             betrag: "",
-            //             beschreibung: "",
-            //             begruendung: "",
-            //             kategorie: "",
-            //             text: result.response.text
-            //         }
-            //     }
-            // } else {
             var fn = result.response[0].name;
             if (fn === "onlinestore.jpg") { // Easter Egg
                 var card = new builder.HeroCard(session)
@@ -51,34 +27,31 @@ function SpesenDialog(bot, builder, recognizer) {
                     session.send(msg);
                     session
             } else {
-            session.userData.spesen = bot.datastore.spesenzettel[0];
-            for (var i = 0; i < bot.datastore.spesenzettel.length; i++) {
-                if (bot.datastore.spesenzettel[i].dateiname === fn) {
-                    session.userData.spesen = bot.datastore.spesenzettel[i];
+                session.userData.spesen = bot.datastore.spesenzettel[0];
+                for (var i = 0; i < bot.datastore.spesenzettel.length; i++) {
+                    if (bot.datastore.spesenzettel[i].dateiname === fn) {
+                        session.userData.spesen = bot.datastore.spesenzettel[i];
+                    }
                 }
-            }
 
-            var user = bot.datastore.getUser(session);
-            session.userData.spesen.kostenstelle = user.kostenstelle;
-        // }
-            session.send(
-                "Ich fasse zusammen:\n\n" +
-                    "Datum: " + session.userData.spesen.datum + "\n\n" + 
-                    "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
-                    "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
-                    "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
-                    "Kategorie: " + session.userData.spesen.kategorie + "\n\n" + 
-                    "Kostenstelle: " + KostenstelleHelper(bot, session.userData.spesen.kostenstelle)
-            );
-            session.beginDialog("Spesen_validieren");
+                var user = bot.datastore.getUser(session);
+                session.userData.spesen.kostenstelle = user.kostenstelle;
+
+                SendSummary(bot, session);
+                session.beginDialog("Spesen_validieren");
             }
         },
         function (session, result) {
-            var user = bot.datastore.getUser(session);
-            bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Spesen von "+user.firstname+" "+user.name+" bestätigen.");
-            
             session.message.text = "bye";
-            session.endDialog("$.Spesen.End");
+
+            var betrag = parseInt(session.userData.spesen.betrag); 
+            if (betrag==NaN || betrag>=100) {
+                var user = bot.datastore.getUser(session);
+                bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Spesen von "+user.firstname+" "+user.name+" bestätigen.");
+                session.endDialog("$.Spesen.End100");
+            } else {
+                session.endDialog("$.Spesen.End");
+            }
         }
     ])
         .cancelAction('/Intro', "OK Spesenerfassung abgebrochen", 
@@ -134,15 +107,7 @@ function SpesenDialog(bot, builder, recognizer) {
         },
         function (session, result, next) {
             if (session.userData.spesenbearbeitet ) {
-                session.send(
-                    "Ich fasse zusammen:\n\n" +
-                        "Datum: " + session.userData.spesen.datum + "\n\n" + 
-                        "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
-                        "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
-                        "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
-                        "Kategorie: " + session.userData.spesen.kategorie + "\n\n" +
-                        "Kostenstelle: " + session.userData.spesen.kostenstelle
-                );
+                SendSummary(bot, session);
             }
             builder.Prompts.choice(
                 session, 
@@ -302,3 +267,14 @@ function KostenstelleHelper(bot, kst) {
     return result;
 };
 
+function SendSummary(bot, session) {
+    session.send(
+        "Ich fasse zusammen:\n\n" +
+            "Datum: " + session.userData.spesen.datum + "\n\n" + 
+            "Betrag: " + session.userData.spesen.betrag + "\n\n" + 
+            "Beschreibung: " + session.userData.spesen.beschreibung + "\n\n" + 
+            "Begründung: " + session.userData.spesen.begruendung + "\n\n" + 
+            "Kategorie: " + session.userData.spesen.kategorie + "\n\n" + 
+            "Kostenstelle: " + KostenstelleHelper(bot, session.userData.spesen.kostenstelle)
+    );
+}

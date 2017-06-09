@@ -69,7 +69,7 @@ bot.datastore = {
     getUserManager: function (session) {
         return this.getUser(session).manager;
     },
-    
+
     getAbsences: function (session) {
         var id = this.getUserId(session);
         var result = [];
@@ -156,9 +156,9 @@ server.get('/', function (req, res, next) {
 var querystring = require('querystring');
 var url = require('url');
 
-server.use(function(req,res,next){
+server.use(function (req, res, next) {
     req.queryJson = querystring.parse(url.parse(req.url).query);
-    req.param = function(name){
+    req.param = function (name) {
         var p = this.params[name];
         if (p) {
             return p
@@ -169,7 +169,7 @@ server.use(function(req,res,next){
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-   next();
+    next();
 });
 
 //notifiy all users
@@ -309,12 +309,12 @@ function showMenu(session) {
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
 
     //notification testing
-   // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
+    // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
         .title("Emploji")
         .text(welcomeText)
         .images([
-            builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
+            builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emoji_nolego.png")
         ]).buttons(buttons);
 
     var msg = new builder.Message(session).addAttachment(card);
@@ -331,7 +331,17 @@ function showMenu(session) {
 //=========================================================
 
 function handleTextMessage(message, session) {
-    handleTextMessagePhase1(message, session);
+   if (session.message.text === "hallo") { 
+        var arr=[];
+        for (var i in bot.datastore.users) {
+            arr.push(" - "+bot.datastore.users[i].firstname);
+            if (Math.random()>0.5) arr=arr.reverse(); // etwa sumsortieren gefällig?
+        }
+        session.message.text = "bye2"; 
+        session.endDialog("Ein Hallo zurück von\n\n"+arr.join("\n\n"));
+    } else {
+        handleTextMessagePhase1(message, session);
+    }
 }
 
 //Phase 1: Retrieve QNA Answers, zeige hohe Treffer
@@ -403,10 +413,14 @@ function handleTextMessagePhase3(message, topAnswers, altAnswers, session) {
         sendQnAAnswers(altAnswers, session);
     } else {
         if (topAnswers.length === 0) {
-            //zeige nicht verstanden nur, wenn keine topAnswer gezeigt wird
-            session.send("$.Intro.NichtVerstanden", session.message.text);
-            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
-            session.replaceDialog("/Intro");
+            if (session.message.text.startsWith("action?")) {
+                //war eine action, mache nichts!
+            } else {
+                //zeige nicht verstanden nur, wenn keine topAnswer gezeigt wird
+                session.send("$.Intro.NichtVerstanden", session.message.text);
+                session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
+                session.replaceDialog("/Intro");
+            }
         }
     }
 }
