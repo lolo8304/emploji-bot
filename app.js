@@ -337,7 +337,7 @@ function handleTextMessage(message, session) {
             arr.push(" - "+bot.datastore.users[i].firstname);
             if (Math.random()>0.5) arr=arr.reverse(); // etwa sumsortieren gefällig?
         }
-        session.message.text = "bye"; 
+        session.message.text = "bye2"; 
         session.endDialog("Ein Hallo zurück von\n\n"+arr.join("\n\n"));
     } else {
         handleTextMessagePhase1(message, session);
