@@ -1,9 +1,9 @@
 [
-{"user":"meyerchri","datum":"31. Juli 2017","betrag":"120","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":""},
-{"user":"david","datum":"29.7.2017 - 30.7.2017","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":""},
-{"user":"remostrupler","datum":"","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":""},
-{"user":"susanne_s","datum":"29.7.2017 - 30.7.2017","betrag":"","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":""},
-{"user":"lorenz-haenggi","datum":"29.7.2017 - 30.7.2017","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"","kategorie":"","kostenstelle":""},
-{"user":"cogji","datum":"","betrag":"","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":""},
-{"user":"brm","datum":"","betrag":"","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":""}
+{"user":"meyerchri","datum":"42685","betrag":"3.99","beschreibung":"IKEA","begruendung":"Neue Deko fürs Büro","kategorie":"Übriges","kostenstelle":"","dateiname":""},
+{"user":"david","datum":"29.7.2017 - 30.7.2017","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":"","dateiname":"emploji-512x512.png"},
+{"user":"remostrupler","datum":"","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":"","dateiname":"emploji-simulator.png"},
+{"user":"susanne_s","datum":"29.7.2017 - 30.7.2017","betrag":"","beschreibung":"Flug nach Köln","begruendung":"JavaScript Kurs","kategorie":"Transport","kostenstelle":"","dateiname":"emploji-simulator-512x512.png"},
+{"user":"lorenz-haenggi","datum":"29.7.2017 - 30.7.2017","betrag":"11.22","beschreibung":"Flug nach Köln","begruendung":"","kategorie":"","kostenstelle":"","dateiname":"emploji.png"},
+{"user":"cogji","datum":"","betrag":"","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":"","dateiname":""},
+{"user":"brm","datum":"","betrag":"","beschreibung":"","begruendung":"","kategorie":"","kostenstelle":"","dateiname":""}
 ]

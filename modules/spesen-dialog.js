@@ -35,13 +35,12 @@ function SpesenDialog(bot, builder, recognizer) {
                     }
                 }
             } else {
-                session.userData.spesen = { 
-                    datum: "",
-                    betrag: "CHF 73.05",
-                    beschreibung: "Einkauf bei " + result.response[0].name,
-                    begruendung: "Büroaccessoires",
-                    kategorie: "Übrige",
-                    filename: result.response[0].name
+                session.userData.spesen = bot.datastore.spesenzettel[0];
+                var fn = result.response[0].name;
+                for (var i = 0; i < bot.datastore.spesenzettel.length; i++) {
+                    if (bot.datastore.spesenzettel[i].dateiname === fn) {
+                        session.userData.spesen = bot.datastore.spesenzettel[i];
+                    }
                 }
             }
             session.send(
