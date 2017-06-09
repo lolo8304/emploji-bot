@@ -18,6 +18,38 @@ function addAbsence(bot, session, category, text, fromDate, toDate, days) {
     bot.datastore.absences.push(newAbsence);
     return newAbsence;
 }
+
+
+function getAbsenzTyp(builder, entities) {
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzTyp") || {});
+  if (entity) {
+      return entity.resolution.values[0];
+  }
+  return "";
+}
+function getAbsenzDateFrom(builder, entities) {
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || {});
+  if (entity) {
+      return entity.entity;
+  }
+  return "";
+}
+function getAbsenzDauer(builder, entities) {
+  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzDauer") || {});
+  if (entity) {
+      return entity.resolution.values[0];
+  }
+  return "";
+}
+
+function getAbsenceAttributes(builder, entities) {
+    return {
+        typ: getAbsenzTyp(builder, entities),
+        fromDate: getAbsenzDateFrom(builder, entities),
+        days: getAbsenzDauer(builder, entities)
+    };
+}
+
 function addAbsenceFromEntities(bot, session, entities) {
     return addAbsence(bot, session, "Ferien", "endlich mal Ferien", "2017-04-01", "2017-04-15", 3);
 }
@@ -34,13 +66,17 @@ function AbsenzenDialog(bot, builder, recognizer) {
     this.bot.dialog('Absenzen_Erstellen', [
         function (session, args, next) {
             if (args && args.intent) {
+                var absenceAttributes = getAbsenceAttributes(builder, args.entities);
                 var newAbsence = addAbsenceFromEntities(bot, session, args.entities);
                 if (newAbsence) {
-                    session.send("Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", newAbsence.category, newAbsence.fromDate, newAbsence.toDate, newAbsence.days);
+                    session.send("Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", newAbsence.typ, newAbsence.fromDate, newAbsence.toDate, newAbsence.days);
+                    
                 } else {
                     session.send("Es ist ein Fehler aufgetreten bei der Erstellung Deiner Absenz. Bitte melde Dich bei meine Administration.")
                 }
             }
+            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
+            session.replaceDialog("/Intro");
         }
     ])
         .cancelAction('/Intro', "OK Absenzerfassung abgebrochen",

@@ -203,6 +203,7 @@ abschlussDialog = require('./modules/abschluss-dialog.js')(bot, builder, recogni
 absenzenDialog = require('./modules/absenz-dialog.js')(bot, builder, recognizer);
 spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 notifier = require('./modules/notification.js')(bot, builder, recognizer);
+bot.notifier = notifier;
 
 //=========================================================
 // Intro dialog handler
