@@ -35,7 +35,7 @@ function AbschlussDialog(bot, builder, recognizer) {
                     );
                     card.buttons([
                         builder.CardAction.dialogAction(session, "Cancel", "", "weiter"),
-                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Alle Absenzen anzeigen")
+                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Absenzen anzeigen")
                     ]);
                     var msg = new builder.Message(session).addAttachment(card);
                     session.send(msg);
@@ -43,8 +43,8 @@ function AbschlussDialog(bot, builder, recognizer) {
                     var card = createAbsenceCard(bot, builder, session, false);
                     card.buttons([
                         builder.CardAction.dialogAction(session, "Cancel", "", "später bestätigen"),
-                        builder.CardAction.dialogAction(session, "Monatabschluss_bestaetigen", "", "Monatabschluss bestätigen"),
-                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Alle Absenzen anzeigen")
+                        builder.CardAction.dialogAction(session, "Monatabschluss_bestaetigen", "", "Bestätigen"),
+                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Absenzen anzeigen")
                     ]);
                     var msg = new builder.Message(session).addAttachment(card);
                     session.send(msg);
