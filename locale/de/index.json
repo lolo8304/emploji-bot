@@ -16,10 +16,12 @@
   "$.Hilfe.KeineAntwort":"Sorry. Leider keine Antwort gefunden",
 
   "$.Spesen.Start":"Wie willst du deine Spesen erfassen?",
-  "$.Spesen.Text":"Gib uns die Daten durch.",
+  "$.Spesen.Text":"Gib uns die Daten durch. Bitte verwende diese Form:\n\nVon - Bis, Betrag, Beschreibung, Begründung",
+
   "$.Spesen.Foto":"Fotografiere deinen Beleg.",
-  "$.Spesen.Summary":"Ich fasse zusammen:\n\nCHF 51.80\n31.05.2017\n\nIKEA Dietlikon\n\nKST: 12002 HREmployee Administration",
+  "$.Spesen.Summary":"Ich fasse zusammen:\n\n",
   "$.Spesen.End":"Perfekt. Der Betrag wird dir spätestens im Folgemonat ausgezahlt - je nach dem wie schnell ich bin ;-)",
+  "$.Spesen.End100":"Perfekt. Der Betrag wird dir spätestens im Folgemonat ausgezahlt - je nach dem wie schnell deine Kostenstelle reagiert.  ;-)",
 
   "_filler" : "filler to support , at end of lines :-)", 
 
