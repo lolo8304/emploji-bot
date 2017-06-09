@@ -137,27 +137,8 @@ server.get('/', function (req, res, next) {
 // Add global LUIS recognizer to bot
 var model = process.env.MICROSOFT_LUIS_MODEL;
 var recognizer = new builder.LuisRecognizer(model);
-/*var intents = new builder.IntentDialog({ recognizers: [recognizer] });
-bot.dialog('/', 
-  intents
-    .matches('Help', '/Help')
-    .matches('Testen', '/Testen')
-    .matches('Intro', '/Intro')
-);
 
 
-// Entity Constants
-const ENTITIES = {
-  TEST: 'TestEntity'
-};*/
-
-
-//=========================================================
-// BOT handler
-//=========================================================
-
-
-bot_helper = require("./modules/bot-helper.js")(bot, builder, recognizer);
 
 //=========================================================
 // default handler
@@ -168,41 +149,19 @@ var introRecognizer = new builder.RegExpRecognizer("Intro", {
     de: /^(intro|start)/i
 });
 
-/*var faqRecognizer = new builder.RegExpRecognizer("FAQ", {
-    en_us: /^(faq|help)/i,
-    de: /^(faq|hilfe)/i
-});
-var abschlussRecognizer = new builder.RegExpRecognizer("Monatsabschluss", {
-    en_us: /^(closing|month)/i,
-    de: /^(abschluss|monat)/i
-});
-var spesenRecognizer = new builder.RegExpRecognizer("Spesen", {
-    en_us: /^(exp)/i,
-    de: /^(spesen)/i
-});
-var absenzenRecognizer = new builder.RegExpRecognizer("Absenzen", {
-    en_us: /^(absence)/i,
-    de: /^(absenz|krank|ferien)/i
-});*/
 var intents = new builder.IntentDialog({
-    //recognizers: [introRecognizer, faqRecognizer, abschlussRecognizer, spesenRecognizer, absenzenRecognizer]
     recognizers: [introRecognizer]
 });
 
 bot.dialog('/',
     intents
-        .matches('Intro', '/Intro')
-    //       .matches('FAQ', '/FAQ')
-    //       .matches('Monatsabschluss', 'Monatsabschluss')
-    //        .matches('Spesen', 'Spesen')
-    //        .matches('Absenzen', 'Absenzen')
-    , [
+        .matches('Intro', '/Intro'), [
         function (session, args, next) {
             console.log("in /");
         }
     ]);
 
-
+//zeige das Menu (intro) wenn der User neu dazu kommt, das erst mal...
 bot.on('conversationUpdate', (message) => {
     if (message.membersAdded) {
         if (!(message.membersAdded[0].name === 'Bot')) {
@@ -211,17 +170,23 @@ bot.on('conversationUpdate', (message) => {
     }
 });
 
-
+//und wenn wir nicht weiterkommen wird ein Fehler angezeigt
 intents.onDefault(
     builder.DialogAction.send("$.Intro.Error")
 );
+
+//=========================================================
+// BOT und Dialog Handlers
+//=========================================================
+
+bot_helper = require("./modules/bot-helper.js")(bot, builder, recognizer);
 
 abschlussDialog = require('./modules/abschluss-dialog.js')(bot, builder, recognizer);
 absenzenDialog = require('./modules/absenz-dialog.js')(bot, builder, recognizer);
 spesenDialog = require('./modules/spesen-dialog.js')(bot, builder, recognizer);
 
 //=========================================================
-// dialog handler
+// Intro dialog handler
 //=========================================================
 
 bot.dialog('/Intro', [
@@ -229,7 +194,8 @@ bot.dialog('/Intro', [
         if (session.message && (session.message.type === "message")
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
             && session.message.text) {
-            //hier geht es um die Universalweiche
+
+            //handle standard UseCases
             if (session.message.text.startsWith("action?Spesen")) {
                 session.beginDialog("Spesen");
             } else if (session.message.text.startsWith("action?Absenzen")) {
@@ -238,29 +204,11 @@ bot.dialog('/Intro', [
                 session.beginDialog("Monatsabschluss");
             }
             else {
-                //session.send(session.message.text);
+                //starte die Universalweiche: 1. LUIS, 2. QNA, 3. sorry...
                 handleTextMessage(session.message.text, session);
             }
-
-
         } else {
-            session.preferredLocale("de");
-            var welcomeText = session.localizer.gettext(session.preferredLocale(), "$.Intro.Hi") +
-                session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
-            var buttons = [];
-            buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
-            buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
-            buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
-            var card = new builder.HeroCard(session)
-                .title("Emploji")
-                .text(welcomeText)
-                .images([
-                    builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
-                ]).buttons(buttons);
-
-            var msg = new builder.Message(session).addAttachment(card);
-            session.send(msg);
-            session.sendBatch();
+            showMenu(session);
         }
     },
     function (session, args, next) {
@@ -276,6 +224,26 @@ bot.dialog('/Intro', [
         }
     });
 
+//Menu HeroCard mit den Buttons zum Start der Haupt UseCases
+function showMenu(session) {
+    session.preferredLocale("de");
+    var welcomeText = session.localizer.gettext(session.preferredLocale(), "$.Intro.Hi") +
+        session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
+    var buttons = [];
+    buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
+    buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
+    buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
+    var card = new builder.HeroCard(session)
+        .title("Emploji")
+        .text(welcomeText)
+        .images([
+            builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + "/images/emploji.png")
+        ]).buttons(buttons);
+
+    var msg = new builder.Message(session).addAttachment(card);
+    session.send(msg);
+    session.sendBatch();
+}
 
 //first LUIS, dann QnA, dann ??'
 function handleTextMessage(message, session) {
@@ -336,7 +304,9 @@ function handleTextMessageQnA(message, session) {
 }
 
 
-
+//=========================================================
+// Testen dialog handler
+//=========================================================
 bot.dialog('/Testen', [
     function (session, args, next) {
         session.preferredLocale("de");
@@ -378,7 +348,9 @@ bot.dialog('/Testen', [
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 ;
 
-
+//=========================================================
+// Hilfe dialog handler
+//=========================================================
 bot.dialog('/Hilfe', [
     function (session, args, next) {
         session.preferredLocale("de");
@@ -409,6 +381,7 @@ bot.dialog('/Hilfe', [
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 ;
 
+//hilfsfunktion
 function sendQnAAnswers(answers, session) {
     var text = "Unsere Antworten:";
     for (var i = 0; i < answers.length; i++) {
