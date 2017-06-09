@@ -15,11 +15,11 @@ function addAbsence(bot, session, category, text, fromDate, toDate, days) {
         days: 3,
         commit: false
     }
-    this.bot.absences.push(newAbsence);
+    bot.datastore.absences.push(newAbsence);
     return newAbsence;
 }
 function addAbsenceFromEntities(bot, session, entities) {
-    return addAbsence(session, "Ferien", "endlich mal Ferien", "2017-04-01", "2017-04-15", 3);
+    return addAbsence(bot, session, "Ferien", "endlich mal Ferien", "2017-04-01", "2017-04-15", 3);
 }
 
 function AbsenzenDialog(bot, builder, recognizer) {
@@ -36,12 +36,10 @@ function AbsenzenDialog(bot, builder, recognizer) {
             if (args && args.intent) {
                 var newAbsence = addAbsenceFromEntities(bot, session, args.entities);
                 if (newAbsence) {
-                    session.endDialog("Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", newAbsence.category, newAbsence.fromDate, newAbsence.toDate, newAbsence.days);
+                    session.send("Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", newAbsence.category, newAbsence.fromDate, newAbsence.toDate, newAbsence.days);
                 } else {
-                    session.endDialog("Es ist ein Fehler aufgetreten bei der Erstellung Deiner Absenz. Bitte melde Dich bei meine Administration.")
+                    session.send("Es ist ein Fehler aufgetreten bei der Erstellung Deiner Absenz. Bitte melde Dich bei meine Administration.")
                 }
-            } else {
-                session.endDialog();
             }
         }
     ])
@@ -68,8 +66,8 @@ function AbsenzenDialog(bot, builder, recognizer) {
             builder.LuisRecognizer.recognize(message, process.env.MICROSOFT_LUIS_MODEL, function (err, intents, entities) {
                 if (err || (intents[0] && intents[0].intent === "None")) {
                     session.replaceDialog("Absenzen", { errorText: "Ich habe nicht alles verstanden. Bitte wiederholen" });
-                } else {
-                    session.replaceDialog("Absenzen_Erfassen", args);
+                } else if (intents[0]) {
+                    session.replaceDialog(intents[0], {intent: intents[0], entities: entities});
                 }
             });
         }
