@@ -1,3 +1,4 @@
+var builder = require('./botbuilder');
 
 module.exports = AbsenzenDialogHelper;
 
@@ -6,18 +7,26 @@ function AbsenzenDialogHelper(bot, builder, luisRecognizer) {
 };
 
 function AbsenzenDialog(bot, builder, recognizer) {
-    this.bot = bot;
-    this.builder = builder;
-    this.recognizer = recognizer;
-
-    this.bot.dialog('Absenzen', [
+    bot.dialog('Absenzen', [
         function (session, args, next) {
             if (args && args.intent) {
                 session.send("Absenzen Dialog für intent: " + args.intent.intent);
+            } else if (args && args.errorText) {                
+                builder.Prompts.text(session, args.errorText);
             } else {
-                session.send("Absenzen Dialog");
+                builder.Prompts.text(session, "Nenne mir den Abwesenheitsgrund und Datum von bis, dann erfasse ich die Absenz.");
             }
         },
+        function (session, result, next) {
+            var message = result.response;
+            builder.LuisRecognizer.recognize(message, process.env.MICROSOFT_LUIS_MODEL, function (err, intents, entities) {
+                if (err || (intents[0] && intents[0].intent === "None")) {
+                    session.replaceDialog("Absenzen", { errorText: "Ich habe nicht alles verstanden. Bitte wiederholen" });
+                } else {
+                    session.replaceDialog("Absenzen_Erstellen", args);
+                }
+            });
+        }
     ])
         .cancelAction('/Intro', "OK Absenzerfassung abgebrochen",
         {
