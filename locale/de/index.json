@@ -15,6 +15,7 @@
   "$.Nein" : "Nein",
   "$.Hilfe.KeineAntwort":"Sorry. Leider keine Antwort gefunden",
 
+  "$.Spesen.FotoStart":"Fotografiere deinen Beleg oder lade einen Scan davon rauf.",
   "$.Spesen.Start":"Wie willst du deine Spesen erfassen?",
   "$.Spesen.Text":"Gib uns die Daten durch. Bitte verwende diese Form:\n\nVon - Bis, Betrag, Beschreibung, Begründung",
 

@@ -1,72 +1,100 @@
 [
   {
     "user": "meyerchri",
+    "slack_id": "U5L3D6A6L:T5C4WRWET",
     "name": "Meyer",
     "firstname": "Christina",
     "dateOfBirth": "1969-04-13",
-    "minExpenses": 0,
+    "minExpenses": "0",
     "position": "Innovation",
-    "Anstellung": 60,
-    "sex": "f"
+    "Anstellung": "60",
+    "sex": "f",
+    "kostenstelle": "10133",
+    "kostenstelle_bezeichnung": "Innovation",
+    "manager": "david"
   },
   {
     "user": "david",
+    "slack_id": "U5EPZJE92:T5C4WRWET",
     "name": "Ulrich",
     "firstname": "David",
     "dateOfBirth": "1970-04-01",
-    "minExpenses": 50,
+    "minExpenses": "50",
     "position": "Architecture",
-    "Anstellung": 90,
-    "sex": "m"
+    "Anstellung": "90",
+    "sex": "m",
+    "kostenstelle": "18327",
+    "kostenstelle_bezeichnung": "IT Strategy a.Archit",
+    "manager": "lorenz-haenggi"
   },
   {
     "user": "remostrupler",
+    "slack_id": "U5EM8E86P:T5C4WRWET",
     "name": "Struppler",
     "firstname": "Remo",
     "dateOfBirth": "1950-01-01",
-    "minExpenses": 0,
+    "minExpenses": "0",
     "position": "IT-Risk",
-    "Anstellung": 100,
-    "sex": "m"
+    "Anstellung": "100",
+    "sex": "m",
+    "kostenstelle": "18328",
+    "kostenstelle_bezeichnung": "IT Fin. & Risk. Man.",
+    "manager": "david"
   },
   {
     "user": "susanne_s",
+    "slack_id": "U5LL0BN4U:T5C4WRWET",
     "name": "Sulzer",
     "firstname": "Susanne",
     "dateOfBirth": "1950-01-01",
-    "minExpenses": 0,
+    "minExpenses": "0",
     "position": "HR",
-    "Anstellung": 100,
-    "sex": "f"
+    "Anstellung": "100",
+    "sex": "f",
+    "kostenstelle": "18201",
+    "kostenstelle_bezeichnung": "Employee Services",
+    "manager": "david"
   },
   {
     "user": "lorenz-haenggi",
+    "slack_id": "U5BBP86RJ:T5C4WRWET",
     "name": "Hänggi",
     "firstname": "Lorenz",
     "dateOfBirth": "1969-04-13",
-    "minExpenses": 50,
+    "minExpenses": "50",
     "position": "Innovation",
-    "Anstellung": 100,
-    "sex": "m"
+    "Anstellung": "100",
+    "sex": "m",
+    "kostenstelle": "18323",
+    "kostenstelle_bezeichnung": "Sales and Digital BA",
+    "manager": "david"
   },
   {
     "user": "cogji",
+    "slack_id": "U5GEGT83C:T5C4WRWET",
     "name": "Giorgi",
     "firstname": "Corinne",
     "dateOfBirth": "1960-01-01",
-    "minExpenses": 0,
+    "minExpenses": "0",
     "position": "HR",
-    "Anstellung": 80,
-    "sex": "f"
+    "Anstellung": "80",
+    "sex": "f",
+    "kostenstelle": "18222",
+    "kostenstelle_bezeichnung": "People Development",
+    "manager": "david"
   },
   {
     "user": "brm",
+    "slack_id": "U5Q62U63V:T5C4WRWET",
     "name": "Breitenmoser",
     "firstname": "Bernhard",
     "dateOfBirth": "1960-01-01",
-    "minExpenses": 0,
+    "minExpenses": "0",
     "position": "SAP Specialist",
-    "Anstellung": 100,
-    "sex": "m"
+    "Anstellung": "100",
+    "sex": "m",
+    "kostenstelle": "SCHB1001",
+    "kostenstelle_bezeichnung": "SAP Common Services",
+    "manager": "david"
   }
 ]
