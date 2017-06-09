@@ -21,7 +21,8 @@ function Nofifier(bot, builder, recognizer) {
                 serviceUrl: savedAddress.serviceUrl
             };
             //notify David im Slack
-            notifyUser("U5EPZJE92:T5C4WRWET", "test notification");
+            //notifyUser("U5EPZJE92:T5C4WRWET", "test notification");
+            notifyUser(bot.datastore.getUserSlackIdByName("david"), "test notification");
 
             /*          notify(address, "Test Notification, id: " 
                       + address.id + " bot id: " + address.bot.id  + " bot name: " + address.bot.name 
@@ -44,6 +45,10 @@ function Nofifier(bot, builder, recognizer) {
         bot.send(msg);
     }
 
+    this.notifyUserWithName = function notifyUserWithName(user_name, message) {
+
+    }
+
     function notifyUser(user_id, message) {
         var address = {
             user: { id: user_id },
@@ -55,6 +60,4 @@ function Nofifier(bot, builder, recognizer) {
         msg.textLocale('de');
         bot.send(msg);
     }
-
-    this.notify
 }

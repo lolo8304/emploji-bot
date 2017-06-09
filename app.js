@@ -47,6 +47,25 @@ bot.datastore = {
         }
         return undefined;
     },
+    getUserSlackIdByName: function (userName) {
+        for (var i in this.users) {
+            if (this.users[i].user === userName) return this.users[i].slack_id;
+        }
+        return undefined;
+    },
+    getManagerSlackIdByName: function (userName) {
+        for (var i in this.users) {
+            if (this.users[i].user === userName) {
+                var manager = this.this.users[i].manager;
+                if (manager) {
+                    return this.getUserSlackIdByName(manager);
+                } else {
+                    return undefined;
+                }
+            }
+        }
+        return undefined;
+    },
     getAbsences: function (session) {
         var id = this.getUserId(session);
         var result = [];
@@ -191,7 +210,7 @@ notifier = require('./modules/notification.js')(bot, builder, recognizer);
 
 bot.dialog('/Intro', [
     function (session, args, next) {
-        
+
         if (session.message && (session.message.type === "message")
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
             && session.message.text) {
