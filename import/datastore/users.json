@@ -11,7 +11,7 @@
     "sex": "f",
     "kostenstelle": "10133",
     "kostenstelle_bezeichnung": "Innovation",
-    "manager": "david"
+    "manager": "emploji"
   },
   {
     "user": "david",
@@ -25,7 +25,7 @@
     "sex": "m",
     "kostenstelle": "18327",
     "kostenstelle_bezeichnung": "IT Strategy a.Archit",
-    "manager": "lorenz-haenggi"
+    "manager": "emploji"
   },
   {
     "user": "remostrupler",
@@ -39,7 +39,7 @@
     "sex": "m",
     "kostenstelle": "18328",
     "kostenstelle_bezeichnung": "IT Fin. & Risk. Man.",
-    "manager": "david"
+    "manager": "emploji"
   },
   {
     "user": "susanne_s",
@@ -53,7 +53,7 @@
     "sex": "f",
     "kostenstelle": "18201",
     "kostenstelle_bezeichnung": "Employee Services",
-    "manager": "david"
+    "manager": "emploji"
   },
   {
     "user": "lorenz-haenggi",
@@ -67,7 +67,7 @@
     "sex": "m",
     "kostenstelle": "18323",
     "kostenstelle_bezeichnung": "Sales and Digital BA",
-    "manager": "david"
+    "manager": "emploji"
   },
   {
     "user": "cogji",
@@ -81,7 +81,7 @@
     "sex": "f",
     "kostenstelle": "18222",
     "kostenstelle_bezeichnung": "People Development",
-    "manager": "david"
+    "manager": "emploji"
   },
   {
     "user": "brm",
@@ -95,20 +95,34 @@
     "sex": "m",
     "kostenstelle": "SCHB1001",
     "kostenstelle_bezeichnung": "SAP Common Services",
-    "manager": "david"
+    "manager": "emploji"
   },
   {
     "user": "User",
     "slack_id": "default-user",
     "name": "Emulator",
     "firstname": "Botly",
-    "dateOfBirth": "42894",
+    "dateOfBirth": "2017-06-08",
     "minExpenses": "0",
     "position": "Bot",
     "Anstellung": "100",
     "sex": "m",
     "kostenstelle": "18222",
     "kostenstelle_bezeichnung": "Bot",
-    "manager": "remostrupler"
+    "manager": "emploji"
+  },
+  {
+    "user": "emploji",
+    "slack_id": "U5BA7L6JE:T5C4WRWET",
+    "name": "Emploji",
+    "firstname": "Bot",
+    "dateOfBirth": "2017-06-08",
+    "minExpenses": "0",
+    "position": "Slack user",
+    "Anstellung": "100",
+    "sex": "m",
+    "kostenstelle": "18222",
+    "kostenstelle_bezeichnung": "Slack",
+    "manager": "emploji"
   }
 ]
