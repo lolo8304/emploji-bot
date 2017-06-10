@@ -274,8 +274,8 @@ bot.dialog('/Intro', [
             } else if (session.message.text.startsWith("action?Monats")) {
                 session.beginDialog("Monatsabschluss");
             } else if (session.message.text.startsWith("action?Notifier")) {
-                // session.beginDialog("Notifier");
-                notifier.notifyUserWithName("lorenz-haenggi", "hallo David Notification");
+                session.beginDialog("Notifier");
+                //notifier.notifyUserWithName(session, "lorenz-haenggi", "hallo David Notification");
             }
             else {
                 //starte die Universalweiche: 1. LUIS, 2. QNA, 3. sorry...
@@ -309,7 +309,7 @@ function showMenu(session) {
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
 
     //notification testing
-    // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
+    //buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
     var card = new builder.HeroCard(session)
         .title("")
         .text(welcomeText)

@@ -47,7 +47,7 @@ function SpesenDialog(bot, builder, recognizer) {
             var betrag = parseInt(session.userData.spesen.betrag); 
             if (betrag==NaN || betrag>=100) {
                 var user = bot.datastore.getUser(session);
-                bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Spesen von "+user.firstname+" "+user.name+" bestätigen.");
+                bot.notifier.notifyUserWithName(session, bot.datastore.getUserManager(session), "Bitte Spesen von "+user.firstname+" "+user.name+" bestätigen.");
                 session.endDialog("$.Spesen.End100");
             } else {
                 session.endDialog("$.Spesen.End");

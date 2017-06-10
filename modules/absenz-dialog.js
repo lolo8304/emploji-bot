@@ -102,7 +102,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
                 var newAbsence = addAbsenceFromAttributes(bot, session, absenceAttributes);
                 if (newAbsence) {
                     var user = bot.datastore.getUser(session);
-                    bot.notifier.notifyUserWithName(bot.datastore.getUserManager(session), "Bitte Absenz von "+user.firstname+" "+user.name+" bestätigen.");
+                    bot.notifier.notifyUserWithName(session, bot.datastore.getUserManager(session), "Bitte Absenz von "+user.firstname+" "+user.name+" bestätigen.");
                     session.send(absenceAttributes.responseToUserText);
                     session.send("Dein Manager wurde zur Bestätigung aufgefordert");
                     session.sendBatch();

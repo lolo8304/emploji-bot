@@ -22,7 +22,7 @@ function Nofifier(bot, builder, recognizer) {
             };
             //notify David im Slack
             //notifyUser("U5EPZJE92:T5C4WRWET", "test notification");
-            notifyUser(bot.datastore.getUserSlackIdByName("david"), "test notification");
+            notifyUser(bot.datastore.getUserSlackIdByName("lorenz-haenggi"), "test notification from id="+savedAddress.user.id+", name="+savedAddress.user.name);
 
             /*          notify(address, "Test Notification, id: " 
                       + address.id + " bot id: " + address.bot.id  + " bot name: " + address.bot.name 
@@ -45,7 +45,8 @@ function Nofifier(bot, builder, recognizer) {
         bot.send(msg);
     }
 
-    this.notifyUserWithName = function notifyUserWithName(user_name, message) {
+    this.notifyUserWithName = function notifyUserWithName(session, user_name, message) {
+        notifyUser(bot.datastore.getUserSlackIdByName(bot.datastore.getUserId(session)), message + " (CC für Dich)", 3000);
         notifyUser(bot.datastore.getUserSlackIdByName(user_name), message);
     }
 
@@ -55,15 +56,18 @@ function Nofifier(bot, builder, recognizer) {
 
     
 
-    function notifyUser(user_id, message) {
-        var address = {
-            user: { id: user_id },
-            bot: { id: process.env.BOT_ID },
-            serviceUrl: process.env.BOT_SERVICE_URL
-        };
-        var msg = new builder.Message().address(address);
-        msg.text(message);
-        msg.textLocale('de');
-        bot.send(msg);
+    function notifyUser(user_id, message, delay) {
+        if (!delay) delay = 0;
+        setTimeout( function() {
+            var address = {
+                user: { id: user_id },
+                bot: { id: process.env.BOT_ID },
+                serviceUrl: process.env.BOT_SERVICE_URL
+            };
+            var msg = new builder.Message().address(address);
+            msg.text(message);
+            msg.textLocale('de');
+            bot.send(msg);
+        }, delay);
     }
 }
