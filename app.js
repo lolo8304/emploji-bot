@@ -263,8 +263,9 @@ bot.dialog('/Intro', [
     function (session, args, next) {
 
         if (session.message && (session.message.type === "message")
+            && session.message.text
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
-            && session.message.text) {
+        ) {
 
             //handle standard UseCases
             if (session.message.text.startsWith("action?Spesen")) {
@@ -282,7 +283,13 @@ bot.dialog('/Intro', [
                 handleTextMessage(session.message.text, session);
             }
         } else {
-            showMenu(session);
+            if (session.message && (session.message.type === "message")
+                && session.message.text
+                && (session.message.text.match(/(stop|bye|goodbye|abbruch|tschüss)/i))) {
+                showShortMenu(session);
+            } else {
+                showMenu(session);
+            }
         }
     },
     function (session, args, next) {
@@ -322,6 +329,22 @@ function showMenu(session) {
     session.sendBatch();
 }
 
+function showShortMenu(session) {
+    session.preferredLocale("de");
+    var buttons = [];
+    buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
+    buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
+    buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
+
+    //notification testing
+    // buttons[3] = builder.CardAction.dialogAction(session, "Notifier", "Notifier", "Notifier");
+    var card = new builder.HeroCard(session).buttons(buttons);
+
+    var msg = new builder.Message(session).addAttachment(card);
+    session.send(msg);
+    session.sendBatch();
+}
+
 //=========================================================
 // Universalweiche 
 //   1. Zeige QnA mit hohem Treffer
@@ -331,14 +354,14 @@ function showMenu(session) {
 //=========================================================
 
 function handleTextMessage(message, session) {
-   if (session.message.text === "hallo" || session.message.text === "Hallo") { 
-        var arr=[];
+    if (session.message.text === "hallo" || session.message.text === "Hallo") {
+        var arr = [];
         for (var i in bot.datastore.users) {
-            arr.push(" - "+bot.datastore.users[i].firstname);
-            if (Math.random()>0.5) arr=arr.reverse(); // etwa sumsortieren gefällig?
+            arr.push(" - " + bot.datastore.users[i].firstname);
+            if (Math.random() > 0.5) arr = arr.reverse(); // etwa sumsortieren gefällig?
         }
-        session.message.text = "bye"; 
-        session.endDialog("Ein Hallo zurück von\n\n"+arr.join("\n\n"));
+        session.message.text = "bye2";
+        session.endDialog("Ein Hallo zurück von\n\n" + arr.join("\n\n"));
     } else {
         handleTextMessagePhase1(message, session);
     }
@@ -376,7 +399,7 @@ function handleTextMessagePhase1(message, session) {
 function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
         if (intents.length > 0) {
-            console.log("message: "+message);
+            console.log("message: " + message);
             console.log('Luis Score: ' + intents[0].score + " for " + intents[0].intent);
             var threshold = Number.parseFloat(process.env.INTENT_SCORE_LUIS_THRESHOLD || "0.51");
             if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= threshold)) {
