@@ -47,7 +47,7 @@ function Nofifier(bot, builder, recognizer) {
 
     this.notifyUserWithName = function notifyUserWithName(session, user_name, message) {
         notifyUser(bot.datastore.getUserSlackIdByName(bot.datastore.getUserId(session)), message + " (CC für Dich)", 3000);
-        notifyUser(bot.datastore.getUserSlackIdByName(user_name), message);
+        notifyUser(bot.datastore.getUserSlackIdByName(user_name), message, 3000);
     }
 
     this.notifyUserWithId = function notifyUserWithId(user_id, message) {
