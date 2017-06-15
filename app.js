@@ -29,6 +29,10 @@ var bot = new builder.UniversalBot(connector, {
         defaultLocale: "de"
     }
 });
+bot.set('localizerSettings', {
+    defaultLocale: "en" 
+});
+
 bot.datastore = {
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
