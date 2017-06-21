@@ -218,7 +218,8 @@ var recognizer = new builder.LuisRecognizer(model);
 
 var introRecognizer = new builder.RegExpRecognizer("Intro", {
     en_us: /^(intro|start)/i,
-    "en-US": /^(intro|start)/i,
+    en: /^(intro|start)/i,
+    en_GB: /^(intro|start)/i,
     de: /^(intro|start)/i
 });
 
