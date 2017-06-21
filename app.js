@@ -533,6 +533,9 @@ bot.dialog('/Hilfe', [
     .cancelAction('/Intro', "OK abgebrochen - tippe mit 'start' wenn Du was von mir willst", { matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i });
 ;
 
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
+
 //hilfsfunktion
 function sendQnAAnswers(answers, session) {
     //   var text = "Unsere Antworten:";
@@ -543,5 +546,6 @@ function sendQnAAnswers(answers, session) {
             text = text + "\n\n";
         }
     }
+    text = entities.decode(text);
     session.send(text);
 }
