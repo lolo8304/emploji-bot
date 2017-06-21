@@ -382,10 +382,13 @@ function handleTextMessagePhase1(message, session) {
                 console.log("QnA score: " + answer.score);
                 var thresholdLow = Number.parseFloat(process.env.INTENT_SCORE_QnA_LOW_THRESHOLD || "35.0");
                 var thresholdHigh = Number.parseFloat(process.env.INTENT_SCORE_QnA_HIGH_THRESHOLD || "75.0");
+                console.log("QnA thresholds: low=" + thresholdLow + ", high="+thresholdHigh);
 
                 if (answer.score >= thresholdHigh) {
+                    console.log("QnA high answer");
                     topAnswers.push(answer);
                 } else if (answer.score >= thresholdLow) {
+                    console.log("QnA alternative answer");
                     alternativeAnswers.push(answer);
                 }
             }
