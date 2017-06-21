@@ -217,9 +217,9 @@ var recognizer = new builder.LuisRecognizer(model);
 //=========================================================
 
 var introRecognizer = new builder.RegExpRecognizer("Intro", {
-    "en_us": /^(intro|start)/i,
+    en_us: /^(intro|start)/i,
     "en-US": /^(intro|start)/i,
-    "de": /^(intro|start)/i
+    de: /^(intro|start)/i
 });
 
 var intents = new builder.IntentDialog({
