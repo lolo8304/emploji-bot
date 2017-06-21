@@ -30,7 +30,7 @@ var bot = new builder.UniversalBot(connector, {
     }
 });
 bot.set('localizerSettings', {
-    defaultLocale: "en" 
+    defaultLocale: "de" 
 });
 
 bot.datastore = {
@@ -217,10 +217,11 @@ var recognizer = new builder.LuisRecognizer(model);
 //=========================================================
 
 var introRecognizer = new builder.RegExpRecognizer("Intro", {
-    en_us: /^(intro|start)/i,
-    en: /^(intro|start)/i,
-    en_GB: /^(intro|start)/i,
-    de: /^(intro|start)/i
+    "en_us": /^(intro|start)/i,
+    "en-US": /^(intro|start)/i,
+    "en": /^(intro|start)/i,
+    "en-GB": /^(intro|start)/i,
+    "de": /^(intro|start)/i
 });
 
 var intents = new builder.IntentDialog({
@@ -267,7 +268,7 @@ bot.notifier = notifier;
 
 bot.dialog('/Intro', [
     function (session, args, next) {
-
+        session.preferredLocale("de");
         if (session.message && (session.message.type === "message")
             && session.message.text
             && (!session.message.text.match(/(start|stop|bye|goodbye|abbruch|tschüss)/i))
@@ -317,7 +318,7 @@ function showMenu(session) {
     var welcomeText = session.localizer.gettext(session.preferredLocale(), "$.Intro.Hi") +
         session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
     var buttons = [];
-    buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
+    buttons[0] = builder.CardAction.postBack(session, "Monatsabschluss", "Monatsabschluss");
     buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
 

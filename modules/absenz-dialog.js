@@ -150,4 +150,34 @@ function AbsenzenDialog(bot, builder, recognizer) {
                 session.endDialog();
             }
         });
+
+    this.bot.dialog('Absenzen_SaldoJahr', [
+        function (session, args, next) {
+            if (args && args.intent) {
+                var absenceAttributes = getAbsenceAttributes(builder, args.entities);
+                var newAbsence = addAbsenceFromAttributes(bot, session, absenceAttributes);
+                if (newAbsence) {
+                    var user = bot.datastore.getUser(session);
+                    bot.notifier.notifyUserWithName(session, bot.datastore.getUserManager(session), "Bitte Absenz von "+user.firstname+" "+user.name+" bestätigen.");
+                    session.send(absenceAttributes.responseToUserText);
+                    session.send("Dein Manager wurde zur Bestätigung aufgefordert");
+                    session.sendBatch();
+                } else {
+                    session.send("Es ist ein Fehler aufgetreten bei der Erstellung Deiner Absenz. Bitte melde Dich bei meine Administration.")
+                }
+            }
+            session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
+            session.replaceDialog("/Intro");
+        }
+    ])
+        .cancelAction('/Intro', "OK Absenzerfassung abgebrochen",
+        {
+            matches: /(start|stop|bye|goodbye|abbruch|tschüss)/i,
+            onSelectAction: (session, args) => {
+                session.endDialog();
+            }
+        });
+
+
+
 }

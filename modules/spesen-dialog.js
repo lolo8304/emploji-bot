@@ -14,7 +14,7 @@ function SpesenDialog(bot, builder, recognizer) {
             builder.Prompts.attachment(session, "$.Spesen.FotoStart");
         },
         function (session, result, next) {
-            var fn = result.response[0].name;
+            var fn = result.response && result.response[0].name;
             if (fn === "onlinestore.jpg") { // Easter Egg
                 var card = new builder.HeroCard(session)
                         .title("Your chat has been infected by wannacry malware!")
