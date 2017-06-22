@@ -318,7 +318,7 @@ function showMenu(session) {
     var welcomeText = session.localizer.gettext(session.preferredLocale(), "$.Intro.Hi") +
         session.localizer.gettext(session.preferredLocale(), "$.Intro.Welcome");
     var buttons = [];
-    buttons[0] = builder.CardAction.postBack(session, "Monatsabschluss", "Monatsabschluss");
+    buttons[0] = builder.CardAction.dialogAction(session, "Monatsabschluss", "Monatsabschluss", "Monatsabschluss");
     buttons[1] = builder.CardAction.dialogAction(session, "Absenzen", "Absenzen", "Absenzen");
     buttons[2] = builder.CardAction.dialogAction(session, "Spesen", "Spesen", "Spesen");
 
