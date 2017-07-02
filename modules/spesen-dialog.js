@@ -112,7 +112,7 @@ function SpesenDialog(bot, builder, recognizer) {
             builder.Prompts.choice(
                 session, 
                 "Alles richtig?" ,
-                "Ja, Spesen so einreichen|Nein, ich möchte korrigieren|Vorgang abbrechen", 
+                "Ja, einreichen|Nein, korrigieren|Abbrechen", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
@@ -145,7 +145,7 @@ function SpesenDialog(bot, builder, recognizer) {
                     "Begründung: " + session.userData.spesen.begruendung + "|" + 
                     "Kategorie: " + session.userData.spesen.kategorie + "|" +
                     "Kostenstelle: " + session.userData.spesen.kostenstelle +
-                    "|Nichts. Alles ist korrekt.|Vorgang abbrechen", 
+                    "|Alles OK - einreichen.|Abbrechen", 
                 { listStyle: builder.ListStyle.button });
         },
         function (session, result, next) {
