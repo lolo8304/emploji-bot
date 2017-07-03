@@ -1,4 +1,6 @@
 var sprintf = require('sprintf-js');
+var moment = require('moment');
+
 module.exports = AbsenzenDialogHelper;
 
 function AbsenzenDialogHelper(bot, builder, luisRecognizer) {
@@ -29,61 +31,142 @@ function getAbsenzTyp(builder, entities) {
   return "";
 }
 function getAbsenzDateFrom(builder, entities) {
-  const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || undefined);
-  if (entity) {
-    for (var i = 0; i < entities.length; i++) {
-        var e = entities[i];
-        if (e.startIndex >= entity.startIndex && e.endIndex <= entity.endIndex) {
-            e.type = e.type + "-removed";
-        }
-    }
-      return entity.entity.replace(" ","");
+  var entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || undefined);
+  if (entity && entity.score >= 0.8) {
+    var absenzDate =  entity.entity.replace(/\s/g,"");
+    var absenzDateMoment = moment(absenzDate, "DD.MM.YYYY");
+    var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
+    return YYYYMMDD;
   }
-  return "";
+  entity = (builder.EntityRecognizer.findEntity(entities || [], "Zeitpunkt") || undefined);
+  var today = moment();
+  if (entity) {
+    var resolution = entity.resolution.values[0];
+    if (resolution === "heute") {
+    } else if (resolution === "morgen") {
+        today.add(1, "days");
+    } else if (resolution === "übermorgen") {
+        today.add(2, "days");
+    } else if (resolution === "gestern") {
+        today.subtract(1, "days");
+    } else if (resolution === "vorgestern") {
+        today.subtract(2, "days");
+    }
+  }
+  return today.format("YYYY-MM-DD");
 }
 function getAbsenzDauer(builder, entities) {
   const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.number") || undefined);
   if (entity) {
       return Number.parseInt(entity.entity);
   }
-  return "";
+  return 1;
 }
 function getAbsenzDauerMultiplier(builder, entities) {
-  const entity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzDauer") || undefined);
-  if (entity) {
-      var dauer = entity.resolution.values[0];
-      if (dauer === "Woche") {
-        return 5;
-      } else {
-          return 1;
-      }
+  const foundEntities = (builder.EntityRecognizer.findAllEntities(entities || [], "AbsenzDauer") || undefined);
+  if (foundEntities) {
+    for (var i = 0; i < foundEntities.length; i++) {
+        var entity = foundEntities[i];
+        var dauer = entity.resolution.values[0];
+        if (dauer === "Woche") {
+            return 5;
+        } else if (dauer === "Tag") {
+            return 1;
+        }
+    }
   }
   return 1;
 }
 
+function getToDateMoment(fromDate, days) {
+    var fromD = moment(fromDate, "YYYY-MM-DD");
+    while (days > 0) {
+        // isoWeekday = day of week . Monday = 1, Sunday = 7
+        fromD.add(1, "days");
+        if (fromD.isoWeekday() < 6) {
+            days--;
+        }
+    }
+    return fromD;
+}
+function calculateDates(absence) {
+    // fromDate in form YYYY-MM-DD
+    // days as integer
+    var fromD = moment(absence.fromDate, "YYYY-MM-DD");
+    var toD = getToDateMoment(absence.fromDate, absence.days);
+    absence.toDate = toD.format("YYYY-MM-DD");
+
+    absence.fromDateDDMMYYYY=fromD.format("DD.MM.YYYY");
+    absence.fromDateDDMM=fromD.format("DD.MM.");
+    absence.year = fromD.year;
+    absence.toDateDDMMYYYY=toD.format("DD.MM.YYYY");
+    absence.toDateDDMM=toD.format("DD.MM.");
+    return absence;
+}
+function isAbsenceThisYear(absence) {
+    return absence.year == moment().year;
+}
+function removeUnneededEntities(builder, entities) {
+  const entityDateTime = (builder.EntityRecognizer.findEntity(entities || [], "builtin.datetime") || undefined);
+  if (entityDateTime) {
+    var entitiesCopy = [].concat(entities);
+    var posToDelete = 0;
+    for (var i = 0; i < entitiesCopy.length; i++) {
+        var e = entitiesCopy[i];
+        if (entityDateTime.score < 0.6) {
+            if (e == entityDateTime) {
+                e.type = e.type + "-removed";
+                entities.splice(posToDelete, 1);
+            } else {
+                posToDelete += 1;
+            }
+        } else {
+            if (e != entityDateTime && e.startIndex >= entityDateTime.startIndex && e.endIndex <= entityDateTime.endIndex) {
+                e.type = e.type + "-removed";
+                entities.splice(posToDelete, 1);
+            } else {
+                posToDelete += 1;
+            }
+        }
+    }
+  }
+  return entities;
+}
 function getAbsenceAttributes(builder, entities) {
+    entities = removeUnneededEntities(builder, entities);
     var multiplyer = getAbsenzDauerMultiplier(builder, entities);
 
     var absence = {
         typ: getAbsenzTyp(builder, entities),
         fromDate: getAbsenzDateFrom(builder, entities),
-        toDate: "",
         days: multiplyer * getAbsenzDauer(builder, entities)
     };
+    absence = calculateDates(absence);
+
     if (absence.typ === "Wohnungswechsel") {
         absence.responseToUserText = sprintf.sprintf(
-            "Ich habe deine Absenz vom %s für deinen %s registriert",
-        absence.fromDate, absence.typ);
+            "Ich habe Deine Absenz vom %s für den %s registriert",
+        absence.fromDateDDMMYYYY, absence.typ);
     } else {
+        var dayText = "1 Arbeitstag";
+        var dateText = isAbsenceThisYear(absence) ? absence.fromDateDDMM : absence.fromDateDDMMYYYY;
+        if (absence.days != 1) {
+            dayText = sprintf.sprintf("%s Arbeitstage", absence.days);
+            if (isAbsenceThisYear(absence)) {
+                dateText = sprintf.sprintf("%s - %s", absence.fromDateDDMM, absence.toDateDDMM);
+            } else {
+                dateText = sprintf.sprintf("%s - %s", absence.fromDateDDMMYYYY, absence.toDateDDMMYYYY);
+            }
+        }
         absence.responseToUserText = sprintf.sprintf(
-            "Vielen Dank. Ich habe folgende Absenz erfasst: %s vom %s - %s (%s Tag)", 
-            absence.typ, absence.fromDate, absence.toDate, absence.days);
+            "Vielen Dank. Ich habe folgende Absenz erfasst: '%s' vom %s (%s)", 
+            absence.typ, dateText, dayText);
     }
     return absence;
 }
 
 function addAbsenceFromAttributes(bot, session, attributes) {
-    return addAbsence(bot, session, attributes.typ, "", attributes.fromDate, "", attributes.days);
+    return addAbsence(bot, session, attributes.typ, "", attributes.fromDate, attributes.toDate, attributes.days);
 }
 
 function AbsenzenDialog(bot, builder, recognizer) {

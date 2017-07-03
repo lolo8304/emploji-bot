@@ -32,6 +32,7 @@
     "restify": "^4.3.0",
     "sprintf": "^0.1.5",
     "html-entities" :"^1.2.1",
+    "moment":"^2.18.1",
 
     "mongodb": "^2.2.26",
     "monk":"^4.0.0"

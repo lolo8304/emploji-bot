@@ -27,6 +27,6 @@
   "_filler" : "filler to support , at end of lines :-)", 
 
   "$.Intro.NichtVerstanden": ["Sorry, habe deine Frage %s nicht verstanden", 
-    "Äxgüsi, was meinst du mit %s?", "Bitte drück dich klarer aus - verstehe %s nicht"]
+    "Äxgüsi, was meinst du mit %s?", "Bitte drück dich klarer aus - verstehe '%s' nicht"]
 
 }

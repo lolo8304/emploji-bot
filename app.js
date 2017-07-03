@@ -290,6 +290,7 @@ bot.dialog('/Intro', [
                 handleTextMessage(session.message.text, session);
             }
         } else {
+            /*
             if (session.message && (session.message.type === "message")
                 && session.message.text
                 && (session.message.text.match(/(stop|bye|goodbye|abbruch|tschüss)/i))) {
@@ -297,6 +298,8 @@ bot.dialog('/Intro', [
             } else {
                 showMenu(session);
             }
+            */
+            showMenu(session);
         }
     },
     function (session, args, next) {
