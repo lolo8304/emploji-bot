@@ -33,7 +33,7 @@ function AbschlussDialog(bot, builder, recognizer) {
                 if (cntOpen == 0) {
                     var card = createThumbnailCard(bot, builder, session,
                         cnt === 0 ? "Du hast keine Absenzen!" : "Deine " + cnt + " Absenzen sind schon bestätigt!",
-                        "icon_ok.png"
+                        "ok"
                     );
                     card.buttons([
                         builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Alle"),
@@ -103,7 +103,7 @@ function AbschlussDialog(bot, builder, recognizer) {
     function createThumbnailCard(bot, builder, session, title, icon) {
         var images = [];
         if (icon)
-            images.push(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/' + icon));
+            images.push(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + icon+'.png').alt(icon));
         var card =
             new builder.ThumbnailCard(session)
                 .title(title)
@@ -124,14 +124,14 @@ function AbschlussDialog(bot, builder, recognizer) {
                         builder.ReceiptItem.create(session,
                             " am " + ddmm(absences[i].fromDate),
                             absences[i].typ + ": 1 Tag" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
-                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + valid_filename(absences[i].typ) + '.png'))
+                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + valid_filename(absences[i].typ) + '.png').alt(absences[i].typ))
                     );
                 } else {
                     items.push(
                         builder.ReceiptItem.create(session,
                             ddmm(absences[i].fromDate) + " bis " + ddmm(absences[i].toDate),
                             absences[i].typ + ": " + absences[i].days + " Tage" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
-                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + valid_filename(absences[i].typ) + '.png'))
+                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + valid_filename(absences[i].typ) + '.png').alt(absences[i].typ))
                     );
                 }
             }
