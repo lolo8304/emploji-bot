@@ -72,9 +72,20 @@ function getAbsenzDateFromTo(builder, entities) {
 }
 
 function getAbsenzDauer(builder, entities) {
-  const entity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.number") || undefined);
+  const numberEntity = (builder.EntityRecognizer.findEntity(entities || [], "builtin.number") || undefined);
   if (entity) {
-      return Number.parseInt(entity.entity);
+      return Number.parseInt(numberEntity.entity);
+  }
+  const foundEntities = (builder.EntityRecognizer.findAllEntities(entities || [], "AbsenzDauer") || undefined);
+  if (foundEntities) {
+    for (var i = 0; i < foundEntities.length; i++) {
+        var entity = foundEntities[i];
+        var dauer = entity.resolution.values[0];
+        var dauerNumber = Number.parseInt(dauer);
+        if (!isNaN(dauerNumber)) {
+            return dauerNumber;
+        }
+    }
   }
   return 1;
 }
