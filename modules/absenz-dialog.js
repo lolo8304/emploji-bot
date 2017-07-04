@@ -249,6 +249,33 @@ function removeUnneededEntities(builder, entities) {
         }
     }
   }
+  const entityNumbers = (builder.EntityRecognizer.findAllEntities(entities || [], "builtin.number") || undefined); 
+  for (var t = 0; t < entityNumbers.length; t++) {
+    var entityNumber = entityNumbers[t];
+    if (entityNumber) {
+        var entitiesCopy = [].concat(entities);
+        var posToDelete = 0;
+        for (var i = 0; i < entitiesCopy.length; i++) {
+            var e = entitiesCopy[i];
+            if (entityNumber.score < 0.5) {
+                if (e == entityNumber) {
+                    e.type = e.type + "-removed";
+                    entities.splice(posToDelete, 1);
+                } else {
+                    posToDelete += 1;
+                }
+            } else {
+                // keep AbsenzMonat to calculate Names instead of Numbers
+                if (e != entityNumber && e.type != "AbsenzDauer" && e.startIndex >= entityNumber.startIndex && e.endIndex <= entityNumber.endIndex) {
+                    e.type = e.type + "-removed";
+                    entities.splice(posToDelete, 1);
+                } else {
+                    posToDelete += 1;
+                }
+            }
+        }
+    }
+  }
   return entities;
 }
 function getAbsenceAttributes(bot, builder, entities) {
