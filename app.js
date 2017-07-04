@@ -37,6 +37,8 @@ bot.datastore = {
     users: require('./import/datastore/users.json'),
     absences: require('./import/datastore/absences.json'),
     spesenzettel: require('./import/datastore/spesenzettel.json'),
+    holiday: require('./import/datastore/holiday.json'),
+    holidayMap: {},
     getUserId: function (session) {
         var id = session.message.address.user.name;
         for (var i in this.users) {
@@ -81,8 +83,22 @@ bot.datastore = {
             if (this.absences[i].user === id) result.push(this.absences[i]);
         }
         return result;
+    },
+    buildHolidayMap: function() {
+        for (var i in this.holiday) {
+           var holidayDay = this.holiday[i];
+           if (holidayDay.public) {
+               this.holidayMap[holidayDay.date] = holidayDay;
+           }
+        }
+        return this.holidayMap;
+    },
+    isPublicHolidayCH(dateYYYMMDD) {
+        var day = this.holidayMap[dateYYYMMDD];
+        return day ? day.public : false;
     }
 };
+bot.datastore.buildHolidayMap();
 
 //=========================================================
 // App helper methods
@@ -405,6 +421,13 @@ function handleTextMessagePhase1(message, session) {
     })
 }
 
+function isValidIntent(intent, score, threshold) {
+    if (intent == "Help") { return false; }
+    if (intent == "None") { return false; }
+    if (intent == "Intro" && score < 0.8) { return false; }
+    return (score >= threshold);
+}
+
 //Phase 2: check LUIS for matching intents
 function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
     builder.LuisRecognizer.recognize(message, model, function (err, intents, entities) {
@@ -412,8 +435,8 @@ function handleTextMessagePhase2(message, topAnswers, altAnswers, session) {
             console.log("message: " + message);
             console.log('Luis Score: ' + intents[0].score + " for " + intents[0].intent);
             var threshold = Number.parseFloat(process.env.INTENT_SCORE_LUIS_THRESHOLD || "0.51");
-            if ((intents[0].intent != "Help") && (intents[0].intent != "None") && (intents[0].score >= threshold)) {
-                //Weiche auf LUIS
+            if (isValidIntent(intents[0].intent, intents[0].score, threshold)) {
+                handleTextMessagePhase3Tip(message, topAnswers, altAnswers, session);
                 beginDialogOnLuisIntent(intents[0], entities, session);
                 return;
             }
@@ -439,6 +462,14 @@ function beginDialogOnLuisIntent(intent, entities, session) {
         console.log("no dialog found for intend " + intent.intent);
     }
 }
+
+//Phasen 3/4 - zeige alternative Answers als Zusatztip
+function handleTextMessagePhase3Tip(message, topAnswers, altAnswers, session) {
+    if (altAnswers.length > 0) {
+        sendQnAAnswers(altAnswers, session, "Mein Gratistip");
+    }
+}
+
 
 //Phasen 3/4 - zeige alternative Answers oder wenn keine vorhanden, habe nicht verstanden
 function handleTextMessagePhase3(message, topAnswers, altAnswers, session) {
@@ -540,15 +571,19 @@ const Entities = require('html-entities').AllHtmlEntities;
 const entities = new Entities();
 
 //hilfsfunktion
-function sendQnAAnswers(answers, session) {
-    //   var text = "Unsere Antworten:";
+function sendQnAAnswers(answers, session, titel) {
+    var finalText = "";
+    if (titel) {
+        finalText = titel+": ";
+    }
     for (var i = 0; i < answers.length; i++) {
         var answer = answers[i];
         text = answer.answer; //+ " (" + answer.score + "%)";
-        if (i < (answers.length - 1)) {
-            text = text + "\n\n";
+        if (i > 0) {
+            finalText += "\n\n";
         }
+        finalText += text;
     }
-    text = entities.decode(text);
-    session.send(text);
+    finalText = entities.decode(finalText);
+    session.send(finalText);
 }

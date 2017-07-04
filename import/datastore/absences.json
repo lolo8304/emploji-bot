@@ -249,6 +249,231 @@
     "fromDate": "2017-02-15",
     "toDate": "2017-02-18",
     "days": 3,
-    "commit": true
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Kurs",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Unfall",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Krankheit",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Heirat",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Jubiläum",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Mutterschaftsurlaub",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Militär+Zivilschutz",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Unbezahlt",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Vaterschaftsurlaub",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Todesfall",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "lorenz-haenggi",
+    "typ": "Kompensation",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Wohnungswechsel",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Kurs",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Unfall",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Ferien",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Krankheit",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Heirat",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Jubiläum",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Mutterschaftsurlaub",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Militär+Zivilschutz",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Unbezahlt",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Vaterschaftsurlaub",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Todesfall",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
+  },
+  {
+    "user": "User",
+    "typ": "Kompensation",
+    "text": "",
+    "fromDate": "2017-02-15",
+    "toDate": "2017-02-18",
+    "days": 3,
+    "commit": false
   }
 ]

@@ -19,6 +19,8 @@ function AbschlussDialog(bot, builder, recognizer) {
                 session.beginDialog("Alle_Absenzen_anzeigen");
             } else if (session.message.text.startsWith("action?Monatabschluss_bestaetigen")) {
                 session.beginDialog("Monatabschluss_bestaetigen");
+            } else if (session.message.text.startsWith("action?stop")) {
+                session.endDialog("bye");
             } else {
                 // var user = bot.datastore.getUser(session);
                 var absences = bot.datastore.getAbsences(session);
@@ -31,20 +33,20 @@ function AbschlussDialog(bot, builder, recognizer) {
                 if (cntOpen == 0) {
                     var card = createThumbnailCard(bot, builder, session,
                         cnt === 0 ? "Du hast keine Absenzen!" : "Deine " + cnt + " Absenzen sind schon bestätigt!",
-                        "Icon_OK.png"
+                        "icon_ok.png"
                     );
                     card.buttons([
-                        builder.CardAction.dialogAction(session, "Cancel", "", "weiter"),
-                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Absenzen anzeigen")
+                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Alle"),
+                        builder.CardAction.dialogAction(session, "stop", "", "zurück")
                     ]);
                     var msg = new builder.Message(session).addAttachment(card);
                     session.send(msg);
                 } else {
                     var card = createAbsenceCard(bot, builder, session, false);
                     card.buttons([
-                        builder.CardAction.dialogAction(session, "Cancel", "", "später bestätigen"),
                         builder.CardAction.dialogAction(session, "Monatabschluss_bestaetigen", "", "Bestätigen"),
-                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Absenzen anzeigen")
+                        builder.CardAction.dialogAction(session, "Alle_Absenzen_anzeigen", "", "Alle"),
+                        builder.CardAction.dialogAction(session, "stop", "", "zurück")
                     ]);
                     var msg = new builder.Message(session).addAttachment(card);
                     session.send(msg);
@@ -89,6 +91,14 @@ function AbschlussDialog(bot, builder, recognizer) {
         return dt ? dt.substring(8, 10) + "." + dt.substring(5, 7) : '';
     };
 
+    function valid_filename(s) {
+        const arr = { "ü" : "u", "ä": "a", "ö":"o","é":"e","à":"a","è":"e","ç":"c","+":"_"," ":"_"};
+        for(var key in arr) {
+            s = s.replace(key, arr[key]);
+        }
+        return s.toLowerCase();
+    }
+
 
     function createThumbnailCard(bot, builder, session, title, icon) {
         var images = [];
@@ -114,14 +124,14 @@ function AbschlussDialog(bot, builder, recognizer) {
                         builder.ReceiptItem.create(session,
                             " am " + ddmm(absences[i].fromDate),
                             absences[i].typ + ": 1 Tag" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
-                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/Icon_' + absences[i].typ + '.png'))
+                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + valid_filename(absences[i].typ) + '.png'))
                     );
                 } else {
                     items.push(
                         builder.ReceiptItem.create(session,
                             ddmm(absences[i].fromDate) + " bis " + ddmm(absences[i].toDate),
                             absences[i].typ + ": " + absences[i].days + " Tage" + (all ? ", " + (absences[i].commit ? "bestätigt" : "unbestätigt") : ''))
-                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/Icon_' + absences[i].typ + '.png'))
+                            .image(builder.CardImage.create(session, process.env.BOT_DOMAIN_URL + '/images/icon_' + valid_filename(absences[i].typ) + '.png'))
                     );
                 }
             }
