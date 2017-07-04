@@ -39,6 +39,7 @@ bot.datastore = {
     spesenzettel: require('./import/datastore/spesenzettel.json'),
     holiday: require('./import/datastore/holiday.json'),
     holidayMap: {},
+    holidayNamedMap: {},
     getUserId: function (session) {
         var id = session.message.address.user.name;
         for (var i in this.users) {
@@ -96,9 +97,40 @@ bot.datastore = {
     isPublicHolidayCH(dateYYYMMDD) {
         var day = this.holidayMap[dateYYYMMDD];
         return day ? day.public : false;
+    },
+    buildHolidayNamedMap() {
+        for (var i in this.holiday) {
+            var holidayDay = this.holiday[i];
+
+            var key = holidayDay.name.toLowerCase();
+            this.holidayNamedMap[key] = this.holidayNamedMap[key] || [];
+            this.holidayNamedMap[key].push(holidayDay);
+            if (holidayDay.alias) {
+                for (var t in holidayDay.alias) {
+                    var key = holidayDay.alias[t].toLowerCase();
+                    this.holidayNamedMap[key] = this.holidayNamedMap[key] || [];
+                    this.holidayNamedMap[key].push(holidayDay);
+                }
+            }
+        }
+        return this.holidayNamedMap;
+    },
+    getHolidayDate(name, YYYY) {
+        var entries = this.holidayNamedMap[name.toLowerCase()];
+        var day = undefined;
+        if (entries) {
+            for (var i in entries) {
+                var entry = entries[i];
+                if (entry.date.indexOf(YYYY) != -1) {
+                    return entry.date;
+                }
+            }
+        }
+        return day;
     }
 };
 bot.datastore.buildHolidayMap();
+bot.datastore.buildHolidayNamedMap();
 
 //=========================================================
 // App helper methods

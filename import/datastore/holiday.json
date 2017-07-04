@@ -1,6 +1,6 @@
 [
   {
-    "name": "New Year's Day",
+    "name": "Neujahr",
     "date": "2017-01-01",
     "observed": "2017-01-01",
     "public": true
@@ -36,49 +36,50 @@
     "public": false
   },
   {
-    "name": "Palm Sunday",
+    "name": "Palmsonntag",
     "date": "2017-04-09",
     "observed": "2017-04-09",
     "public": false
   },
   {
-    "name": "Good Friday",
+    "name": "Karfreitag",
     "date": "2017-04-14",
     "observed": "2017-04-14",
     "public": true
   },
   {
-    "name": "Easter Sunday",
+    "name": "Ostersonntag",
     "date": "2017-04-16",
     "observed": "2017-04-16",
     "public": true
   },
   {
-    "name": "Easter Monday",
+    "name": "Ostermontag",
     "date": "2017-04-17",
     "observed": "2017-04-17",
     "public": true
   },
   {
     "name": "1. Mai",
+    "alias": [ "1.Mai" ],
     "date": "2017-05-01",
     "observed": "2017-05-01",
     "public": true
   },
   {
-    "name": "Ascension",
+    "name": "Auffahrt",
     "date": "2017-05-25",
     "observed": "2017-05-25",
     "public": true
   },
   {
-    "name": "Pentecost",
+    "name": "Pfingsten",
     "date": "2017-06-04",
     "observed": "2017-06-04",
     "public": false
   },
   {
-    "name": "Whit Monday",
+    "name": "Pfingstmontag",
     "date": "2017-06-05",
     "observed": "2017-06-05",
     "public": true
@@ -101,8 +102,100 @@
     "observed": "2017-06-29",
     "public": false
   },
+
   {
-    "name": "New Year's Day",
+    "name": "Nationalfeiertag",
+    "alias": [ "1.August", "1. August" ],
+    "date": "2017-08-01",
+    "observed": "2017-08-01",
+    "public": true
+  },
+  {
+    "name": "Assumption",
+    "date": "2017-08-15",
+    "observed": "2017-08-15",
+    "public": false
+  },
+  {
+    "name": "Federal Day of Thanksgiving, Repentance and Prayer",
+    "date": "2017-09-17",
+    "observed": "2017-09-17",
+    "public": true
+  },
+  {
+    "name": "Lundi du Jeûne (Monday after previous)",
+    "date": "2017-09-18",
+    "observed": "2017-09-18",
+    "public": false
+  },
+  {
+    "name": "Saint Nicholas of Flüe Day",
+    "date": "2017-09-25",
+    "observed": "2017-09-25",
+    "public": false
+  },
+  {
+    "name": "All Saints Day",
+    "date": "2017-11-01",
+    "observed": "2017-11-01",
+    "public": false
+  },
+  {
+    "name": "Immaculate Conception",
+    "date": "2017-12-08",
+    "observed": "2017-12-08",
+    "public": false
+  },
+  {
+    "name": "Weihnachten",
+    "date": "2017-12-25",
+    "observed": "2017-12-25",
+    "public": true
+  },
+  {
+    "name": "St Stephen's Day",
+    "date": "2017-12-26",
+    "observed": "2017-12-26",
+    "public": true
+  },
+  {
+    "name": "Silvester",
+    "date": "2017-12-31",
+    "observed": "2017-12-31",
+    "public": true
+  },
+  {
+    "name": "Restoration of the Republic",
+    "date": "2017-12-31",
+    "observed": "2017-12-31",
+    "public": false
+  },
+
+  {
+    "name": "Neujahr",
+    "date": "2018-01-01",
+    "observed": "2018-01-01",
+    "public": true
+  },
+  {
+    "name": "St. Berchtold",
+    "date": "2018-01-02",
+    "observed": "2018-01-02",
+    "public": false
+  },
+  {
+    "name": "Epiphany",
+    "date": "2018-01-06",
+    "observed": "2018-01-06",
+    "public": false
+  },
+
+
+
+
+
+  {
+    "name": "Neujahr",
     "date": "2016-01-01",
     "observed": "2016-01-01",
     "public": true
@@ -132,25 +225,25 @@
     "public": false
   },
   {
-    "name": "Palm Sunday",
+    "name": "Palmsonntag",
     "date": "2016-03-20",
     "observed": "2016-03-20",
     "public": false
   },
   {
-    "name": "Good Friday",
+    "name": "Karfreitag",
     "date": "2016-03-25",
     "observed": "2016-03-25",
     "public": true
   },
   {
-    "name": "Easter Sunday",
+    "name": "Ostersonntag",
     "date": "2016-03-27",
     "observed": "2016-03-27",
     "public": true
   },
   {
-    "name": "Easter Monday",
+    "name": "Ostermontag",
     "date": "2016-03-28",
     "observed": "2016-03-28",
     "public": true
@@ -163,24 +256,25 @@
   },
   {
     "name": "1. Mai",
+    "alias": [ "1.Mai" ],
     "date": "2016-05-01",
     "observed": "2016-05-01",
     "public": true
   },
   {
-    "name": "Ascension",
+    "name": "Auffahrt",
     "date": "2016-05-05",
     "observed": "2016-05-05",
     "public": true
   },
   {
-    "name": "Pentecost",
+    "name": "Pfingsten",
     "date": "2016-05-15",
     "observed": "2016-05-15",
     "public": false
   },
   {
-    "name": "Whit Monday",
+    "name": "Pfingstmontag",
     "date": "2016-05-16",
     "observed": "2016-05-16",
     "public": true
@@ -204,7 +298,8 @@
     "public": false
   },
   {
-    "name": "Swiss National Day",
+    "name": "Nationalfeiertag",
+    "alias": [ "1.August", "1. August" ],
     "date": "2016-08-01",
     "observed": "2016-08-01",
     "public": true
@@ -252,19 +347,19 @@
     "public": false
   },
   {
-    "name": "Christmas Day",
+    "name": "Weihnachten",
     "date": "2016-12-25",
     "observed": "2016-12-25",
     "public": true
   },
   {
-    "name": "St Stephen's Day",
+    "name": "St Stephen's Tag",
     "date": "2016-12-26",
     "observed": "2016-12-26",
     "public": true
   },
   {
-    "name": "New Year's Eve",
+    "name": "Silvester",
     "date": "2016-12-31",
     "observed": "2016-12-31",
     "public": true
@@ -276,7 +371,7 @@
     "public": false
   },
   {
-    "name": "New Year's Day",
+    "name": "Neujahr",
     "date": "2015-01-01",
     "observed": "2015-01-01",
     "public": true
@@ -306,13 +401,13 @@
     "public": false
   },
   {
-    "name": "Palm Sunday",
+    "name": "Palmsonntag",
     "date": "2015-03-29",
     "observed": "2015-03-29",
     "public": false
   },
   {
-    "name": "Good Friday",
+    "name": "Karfreitag",
     "date": "2015-04-03",
     "observed": "2015-04-03",
     "public": true
@@ -324,37 +419,38 @@
     "public": false
   },
   {
-    "name": "Easter Sunday",
+    "name": "Ostersonntag",
     "date": "2015-04-05",
     "observed": "2015-04-05",
     "public": true
   },
   {
-    "name": "Easter Monday",
+    "name": "Ostermontag",
     "date": "2015-04-06",
     "observed": "2015-04-06",
     "public": true
   },
   {
     "name": "1. Mai",
+    "alias": [ "1.Mai" ],
     "date": "2015-05-01",
     "observed": "2015-05-01",
     "public": true
   },
   {
-    "name": "Ascension",
+    "name": "Auffahrt",
     "date": "2015-05-14",
     "observed": "2015-05-14",
     "public": true
   },
   {
-    "name": "Pentecost",
+    "name": "Pfingsten",
     "date": "2015-05-24",
     "observed": "2015-05-24",
     "public": false
   },
   {
-    "name": "Whit Monday",
+    "name": "Pfingstmontag",
     "date": "2015-05-25",
     "observed": "2015-05-25",
     "public": true
@@ -378,7 +474,8 @@
     "public": false
   },
   {
-    "name": "Swiss National Day",
+    "name": "Nationalfeiertag",
+    "alias": [ "1.August", "1. August" ],
     "date": "2015-08-01",
     "observed": "2015-08-01",
     "public": true
@@ -426,7 +523,7 @@
     "public": false
   },
   {
-    "name": "Christmas Day",
+    "name": "Weihnachten",
     "date": "2015-12-25",
     "observed": "2015-12-25",
     "public": true
@@ -438,7 +535,7 @@
     "public": true
   },
   {
-    "name": "New Year's Eve",
+    "name": "Silvester",
     "date": "2015-12-31",
     "observed": "2015-12-31",
     "public": true
@@ -450,7 +547,7 @@
     "public": false
   },
   {
-    "name": "New Year's Day",
+    "name": "Neujahr",
     "date": "2014-01-01",
     "observed": "2014-01-01",
     "public": true
@@ -486,49 +583,50 @@
     "public": false
   },
   {
-    "name": "Palm Sunday",
+    "name": "Palmsonntag",
     "date": "2014-04-13",
     "observed": "2014-04-13",
     "public": false
   },
   {
-    "name": "Good Friday",
+    "name": "Karfreitag",
     "date": "2014-04-18",
     "observed": "2014-04-18",
     "public": true
   },
   {
-    "name": "Easter Sunday",
+    "name": "Ostersonntag",
     "date": "2014-04-20",
     "observed": "2014-04-20",
     "public": true
   },
   {
-    "name": "Easter Monday",
+    "name": "Ostermontag",
     "date": "2014-04-21",
     "observed": "2014-04-21",
     "public": true
   },
   {
     "name": "1. Mai",
+    "alias": [ "1.Mai" ],
     "date": "2014-05-01",
     "observed": "2014-05-01",
     "public": true
   },
   {
-    "name": "Ascension",
+    "name": "Auffahrt",
     "date": "2014-05-29",
     "observed": "2014-05-29",
     "public": true
   },
   {
-    "name": "Pentecost",
+    "name": "Pfingsten",
     "date": "2014-06-08",
     "observed": "2014-06-08",
     "public": false
   },
   {
-    "name": "Whit Monday",
+    "name": "Pfingstmontag",
     "date": "2014-06-09",
     "observed": "2014-06-09",
     "public": true
@@ -552,7 +650,8 @@
     "public": false
   },
   {
-    "name": "Swiss National Day",
+    "name": "Nationalfeiertag",
+    "alias": [ "1.August", "1. August" ],
     "date": "2014-08-01",
     "observed": "2014-08-01",
     "public": true
@@ -600,7 +699,7 @@
     "public": false
   },
   {
-    "name": "Christmas Day",
+    "name": "Weihnachten",
     "date": "2014-12-25",
     "observed": "2014-12-25",
     "public": true
@@ -612,7 +711,7 @@
     "public": true
   },
   {
-    "name": "New Year's Eve",
+    "name": "Silvester",
     "date": "2014-12-31",
     "observed": "2014-12-31",
     "public": true

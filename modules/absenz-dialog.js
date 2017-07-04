@@ -60,7 +60,7 @@ function getValidDateWithMonthNameFromEntity(entity, monatEntity) {
     return absenzDate;
 }
 
-function getAbsenzDateFromTo(builder, entities) {
+function getAbsenzDateFromTo(bot, builder, entities) {
   var dateEntities = (builder.EntityRecognizer.findAllEntities(entities || [], "builtin.datetime") || undefined);
   var monatEntity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzMonat") || undefined);
   var foundDates = [];
@@ -110,6 +110,9 @@ function getAbsenzDateFromTo(builder, entities) {
         today.subtract(1, "days");
     } else if (resolution === "vorgestern") {
         today.subtract(2, "days");
+    } else if (resolution === "Feiertag") {
+        var holiday = bot.datastore.getHolidayDate(entity.entity, today.format("YYYY"));
+        if (holiday) { today = moment(holiday, "YYYY-MM-DD"); }
     }
     return { from: today.format("YYYY-MM-DD"), to: undefined };
   }
@@ -221,8 +224,68 @@ function calculateDates(bot, absence) {
 function isAbsenceThisYear(absence) {
     return absence.year == moment().year;
 }
+
+function findNextEntityAfter(allSorted, position) {
+    for (var i in allSorted) {
+        if (allSorted[i].startIndex > position) { return allSorted[i]; }
+    }
+    return undefined;
+}
+
+/*
+validate dates in form
+    13 . 7 . 2016
+    13 . 7 . 
+
+    13 . 7 . xx < 16 and "AbsenzDauer" is the closest to the right
+
+*/
+function verifyRealDateTime(entities, allEntities) {
+    var all = [].concat(allEntities);
+    all.sort(function(a, b) {
+        return a.startIndex - b.startIndex;
+    });
+    for (var i in entities) {
+        var entity = entities[i];
+        var parts = entity.entity.split(".");
+        if (parts.length < 3) {
+            // seems to be DD and MM only
+            // skip do nothing
+        } else {
+            // 13 . 7 . xx - extract xx as number
+            var lastNumberString = parts[parts.length-1].trim();
+            var lastNumber = Number.parseInt(lastNumberString);
+            if (!isNaN(lastNumber) && lastNumber < 100) {
+                var nextEntity = findNextEntityAfter(all, entity.endIndex+1);
+                if (nextEntity.type === "AbsenzDauer") {
+                    var resolution = nextEntity.resolution.values[0];
+                    if (isNaN(resolution)) {
+                        /* seems that a part of the date is a number 
+                            and the next entity after is a String "Tag, Woche, ..."
+                        */
+                        //cut out last part and put it together
+                        var newEntityValue = parts.slice(0, parts.length-1).join(".").trim();
+                        var diff = lastNumberString.length;
+                        entity.entity = newEntityValue;
+                        entity.endIndex = entity.endIndex - diff;
+                    }
+                } else {
+                    // no other entry found, unclear what it is
+                    // skip
+                }
+            } else {
+                // last part is not number or > 100, guess its a year
+                // skip
+            }
+        }
+    }
+    return entities;
+}
+
+
 function removeUnneededEntities(builder, entities) {
-  const entityDateTimes = (builder.EntityRecognizer.findAllEntities(entities || [], "builtin.datetime") || undefined); 
+  var entityDateTimes = (builder.EntityRecognizer.findAllEntities(entities || [], "builtin.datetime") || undefined); 
+  entityDateTimes = verifyRealDateTime(entityDateTimes, entities);
   for (var t = 0; t < entityDateTimes.length; t++) {
     var entityDateTime = entityDateTimes[t];
     if (entityDateTime) {
@@ -281,7 +344,7 @@ function removeUnneededEntities(builder, entities) {
 function getAbsenceAttributes(bot, builder, entities) {
     entities = removeUnneededEntities(builder, entities);
     var multiplyer = getAbsenzDauerMultiplier(builder, entities);
-    var fromToDate = getAbsenzDateFromTo(builder, entities);
+    var fromToDate = getAbsenzDateFromTo(bot,builder, entities);
 
     var absence = {
         typ: getAbsenzTyp(builder, entities),
