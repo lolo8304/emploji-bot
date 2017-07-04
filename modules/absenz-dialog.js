@@ -43,6 +43,11 @@ function getAbsenzDateFromTo(builder, entities) {
     if (entity && entity.score >= 0.5) {
         var absenzDate =  entity.entity.replace(/\s/g,"");
         if (monatEntity) {
+            var month = monatEntity.resolution.values[0].toLowerCase();
+            var monthIndex = absenzDate.toLowerCase().indexOf(month);
+            if (monthIndex == -1) {
+                absenzDate += month
+            }
             /*format possibly contains DD. April */
             var absenzDateMoment = moment(absenzDate, "DD.MMM.YYYY");
             var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
