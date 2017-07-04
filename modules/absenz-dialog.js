@@ -34,6 +34,32 @@ function getAbsenzTyp(builder, entities) {
   }
   return "";
 }
+
+function getValidDateWithMonthNameFromEntity(entity, monatEntity) {
+    /* replace 
+        entity          monatEntity  --> result
+        "4 ."            + "dez"     --> 4. Dezember
+        "4 . dez"        + "dez"     --> 4. Dezember
+        "4 . dez ."      + "dez ."   --> 4. Dezember
+        "4 . dez. 2016"  + "dez ."   --> 4. Dezember
+        "4 . dez. 2016"  +           --> 4. Dezember
+
+    */
+    var fullDate = entity.entity;
+    var monthToSearch = monatEntity.entity.toLowerCase();
+    var monthToSearchPlusDot = monatEntity.entity.toLowerCase()+".";
+    var fullMonthToReplace = monatEntity.resolution.values[0];
+    if (fullDate.indexOf(monthToSearchPlusDot) != -1) {
+        fullDate = fullDate.replace(monthToSearchPlusDot, fullMonthToReplace);
+    } else if (fullDate.indexOf(monthToSearch) != -1) {
+        fullDate = fullDate.replace(monthToSearch, fullMonthToReplace);
+    } else {
+        fullDate += " "+fullMonthToReplace;
+    }
+    var absenzDate =  fullDate.replace(/\s\.\s/g,".");
+    return absenzDate;
+}
+
 function getAbsenzDateFromTo(builder, entities) {
   var dateEntities = (builder.EntityRecognizer.findAllEntities(entities || [], "builtin.datetime") || undefined);
   var monatEntity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzMonat") || undefined);
@@ -41,19 +67,24 @@ function getAbsenzDateFromTo(builder, entities) {
   for (var i = 0; i < dateEntities.length; i++) {
     var entity = dateEntities[i];
     if (entity && entity.score >= 0.5) {
-        var absenzDate =  entity.entity.replace(/\s/g,"");
         if (monatEntity) {
-            var month = monatEntity.resolution.values[0].toLowerCase();
-            var monthIndex = absenzDate.toLowerCase().indexOf(month);
-            if (monthIndex == -1) {
-                absenzDate += month
-            }
-            /*format possibly contains DD. April */
-            var absenzDateMoment = moment(absenzDate, "DD.MMM.YYYY");
+            var absenzDate = getValidDateWithMonthNameFromEntity(entity, monatEntity);
+            var absenzDateMoment = moment(absenzDate, "DD.MMM YYYY", "DE", false);
             var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
             foundDates.push(YYYYMMDD);
         } else {
-            var absenzDateMoment = moment(absenzDate, "DD.MM.YYYY");
+            /* can be
+                04 . 12 . 2016
+                04 . dez. 2016
+            */
+            var absenzDate =  entity.entity;
+            var absenzDateMoment = undefined;
+            if (absenzDate.match(/[a-z]+/)) {
+                absenzDateMoment= moment(absenzDate, "DD . MMM YYYY", "de", false);
+            }
+            if (!absenzDateMoment || !absenzDateMoment.isValid()) {
+                absenzDateMoment = moment(absenzDate, "DD . MM . YYYY");
+            }
             var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
             foundDates.push(YYYYMMDD);
         }
