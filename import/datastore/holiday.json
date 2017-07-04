@@ -60,10 +60,10 @@
     "public": true
   },
   {
-    "name": "Labor Day",
+    "name": "1. Mai",
     "date": "2017-05-01",
     "observed": "2017-05-01",
-    "public": false
+    "public": true
   },
   {
     "name": "Ascension",
@@ -162,10 +162,10 @@
     "public": false
   },
   {
-    "name": "Labor Day",
+    "name": "1. Mai",
     "date": "2016-05-01",
     "observed": "2016-05-01",
-    "public": false
+    "public": true
   },
   {
     "name": "Ascension",
@@ -336,10 +336,10 @@
     "public": true
   },
   {
-    "name": "Labor Day",
+    "name": "1. Mai",
     "date": "2015-05-01",
     "observed": "2015-05-01",
-    "public": false
+    "public": true
   },
   {
     "name": "Ascension",
@@ -510,10 +510,10 @@
     "public": true
   },
   {
-    "name": "Labor Day",
+    "name": "1. Mai",
     "date": "2014-05-01",
     "observed": "2014-05-01",
-    "public": false
+    "public": true
   },
   {
     "name": "Ascension",

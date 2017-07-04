@@ -69,7 +69,7 @@ function getAbsenzDateFromTo(builder, entities) {
     if (entity && entity.score >= 0.5) {
         if (monatEntity) {
             var absenzDate = getValidDateWithMonthNameFromEntity(entity, monatEntity);
-            var absenzDateMoment = moment(absenzDate, "DD.MMM YYYY", "DE", false);
+            var absenzDateMoment = moment(absenzDate, "DD.MMM YYYY", "de-ch", false);
             var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
             foundDates.push(YYYYMMDD);
         } else {
@@ -80,7 +80,7 @@ function getAbsenzDateFromTo(builder, entities) {
             var absenzDate =  entity.entity;
             var absenzDateMoment = undefined;
             if (absenzDate.match(/[a-z]+/)) {
-                absenzDateMoment= moment(absenzDate, "DD . MMM YYYY", "de", false);
+                absenzDateMoment= moment(absenzDate, "DD . MMM YYYY", "de-ch", false);
             }
             if (!absenzDateMoment || !absenzDateMoment.isValid()) {
                 absenzDateMoment = moment(absenzDate, "DD . MM . YYYY");
@@ -111,8 +111,20 @@ function getAbsenzDateFromTo(builder, entities) {
     } else if (resolution === "vorgestern") {
         today.subtract(2, "days");
     }
+    return { from: today.format("YYYY-MM-DD"), to: undefined };
   }
-  return { from: today.format("YYYY-MM-DD"), to: undefined };
+  entity = (builder.EntityRecognizer.findEntity(entities || [], "ZeitpunktTag") || undefined);
+  if (entity) {
+    var tag = entity.resolution.values[0];
+    var tagNumber = Number.parseInt(tag);
+    if (!isNaN(tagNumber)) {
+        if (monatEntity) {
+            var fullMonthToReplace = monatEntity.resolution.values[0];
+            today = moment(tagNumber+". "+fullMonthToReplace, "DD. MMM YYYY", "de-ch", false);
+        }
+    }
+    return { from: today.format("YYYY-MM-DD"), to: undefined };
+  }
 }
 
 function getAbsenzDauer(builder, entities) {
@@ -314,7 +326,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
                 }
             }
             session.message.text = "bye"; //trick den menu dialog wiederanzuzeigen
-            session.replaceDialog("/Intro");
+            session.endDialog();
         }
     ])
         .cancelAction('/Intro', "OK Absenzerfassung abgebrochen",
