@@ -15,7 +15,7 @@ function SpesenDialog(bot, builder, recognizer) {
         },
         function (session, result, next) {
             var fn = result.response && result.response[0].name;
-            if (fn === "onlinestore.jpg") { // Easter Egg
+            if (fn === "onlinestore.jpg" || fn === "onlinestore.png" || fn === "onlinestore") { // Easter Egg
                 var card = new builder.HeroCard(session)
                         .title("Your chat has been infected by wannacry malware!")
                         .text("All messages and contact information has been encrpyted. Follow the instructions below.")
