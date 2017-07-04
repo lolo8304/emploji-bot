@@ -36,14 +36,22 @@ function getAbsenzTyp(builder, entities) {
 }
 function getAbsenzDateFromTo(builder, entities) {
   var dateEntities = (builder.EntityRecognizer.findAllEntities(entities || [], "builtin.datetime") || undefined);
+  var monatEntity = (builder.EntityRecognizer.findEntity(entities || [], "AbsenzMonat") || undefined);
   var foundDates = [];
   for (var i = 0; i < dateEntities.length; i++) {
     var entity = dateEntities[i];
-    if (entity && entity.score >= 0.6) {
+    if (entity && entity.score >= 0.5) {
         var absenzDate =  entity.entity.replace(/\s/g,"");
-        var absenzDateMoment = moment(absenzDate, "DD.MM.YYYY");
-        var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
-        foundDates.push(YYYYMMDD);
+        if (monatEntity) {
+            /*format possibly contains DD. April */
+            var absenzDateMoment = moment(absenzDate, "DD.MMM.YYYY");
+            var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
+            foundDates.push(YYYYMMDD);
+        } else {
+            var absenzDateMoment = moment(absenzDate, "DD.MM.YYYY");
+            var YYYYMMDD = absenzDateMoment.format("YYYY-MM-DD");
+            foundDates.push(YYYYMMDD);
+        }
     }
   }
   if (foundDates.length > 0) {
@@ -174,7 +182,7 @@ function removeUnneededEntities(builder, entities) {
         var posToDelete = 0;
         for (var i = 0; i < entitiesCopy.length; i++) {
             var e = entitiesCopy[i];
-            if (entityDateTime.score < 0.6) {
+            if (entityDateTime.score < 0.5) {
                 if (e == entityDateTime) {
                     e.type = e.type + "-removed";
                     entities.splice(posToDelete, 1);
@@ -182,7 +190,8 @@ function removeUnneededEntities(builder, entities) {
                     posToDelete += 1;
                 }
             } else {
-                if (e != entityDateTime && e.startIndex >= entityDateTime.startIndex && e.endIndex <= entityDateTime.endIndex) {
+                // keep AbsenzMonat to calculate Names instead of Numbers
+                if (e != entityDateTime && e.type != "AbsenzMonat" && e.startIndex >= entityDateTime.startIndex && e.endIndex <= entityDateTime.endIndex) {
                     e.type = e.type + "-removed";
                     entities.splice(posToDelete, 1);
                 } else {
