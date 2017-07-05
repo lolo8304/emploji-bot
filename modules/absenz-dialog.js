@@ -128,6 +128,7 @@ function getAbsenzDateFromTo(bot, builder, entities) {
     }
     return { from: today.format("YYYY-MM-DD"), to: undefined };
   }
+  return { from: undefined, to: undefined };
 }
 
 function getAbsenzDauer(builder, entities) {
@@ -225,11 +226,36 @@ function isAbsenceThisYear(absence) {
     return absence.year == moment().year;
 }
 
-function findNextEntityAfter(allSorted, position) {
-    for (var i in allSorted) {
-        if (allSorted[i].startIndex > position) { return allSorted[i]; }
+function findNextEntityAfter(allSorted, position, matchingEntity) {
+    var foundEntities = findNextEntitiesAfter(allSorted, position);
+    for (var i in foundEntities) {
+        var entity = foundEntities[i];
+        if (entity.type === matchingEntity) {
+            return entity
+        }
     }
     return undefined;
+}
+
+function findNextEntitiesAfter(allSorted, position) {
+    for (var i in allSorted) {
+        if (allSorted[i].startIndex > position) {
+            /* search for all entities with same index positions */
+            var foundEntities = [];
+            for (var t = i; t < allSorted.length; t++) {
+                if (
+                    allSorted[i].startIndex == allSorted[t].startIndex &&
+                    allSorted[i].endIndex == allSorted[t].endIndex
+                ) {
+                    foundEntities.push(allSorted[t]);
+                } else {
+                    return foundEntities;
+                }
+            }
+            return foundEntities;
+        }
+    }
+    return [];
 }
 
 /*
@@ -243,7 +269,11 @@ validate dates in form
 function verifyRealDateTime(entities, allEntities) {
     var all = [].concat(allEntities);
     all.sort(function(a, b) {
-        return a.startIndex - b.startIndex;
+        if (a.startIndex - b.startIndex == 0) {
+            return a.endIndex - b.endIndex;
+        } else {
+            return a.startIndex - b.startIndex;
+        };
     });
     for (var i in entities) {
         var entity = entities[i];
@@ -256,8 +286,9 @@ function verifyRealDateTime(entities, allEntities) {
             var lastNumberString = parts[parts.length-1].trim();
             var lastNumber = Number.parseInt(lastNumberString);
             if (!isNaN(lastNumber) && lastNumber < 100) {
-                var nextEntity = findNextEntityAfter(all, entity.endIndex+1);
-                if (nextEntity.type === "AbsenzDauer") {
+                // check if next after entity is an AbsenzDauer as Text - then the number is part of the date
+                var nextEntity = findNextEntityAfter(all, entity.endIndex, "AbsenzDauer");
+                if (nextEntity) {
                     var resolution = nextEntity.resolution.values[0];
                     if (isNaN(resolution)) {
                         /* seems that a part of the date is a number 
@@ -276,6 +307,30 @@ function verifyRealDateTime(entities, allEntities) {
             } else {
                 // last part is not number or > 100, guess its a year
                 // skip
+                if (lastNumberString === "") {
+                    // seems that date is not fully parsed
+                    // 10 . 4 .      +    17   
+                    var nextEntity = findNextEntityAfter(all, entity.endIndex+1, "AbsenzDauer");
+                    if (nextEntity) {
+                        var resolution = nextEntity.resolution.values[0];
+                        if (!isNaN(resolution)) {
+                            /* seems that the next part is a part of the date */
+                            //replace empty last part and put it together
+                            parts[parts.length-1] = " "+resolution;
+                            var newEntityValue = parts.join(".").trim();
+                            var diff = parts[parts.length-1].length;
+                            entity.entity = newEntityValue;
+                            entity.endIndex = entity.endIndex + diff;
+                        } else {
+                            // is not a number - seems not to be a date
+                            // skip
+                        }
+                    } else {
+                        // if not AbsenzDauer - seems not to be a date
+                        // skip
+                    }
+
+                }
             }
         }
     }
@@ -346,13 +401,28 @@ function getAbsenceAttributes(bot, builder, entities) {
     var multiplyer = getAbsenzDauerMultiplier(builder, entities);
     var fromToDate = getAbsenzDateFromTo(bot,builder, entities);
 
-    var absence = {
-        typ: getAbsenzTyp(builder, entities),
-        fromDate: fromToDate.from,
-        toDate: fromToDate.to,
-        days: multiplyer * getAbsenzDauer(builder, entities)
-    };
-    absence = calculateDates(bot, absence);
+    var absence = undefined;
+    if (fromToDate.from) {
+        absence = {
+            typ: getAbsenzTyp(builder, entities),
+            fromDate: fromToDate.from,
+            toDate: fromToDate.to,
+            days: multiplyer * getAbsenzDauer(builder, entities)
+        };
+        absence = calculateDates(bot, absence);
+    } else {
+        absence = {
+            typ: "",
+            fromDate: undefined,
+            toDate: undefined,
+            days: 0
+        };
+        absence.responseToUserText = sprintf.sprintf(
+            "Sorry, ich habe keinen Zeitpunkt ermitteln können. Nimm die lange Jahresform: z.B. 2017 oder ein , danach",
+            absence.typ);
+        return absence;
+        
+    }
 
     if (absence.days > 0) {
         if (absence.typ === "Wohnungswechsel") {
@@ -434,7 +504,7 @@ function AbsenzenDialog(bot, builder, recognizer) {
             } else if (args && args.errorText) {                
                 builder.Prompts.text(session, args.errorText);
             } else {
-                builder.Prompts.text(session, "Nenne mir den Abwesenheitsgrund (krank, Ferien, Umzug, ...), Datum und Anzahl Tage - dann erfasse ich die Absenz.");
+                builder.Prompts.text(session, "Nenne mir den Abwesenheitsgrund (krank, Ferien, Umzug, ...), Anzahl Tage/Wochen und Datum - dann erfasse ich die Absenz: z.B. ich hatte 2 Tage frei am 2.Mai");
             }
         },
         function (session, result, next) {
