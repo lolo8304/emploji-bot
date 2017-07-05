@@ -278,6 +278,43 @@ function verifyRealDateTime(entities, allEntities) {
     for (var i in entities) {
         var entity = entities[i];
         var parts = entity.entity.split(".");
+        if (parts.length == 2) {
+            // seems to be DD and MM only
+            // skip do nothing
+            // or textual form 4. April 2017 or 4. April 3 Tage (to be splitted)
+            var potentiallyText = parts[1];
+            var potentiallyNoNumber = Number.parseInt(lastNumberString);
+            if (isNaN(potentiallyNoNumber)) {
+                // seems to be form: April or April 3
+                var splitted = potentiallyText.split(" ");
+                potentiallyNoNumber =  Number.parseInt(splitted[splitted.length-1]);
+                if (!isNaN(potentiallyNoNumber)) {
+                    var nextEntity = findNextEntityAfter(all, entity.endIndex, "AbsenzDauer");
+                    if (nextEntity) {
+                        var resolution = nextEntity.resolution.values[0];
+                        if (isNaN(resolution)) {
+                            /* seems that a part of the date is a number 
+                                and the next entity after is a String "Tag, Woche, ..."
+                            */
+                            // remove last splitted slot and put parts together
+                            var lastNumberString = splitted[splitted.length-1];
+                            parts[1] = splitted.slice(0, splitted.length-1).join(" ");
+                            entity.entity = parts.join(".");
+                            entity.endIndex = entity.endIndex - lastNumberString.length-1;
+                            entity.score = Math.max(entity.score, 0.6); // manually fixed
+                        } else {
+                            // is not a number - seems not to be a date
+                            // skip
+                        }
+                    } else {
+                        // if not AbsenzDauer - seems not to be a date
+                        // skip
+                    }
+                }
+            } else {
+                // skip: DD . MM form
+            }
+        }
         if (parts.length < 3) {
             // seems to be DD and MM only
             // skip do nothing
@@ -299,6 +336,7 @@ function verifyRealDateTime(entities, allEntities) {
                         var diff = lastNumberString.length;
                         entity.entity = newEntityValue;
                         entity.endIndex = entity.endIndex - diff;
+                        entity.score = Math.max(entity.score, 0.6); // manually fixed
                     }
                 } else {
                     // no other entry found, unclear what it is
@@ -321,6 +359,7 @@ function verifyRealDateTime(entities, allEntities) {
                             var diff = parts[parts.length-1].length;
                             entity.entity = newEntityValue;
                             entity.endIndex = entity.endIndex + diff;
+                            entity.score = Math.max(entity.score, 0.6);
                         } else {
                             // is not a number - seems not to be a date
                             // skip
