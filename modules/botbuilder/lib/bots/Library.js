@@ -109,8 +109,8 @@ var Library = (function (_super) {
         var parts = entry ? entry.id.split(':') : null;
         if (parts && parts[0] == this.name) {
             var dialog = this.dialog(parts[1]);
+            var ctx = utils.clone(context);
             if (dialog) {
-                var ctx = utils.clone(context);
                 ctx.libraryName = this.name;
                 ctx.dialogData = entry.state;
                 ctx.activeDialog = true;
