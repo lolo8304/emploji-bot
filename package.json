@@ -31,6 +31,7 @@
     "request-promise": "^4.2.1",
     "restify": "^4.3.0",
     "sprintf": "^0.1.5",
+    "sprintf-js":"^1.1.1",
     "html-entities" :"^1.2.1",
     "moment":"^2.18.1",
 
