@@ -26,12 +26,23 @@
   },
   "homepage": "https://github.com/lolo8304/emploji-bot#readme",
   "dependencies": {
+    "async": "^1.5.2",    
+    "base64url": "^2.0.0",    
+    "chrono-node": "^1.1.3",    
+    "jsonwebtoken": "^7.0.1",    
+    "promise": "^7.1.1",    
+    "request": "^2.69.0",    
+    "rsa-pem-from-mod-exp": "^0.8.4",    
+    "sprintf-js": "^1.0.3",    
+    "url-join": "^1.1.0",
+    
+    
+    
     "dotenv": "^4.0.0",
     "fs": "^0.0.1-security",
     "request-promise": "^4.2.1",
     "restify": "^4.3.0",
     "sprintf": "^0.1.5",
-    "sprintf-js":"^1.1.1",
     "html-entities" :"^1.2.1",
     "moment":"^2.18.1",
 
