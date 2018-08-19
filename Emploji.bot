@@ -1,0 +1,15 @@
+{
+    "name": "Emploji",
+    "description": "",
+    "secretKey": "febfbc0d2a9449e63225525b51ea2185b5c6090413f2c40cb7302a9c9aef6c17943b331d454638a70c4c03b038ebc4eb",
+    "services": [
+        {
+            "appId": "",
+            "id": "df230bf0-55f3-11e8-8bc8-9b26697c2601",
+            "type": "endpoint",
+            "appPassword": "",
+            "endpoint": "http://localhost:3800/api/messages",
+            "name": "Emploji"
+        }
+    ]
+}

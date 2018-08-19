@@ -18,7 +18,7 @@ function QnA() {
             method: 'POST',
             uri: process.env.MICROSOFT_QNA_MAKER_URL,
             headers: {
-                'Ocp-Apim-Subscription-Key': process.env.MICROSOFT_QNA_MAKER_KEY,
+                'Authorization': process.env.MICROSOFT_QNA_MAKER_KEY,
                 'Content-Type': 'application/json'
             },
             body: {
